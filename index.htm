@@ -502,11 +502,22 @@
 						'rgba(46, 117, 182, 0.9)',
 						'rgba(46, 117, 182, 0.9)'
 					],
-					hoverBorderWidth:3,
-					hoverBorderColor:'#000',
-					fill: false
+					hoverBorderWidth:2,
+					hoverBorderColor:'#fff',
+					fill: false,
+					order: 2
+					},
+					{
+					label: 'Global',
+					borderColor:'rgba(255, 255, 255, 0.8)',
+					borderWidth: 2,
+					backgroundColor: 'rgba(255, 255, 255, 0.01',
+					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
+					type: 'line',
+					pointRadius: 0,
+					order: 1
 					}					
-					]
+				]
 			},
 			options: {
 				title:{
@@ -521,10 +532,15 @@
 				tooltips: {
 					//mode: 'point'
 		            callbacks: {
-					//	title: function(tooltipItems, data) {
-               		//	return data.datasets[tooltipItems[0].datasetIndex].label;
-					//	}
-					}
+        				label: function(tooltipItem, data) {
+        					var dataset = data.datasets[tooltipItem.datasetIndex];
+          					var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+          					return previousValue + currentValue;
+          					});
+          					var currentValue = dataset.data[tooltipItem.index];
+          					return currentValue + "%";
+        				}
+      				}
 				},
 				responsive: true,
 				aspectRatio: 1.5
