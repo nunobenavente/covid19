@@ -8,10 +8,20 @@
 
 <style>
 #logLog {
-	width: 1100px;
+	width: 70%;
   	height: 900px;
+	float: left;
 	/*margin: 10px;*/
 	padding: 10px;
+  	border: 0px solid #aaaaaa;
+  	background-color: #222a35;
+}
+#barrasLinear {
+	width: 30%;
+	height:35%;
+  	float: right;
+	margin: 5px;
+	padding: 0px;
   	border: 0px solid #aaaaaa;
   	background-color: #222a35;
 }
@@ -21,10 +31,13 @@
 
 <body style="background-color:#222">
 	<div id="logLog" class="container">
-    	<canvas id="myChart" style="background-color:#222a35"></canvas>
+    	<canvas id="logLogCanvas" style="background-color:#222a35"></canvas>
+    </div>
+	<div id="barrasLinear" class="container">
+    	<canvas id="barrasCanvas" style="background-color:#222a35"></canvas>
     </div>
     <script>
-    	let myChart = document.getElementById('myChart').getContext('2d');
+    	let myChart = document.getElementById('logLogCanvas').getContext('2d');
 		
 		//GLOBAL OPTIONS
 		//Chart.defaults.global.defaultFontFamily = 'Lato';
@@ -429,8 +442,8 @@
 							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
                             //return Number(value.toString());//pass tick values as a string into Number function
 							//},
-							fontSize: 10,
-							max: 1000000
+							fontSize: 10
+							//max: 1000000
 							
 						}
             		}]
@@ -457,10 +470,67 @@
   				//maintainAspectRatio: false
 				aspectRatio: 1.5
     		}
-			
-
 		}
 		);
+		
+		let barrasChart = document.getElementById('barrasCanvas').getContext('2d');
+		let barras = new Chart(barrasChart, {	
+			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+			data: {
+				labels:['UK', 'NL', 'SPA', 'BRA', 'USA', 'POR', 'GER', 'KOR'],
+				datasets:[
+					{
+					label:'Letalidade',
+					data:[
+						11.57,
+						10.90,
+						10.00,
+						5.07,
+						3.42,
+						2.93,
+						2.07,
+						1.96
+					],
+					//backgroundColor:'Green'	
+					backgroundColor:[
+						'rgba(46, 117, 182, 0.9)',
+						'rgba(46, 117, 182, 0.9)',
+						'rgba(46, 117, 182, 0.9)',
+						'rgba(46, 117, 182, 0.9)',
+						'rgba(46, 117, 182, 0.9)',
+						'green',
+						'rgba(46, 117, 182, 0.9)',
+						'rgba(46, 117, 182, 0.9)'
+					],
+					hoverBorderWidth:3,
+					hoverBorderColor:'#000',
+					fill: false
+					}					
+					]
+			},
+			options: {
+				title:{
+					display:true,
+					text:'COVID19 - Letalidade',
+					fontSize:18
+				},
+				legend: {
+		            display: false
+				},
+
+				tooltips: {
+					//mode: 'point'
+		            callbacks: {
+					//	title: function(tooltipItems, data) {
+               		//	return data.datasets[tooltipItems[0].datasetIndex].label;
+					//	}
+					}
+				},
+				responsive: true,
+				aspectRatio: 1.5
+			}
+    	}
+		);		
 		//var endereco = logLogChart.toBase64Image();
 		//document.write(endereco) 
     </script>
