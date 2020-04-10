@@ -48,6 +48,7 @@
 		Chart.defaults.global.legend.labels.boxWidth = 10;
 		Chart.defaults.global.legend.position = 'bottom';
 		Chart.defaults.global.layout.padding = 10;
+		//Chart.defaults.global.elements.point.hoverRadius = 10;
 						
 		let logLogChart = new Chart(myChart, {
 			type: 'scatter', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
@@ -363,6 +364,64 @@
 					]
         		},
 				{
+        		    label: 'IT',
+					showLine:true,
+					fill:false,
+					borderWidth: 1,
+					borderColor:'rgba(112, 220, 18, 1)',
+					backgroundColor:'rgba(112, 220, 18, 1)', // Preenchimento dos pontos
+					
+            		data: [
+					{x:129, y:	129},
+					{x:226, y:	226},
+					{x:319, y:	319},
+					{x:397, y:	397},
+					{x:647, y:	647},
+					{x:885, y:	871},
+					{x:1125, y:	1049},
+					{x:1686, y:	1557},
+					{x:2033, y:	1807},
+					{x:2499, y:	2180},
+					{x:3086, y:	2689},
+					{x:3855, y:	3208},
+					{x:4633, y:	3748},
+					{x:5880, y:	4755},
+					{x:7372, y:	5686},
+					{x:9169, y:	7136},
+					{x:10146, y:	7647},
+					{x:12459, y:	9373},
+					{x:15110, y:	11255},
+					{x:17657, y:	13024},
+					{x:21154, y:	15274},
+					{x:23977, y:	16605},
+					{x:27977, y:	18808},
+					{x:31503, y:	21357},
+					{x:35710, y:	23251},
+					{x:41032, y:	25922},
+					{x:47018, y:	29361},
+					{x:53575, y:	32421},
+					{x:59135, y:	35158},
+					{x:63924, y:	35947},
+					{x:69173, y:	37670},
+					{x:74383, y:	38673},
+					{x:80536, y:	39504},
+					{x:86495, y:	39477},
+					{x:92469, y:	38894},
+					{x:97686, y:	38551},
+					{x:101736, y:	37812},
+					{x:105789, y:	36616},
+					{x:110571, y:	36188},
+					{x:115239, y:	34703},
+					{x:119824, y:	33329},
+					{x:124629, y:	32160},
+					{x:128945, y:	31259},
+					{x:132544, y:	30808},
+					{x:135583, y:	29794},
+					{x:139419, y:	28848},
+					{x:143623, y:	28384}
+					]
+        		},
+				{
         		    label: 'NL',
 					showLine:true,
 					fill:false,
@@ -507,6 +566,56 @@
 					{x:10384,	y:598},
 					{x:10423,	y:447},
 					{x:10450,	y:388}
+					]
+        		},
+				{
+        		    label: 'US',
+					showLine:true,
+					fill:false,
+					borderWidth: 1,
+					borderColor:'grey',
+					backgroundColor:'grey', // Preenchimento dos pontos
+					
+            		data: [
+					{x:103, y:	50},
+					{x:125, y:	72},
+					{x:159, y:	100},
+					{x:233, y:	173},
+					{x:338, y:	272},
+					{x:433, y:	364},
+					{x:554, y:	465},
+					{x:754, y:	651},
+					{x:1025, y:	900},
+					{x:1312, y:	1153},
+					{x:1663, y:	1430},
+					{x:2174, y:	1836},
+					{x:2951, y:	2518},
+					{x:3774, y:	3220},
+					{x:4661, y:	3907},
+					{x:6427, y:	5402},
+					{x:9415, y:	8103},
+					{x:14250, y:	12587},
+					{x:19624, y:	17450},
+					{x:26747, y:	23796},
+					{x:35206, y:	31432},
+					{x:46442, y:	41781},
+					{x:55231, y:	48804},
+					{x:69194, y:	59779},
+					{x:85991, y:	71741},
+					{x:104686, y:	85062},
+					{x:124665, y:	97918},
+					{x:143025, y:	107819},
+					{x:164620, y:	118178},
+					{x:189618, y:	134387},
+					{x:216721, y:	147527},
+					{x:245540, y:	159549},
+					{x:277965, y:	173279},
+					{x:312237, y:	187572},
+					{x:337635, y:	194610},
+					{x:368196, y:	203576},
+					{x:398809, y:	209191},
+					{x:432132, y:	215411},
+					{x:466033, y:	220493}
 					]
         		},
 				{
@@ -697,11 +806,12 @@
 		let barras = new Chart(barrasChart, {	
 			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
 			data: {
-				labels:['GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
+				labels:['IT', 'GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
 				datasets:[
 					{
 					label:'Letalidade',
 					data:[
+						13.12,
 						12.13,
 						10.98,
 						10.09,
@@ -713,6 +823,7 @@
 					],
 					//backgroundColor:'Green'	
 					backgroundColor:[
+						'rgba(46, 117, 182, 0.9)',
 						'rgba(46, 117, 182, 0.9)',
 						'rgba(46, 117, 182, 0.9)',
 						'rgba(46, 117, 182, 0.9)',
@@ -732,7 +843,7 @@
 					borderColor:'rgba(255, 255, 255, 0.8)',
 					borderWidth: 2,
 					backgroundColor: 'rgba(255, 255, 255, 0.01',
-					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
+					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
 					type: 'line',
 					pointRadius: 0,
 					order: 1
@@ -797,6 +908,7 @@
 		);		
 		//var endereco = logLogChart.toBase64Image();
 		//document.write(endereco) 
+		
     </script>
 </body>
 </html>
