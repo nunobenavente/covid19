@@ -8,18 +8,18 @@
 
 <style>
 #logLog {
-	width: 68%;
-  	height: 900px;
+	width: 70%;
+  	/*height: 900px;*/
 	float: left;
-	/*margin: 10px;*/
+	margin: 5px 5px;
 	padding: 10px;
   	border: 0px solid #aaaaaa;
   	background-color: #222a35;
 }
 #barrasLinear {
-	width: 30%;
+	width: 35%;
 	height:35%;
-  	float: right;
+  	float: left;
 	margin: 5px;
 	padding: 0px;
   	border: 0px solid #aaaaaa;
@@ -241,6 +241,87 @@
 					{x:103228, y:35862},
 					{x:108202, y:34680},
 					{x:113525, y:33829}
+					]
+        		},
+				{
+        		    label: 'GB',
+					showLine:true,
+					fill:false,
+					borderWidth: 1,
+					borderColor:'rgba(46, 117, 182, 1)',
+					backgroundColor:'rgba(46, 117, 182, 1)',
+            		data: [
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:2,y:	2},
+					{x:3,y:	1},
+					{x:3,y:	1},
+					{x:4,y:	2},
+					{x:4,y:	2},
+					{x:8,y:	6},
+					{x:8,y:	6},
+					{x:9,y:	7},
+					{x:9,y:	6},
+					{x:9,y:	6},
+					{x:9,y:	5},
+					{x:9,y:	5},
+					{x:9,y:	1},
+					{x:9,y:	1},
+					{x:10,y:	1},
+					{x:10,y:	1},
+					{x:10,y:	1},
+					{x:10,y:	1},
+					{x:14,y:	5},
+					{x:14,y:	5},
+					{x:14,y:	5},
+					{x:14,y:	4},
+					{x:17,y:	7},
+					{x:19,y:	9},
+					{x:24,y:	14},
+					{x:37,y:	23},
+					{x:41,y:	27},
+					{x:52,y:	38},
+					{x:85,y:	71},
+					{x:115,y:	98},
+					{x:163,y:	144},
+					{x:206,y:	182},
+					{x:273,y:	236},
+					{x:321,y:	280},
+					{x:373,y:	321},
+					{x:456,y:	371},
+					{x:590,y:	475},
+					{x:707,y:	544},
+					{x:1140,y:	934},
+					{x:1391,y:	1118},
+					{x:1543,y:	1222},
+					{x:1950,y:	1577},
+					{x:2630,y:	2174},
+					{x:3277,y:	2687},
+					{x:3983,y:	3276},
+					{x:5018,y:	3878},
+					{x:5683,y:	4292},
+					{x:6650,y:	5107},
+					{x:8077,y:	6127},
+					{x:9529,y:	6899},
+					{x:11658,y:	8381},
+					{x:14543,y:	10560},
+					{x:17089,y:	12071},
+					{x:19522,y:	13839},
+					{x:22141,y:	15491},
+					{x:25150,y:	17073},
+					{x:29474,y:	19945},
+					{x:33718,y:	22060},
+					{x:38168,y:	23625},
+					{x:41903,y:	24814},
+					{x:47806,y:	28284},
+					{x:51608,y:	29467},
+					{x:55242,y:	30092},
+					{x:60733,y:	31259},
+					{x:65077,y:	31359}
 					]
         		},
 				{
@@ -486,6 +567,7 @@
 					fill:false,
 					borderWidth: 1,
 					borderColor:'rgba(200, 200, 200, 0.5)',
+					hidden: true,
             		data: [
 					{x: 1000000, y: 1},
 					{x: 1000000, y: 1000000},
@@ -518,7 +600,7 @@
                             //return Number(value.toString());//pass tick values as a string into Number function
 							//},
 							fontSize: 10
-							//max: 2000000
+							//min: 1000
 						}
            			}],
 					yAxes: [{
@@ -540,6 +622,7 @@
                             //return Number(value.toString());//pass tick values as a string into Number function
 							//},
 							fontSize: 10
+							//min: 100
 							//max: 1000000
 							
 						}
@@ -559,7 +642,7 @@
 					//mode: 'point'
 		            callbacks: {
 						title: function(tooltipItems, data) {
-               			return data.datasets[tooltipItems[0].datasetIndex].label;
+               			return data.datasets[tooltipItems[0].datasetIndex].label + " (Tot, 7 dias)";
 						}
 					}
 				},
