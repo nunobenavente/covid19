@@ -8,7 +8,7 @@
 
 <style>
 #logLog {
-	width: 70%;
+	width: 68%;
   	height: 900px;
 	float: left;
 	/*margin: 10px;*/
@@ -102,7 +102,7 @@
 					]
         		},
 				{
-        		    label: 'SPA',
+        		    label: 'ES',
 					showLine:true,
 					fill:false,
 					borderWidth: 1,
@@ -154,11 +154,12 @@
 					{x:130757, y:51962},
 					{x:135030, y:49837},
 					{x:140508, y:46093},
-					{x:146688, y:44554}
+					{x:146688, y:44554},
+					{x:152444, y:42208}
 					]
         		},
 				{
-        		    label: 'GER',
+        		    label: 'DE',
 					showLine:true,
 					fill:false,
 					borderWidth: 1,
@@ -237,7 +238,8 @@
 					{x:95391, y:38093},
 					{x:99225, y:37312},
 					{x:103228, y:35862},
-					{x:108202, y:34680}
+					{x:108202, y:34680},
+					{x:113525, y:33829}
 					]
         		},
 				{
@@ -290,7 +292,8 @@
 					{x:17851, y:6985},
 					{x:18803, y:7053},
 					{x:19580, y:6985},
-					{x:20549, y:6935}
+					{x:20549, y:6935},
+					{x:21762, y:7065}
 					]
         		},
 				{
@@ -399,7 +402,7 @@
     		options: {
 				title:{
 					display:true,
-					text:'COVID19 no Mundo - Evolu\xE7\xE3o dos casos confirmados',
+					text:['COVID19 no Mundo - Evolu\xE7\xE3o dos casos confirmados','10 Abril'],
 					fontSize:18
 				},
         		scales: {
@@ -454,7 +457,7 @@
                 		tension: 0 // disables bezier curves
             		},
 					point: {
-                        radius: 1.2
+                        radius: 0.6
                     }
        			},
 				
@@ -477,19 +480,19 @@
 		let barras = new Chart(barrasChart, {	
 			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
 			data: {
-				labels:['UK', 'NL', 'SPA', 'BRA', 'USA', 'POR', 'GER', 'KOR'],
+				labels:['GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
 				datasets:[
 					{
 					label:'Letalidade',
 					data:[
-						11.57,
-						10.90,
-						10.00,
-						5.07,
-						3.42,
-						2.93,
-						2.07,
-						1.96
+						12.13,
+						10.98,
+						10.09,
+						5.27,
+						3.58,
+						2.81,
+						2.20,
+						1.99
 					],
 					//backgroundColor:'Green'	
 					backgroundColor:[
@@ -519,6 +522,7 @@
 					}					
 				]
 			},
+			
 			options: {
 				title:{
 					display:true,
@@ -534,16 +538,20 @@
 		            callbacks: {
         				label: function(tooltipItem, data) {
         					var dataset = data.datasets[tooltipItem.datasetIndex];
-          					var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-          					return previousValue + currentValue;
-          					});
+          					//var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+          					//return previousValue + currentValue;
+          					//});
           					var currentValue = dataset.data[tooltipItem.index];
           					return currentValue + "%";
         				}
       				}
 				},
 				responsive: true,
-				aspectRatio: 1.5
+				aspectRatio: 1.5,
+				animation: {
+					onComplete: function () {
+					}
+				}
 			}
     	}
 		);		
