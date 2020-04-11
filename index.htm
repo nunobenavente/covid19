@@ -31,9 +31,15 @@
   	background-color: #222a35;
 }
 
-#chartdiv {
+#letalidadediv {
   width: 35%;
-  height: 350px;
+  height: 360px;
+  margin: 10px 20px 20px 10px;
+  float:left;
+ }
+ #casospormilhaodiv {
+  width: 35%;
+  height: 360px;
   margin: 10px 20px 20px 10px;
   float:left;
  }
@@ -48,7 +54,8 @@
 <!--	<div id="barrasLinear" class="container">
     	<canvas id="barrasCanvas" style="background-color:#222a35"></canvas>
     </div>-->
-    <div id="chartdiv"></div>
+    <div id="letalidadediv"></div>
+    <div id="casospormilhaodiv"></div>
     
     <script>
     	let myChart = document.getElementById('logLogCanvas').getContext('2d');
@@ -945,7 +952,7 @@ am4core.useTheme(am4themes_dark);
 // Themes end
 
 // Create chart instance
-var chart = am4core.create("chartdiv", am4charts.XYChart);
+var chart = am4core.create("letalidadediv", am4charts.XYChart);
 
 
 // Add data
@@ -1021,9 +1028,13 @@ categoryAxis.renderer.labels.template.fontSize = 10;
 
 var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 valueAxis.renderer.grid.template.strokeDasharray = "4,4";
-valueAxis.renderer.labels.template.disabled = true;
-valueAxis.title.text = "%";
-valueAxis.title.fontSize = 12;
+valueAxis.renderer.labels.template.disabled = false;
+//valueAxis.title.text = "%";
+//valueAxis.title.fontSize = 12;
+valueAxis.numberFormatter = new am4core.NumberFormatter();
+valueAxis.numberFormatter.numberFormat = "#'%'"
+//valueAxis.renderer.labels.template.adapter.add("text", function(text) {
+ // return text + "%";});
 valueAxis.renderer.labels.template.fontSize = 10;
 valueAxis.min = 0;
 
@@ -1073,6 +1084,114 @@ var circle = bullet.createChild(am4core.Circle);
 circle.radius = 1;
 circle.fill = am4core.color("#eee");
 circle.strokeWidth = 1;
+
+
+/////////////////////////////////////////////
+// CASOS POR MILHAO 
+// Create chart instance
+var chart = am4core.create("casospormilhaodiv", am4charts.XYChart);
+
+
+// Add data
+chart.data = [{
+    "pais": "IT",
+    "points": 2442,
+    "color": chart.colors.next(),
+	"bullet": "./flags/IT.png"
+}, {
+    "pais": "GB",
+    "points": 1122,
+    "color": chart.colors.next(),
+    "bullet": "./flags/GB.png"
+}, {
+    "pais": "NL",
+    "points": 1426,
+    "color": chart.colors.next(),
+    "bullet": "./flags/NL.png"
+}, {
+    "pais": "ES",
+    "points": 3464,
+    "color": chart.colors.next(),
+    "bullet": "./flags/ES.png"
+}, {
+    "pais": "BR",
+    "points": 95,
+    "color": chart.colors.next(),
+    "bullet": "./flags/BR.png"
+}, {
+    "pais": "US",
+    "points": 1533,
+    "color": chart.colors.next(),
+    "bullet": "./flags/US.png"
+}, {
+    "pais": "PT",
+    "points": 1548,
+    "color": "green",
+    "bullet": "./flags/PT.png"
+}, {
+    "pais": "DE",
+    "points": 1478,
+    "color": chart.colors.next(),
+    "bullet": "./flags/DE.png"
+}, {
+    "pais": "KR",
+    "points": 203,
+    "color": chart.colors.next(),
+    "bullet": "./flags/KR.png"	
+}];
+
+var title = chart.titles.create();
+title.text = "[bold font-size: 18]Casos/milhão de habitantes[/]\n";
+title.textAlign = "middle";
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "pais";
+categoryAxis.renderer.grid.template.disabled = true;
+categoryAxis.renderer.minGridDistance = 30;
+categoryAxis.renderer.inside = true;
+categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+categoryAxis.renderer.labels.template.fontSize = 10;
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+valueAxis.renderer.labels.template.disabled = false;
+//valueAxis.title.text = "%";
+//valueAxis.title.fontSize = 12;
+valueAxis.renderer.labels.template.fontSize = 10;
+valueAxis.min = 0;
+valueAxis.max = 4000;
+
+// Do not crop bullets
+chart.maskBullets = false;
+
+// Remove padding
+chart.paddingBottom = 0;
+
+chart.numberFormatter.numberFormat = "#";
+
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries());
+series.dataFields.valueY = "points";
+series.dataFields.categoryX = "pais";
+series.columns.template.propertyFields.fill = "color";
+series.columns.template.propertyFields.stroke = "color";
+series.columns.template.column.cornerRadiusTopLeft = 15;
+series.columns.template.column.cornerRadiusTopRight = 15;
+series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+
+// Add bullets
+var bullet = series.bullets.push(new am4charts.Bullet());
+var image = bullet.createChild(am4core.Image);
+image.horizontalCenter = "middle";
+image.verticalCenter = "bottom";
+image.dy = 20;
+image.y = am4core.percent(100);
+image.propertyFields.href = "bullet";
+image.tooltipText = series.columns.template.tooltipText;
+image.propertyFields.fill = "color";
+image.filters.push(new am4core.DropShadowFilter());
+
 		
 		
     </script>
