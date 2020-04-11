@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
 <title>Dados COVID-19</title>
 
 <style>
@@ -25,6 +30,13 @@
   	border: 0px solid #aaaaaa;
   	background-color: #222a35;
 }
+
+#chartdiv {
+  width: 35%;
+  height: 350px;
+  margin: 10px 20px 20px 10px;
+  float:left;
+ }
 </style>
 
 </head>
@@ -33,9 +45,11 @@
 	<div id="logLog" class="container">
     	<canvas id="logLogCanvas" style="background-color:#222a35"></canvas>
     </div>
-	<div id="barrasLinear" class="container">
+<!--	<div id="barrasLinear" class="container">
     	<canvas id="barrasCanvas" style="background-color:#222a35"></canvas>
-    </div>
+    </div>-->
+    <div id="chartdiv"></div>
+    
     <script>
     	let myChart = document.getElementById('logLogCanvas').getContext('2d');
 		
@@ -100,7 +114,8 @@
 					{x:12442, y:4999},
 					{x:13141, y:4890},
 					{x:13956, y:4922},
-					{x:15472, y:5586}
+					{x:15472, y:5586},
+					{x:15987, y:5463}
 					]
         		},
 				{
@@ -138,7 +153,8 @@
 					{x:12056, y:	7477},
 					{x:13717, y:	8000},
 					{x:15927, y:	9091},
-					{x:17857, y:	9947}
+					{x:17857, y:	9947},
+					{x:19638, y:10582}
 					]
         		},
 				{
@@ -195,7 +211,8 @@
 					{x:135030, y:49837},
 					{x:140508, y:46093},
 					{x:146688, y:44554},
-					{x:152444, y:42208}
+					{x:152444, y:42208},
+					{x:157020, y:39312}
 					]
         		},
 				{
@@ -279,7 +296,8 @@
 					{x:99225, y:37312},
 					{x:103228, y:35862},
 					{x:108202, y:34680},
-					{x:113525, y:33829}
+					{x:113525, y:33829},
+					{x:117658, y:31880}
 					]
         		},
 				{
@@ -360,7 +378,8 @@
 					{x:51608,y:	29467},
 					{x:55242,y:	30092},
 					{x:60733,y:	31259},
-					{x:65077,y:	31359}
+					{x:65077,y:	31359},
+					{x:70272, y:32104}
 					]
         		},
 				{
@@ -418,7 +437,8 @@
 					{x:132544, y:	30808},
 					{x:135583, y:	29794},
 					{x:139419, y:	28848},
-					{x:143623, y:	28384}
+					{x:143623, y:	28384},
+					{x:147574, y:27750}
 					]
         		},
 				{
@@ -802,112 +822,258 @@
 		}
 		);
 		
-		let barrasChart = document.getElementById('barrasCanvas').getContext('2d');
-		let barras = new Chart(barrasChart, {	
-			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-			data: {
-				labels:['IT', 'GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
-				datasets:[
-					{
-					label:'Letalidade',
-					data:[
-						13.12,
-						12.13,
-						10.98,
-						10.09,
-						5.27,
-						3.58,
-						2.81,
-						2.20,
-						1.99
-					],
-					//backgroundColor:'Green'	
-					backgroundColor:[
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)',
-						'green',
-						'rgba(46, 117, 182, 0.9)',
-						'rgba(46, 117, 182, 0.9)'
-					],
-					hoverBorderWidth:2,
-					hoverBorderColor:'#fff',
-					fill: false,
-					order: 2
-					},
-					{
-					label: 'Global',
-					borderColor:'rgba(255, 255, 255, 0.8)',
-					borderWidth: 2,
-					backgroundColor: 'rgba(255, 255, 255, 0.01',
-					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
-					type: 'line',
-					pointRadius: 0,
-					order: 1
-					}					
-				]
-			},
-			
-			options: {
-				title:{
-					display:true,
-					text:'COVID19 - Letalidade',
-					fontSize:18
-				},
-				legend: {
-		            display: false
-				},
-				scales: {
-					yAxes: [{
- 		               	id: 'left-y-axis',
-                		position: 'left',
-						scaleLabel: {
-        					display: true,
-        					labelString: '%',
-							fontSize: 14,
-							padding: 10
-      					},
-						gridLines: {
-							color: 'rgba(200, 200, 200, 0.05)',
-							zeroLineColor: 'rgba(200, 200, 200, 0.05)'
-						},
-						ticks: {
-							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
-                            //return Number(value.toString());//pass tick values as a string into Number function
-							//},
-							fontSize: 10
-							
-						}
-            		}]
-        		},
+		//let barrasChart = document.getElementById('barrasCanvas').getContext('2d');
+//		let barras = new Chart(barrasChart, {	
+//			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+//			data: {
+//				labels:['IT', 'GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
+//				datasets:[
+//					{
+//					label:'Letalidade',
+//					data:[
+//						13.12,
+//						12.13,
+//						10.98,
+//						10.09,
+//						5.27,
+//						3.58,
+//						2.81,
+//						2.20,
+//						1.99
+//					],
+//					//backgroundColor:'Green'	
+//					backgroundColor:[
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)',
+//						'green',
+//						'rgba(46, 117, 182, 0.9)',
+//						'rgba(46, 117, 182, 0.9)'
+//					],
+//					hoverBorderWidth:2,
+//					hoverBorderColor:'#fff',
+//					fill: false,
+//					order: 2
+//					},
+//					{
+//					label: 'Global',
+//					borderColor:'rgba(255, 255, 255, 0.8)',
+//					borderWidth: 2,
+//					backgroundColor: 'rgba(255, 255, 255, 0.01)',
+//					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
+//					type: 'line',
+//					pointRadius: 0,
+//					order: 1
+//					}					
+//				]
+//			},
+//			
+//			options: {
+//				title:{
+//					display:true,
+//					text:'COVID19 - Letalidade',
+//					fontSize:18
+//				},
+//				legend: {
+//		            display: false
+//				},
+//				scales: {
+//					yAxes: [{
+// 		               	id: 'left-y-axis',
+//                		position: 'left',
+//						scaleLabel: {
+//        					display: true,
+//        					labelString: '%',
+//							fontSize: 14,
+//							padding: 10
+//      					},
+//						gridLines: {
+//							color: 'rgba(200, 200, 200, 0.05)',
+//							zeroLineColor: 'rgba(200, 200, 200, 0.05)'
+//						},
+//						ticks: {
+//							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
+//                            //return Number(value.toString());//pass tick values as a string into Number function
+//							//},
+//							fontSize: 10
+//							
+//						}
+//            		}]
+//        		},
+//
+//				tooltips: {
+//					//mode: 'point'
+//		            callbacks: {
+//        				label: function(tooltipItem, data) {
+//        					var dataset = data.datasets[tooltipItem.datasetIndex];
+//          					//var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+//          					//return previousValue + currentValue;
+//          					//});
+//          					var currentValue = dataset.data[tooltipItem.index];
+//          					return currentValue + "%";
+//        				}
+//      				}
+//				},
+//				responsive: true,
+//				aspectRatio: 1.5,
+//				animation: {
+//					onComplete: function () {
+//					}
+//				}
+//			}
+//    	}
+//		);		
 
-				tooltips: {
-					//mode: 'point'
-		            callbacks: {
-        				label: function(tooltipItem, data) {
-        					var dataset = data.datasets[tooltipItem.datasetIndex];
-          					//var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-          					//return previousValue + currentValue;
-          					//});
-          					var currentValue = dataset.data[tooltipItem.index];
-          					return currentValue + "%";
-        				}
-      				}
-				},
-				responsive: true,
-				aspectRatio: 1.5,
-				animation: {
-					onComplete: function () {
-					}
-				}
-			}
-    	}
-		);		
-		//var endereco = logLogChart.toBase64Image();
-		//document.write(endereco) 
+		/**
+ * ---------------------------------------
+ * This demo was created using amCharts 4.
+ * 
+ * For more information visit:
+ * https://www.amcharts.com/
+ * 
+ * Documentation is available at:
+ * https://www.amcharts.com/docs/v4/
+ * ---------------------------------------
+ */
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+am4core.useTheme(am4themes_dark);
+// Themes end
+
+// Create chart instance
+var chart = am4core.create("chartdiv", am4charts.XYChart);
+
+
+// Add data
+chart.data = [{
+    "name": "IT",
+    "points": 12.77,
+    "color": chart.colors.next(),
+	"bullet": "./flags/IT.png",
+    //"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
+	"media": 6.06
+}, {
+    "name": "GB",
+    "points": 12.03,
+    "color": chart.colors.next(),
+    "bullet": "./flags/GB.png",
+	"media": 6.06
+}, {
+    "name": "NL",
+    "points": 10.80,
+    "color": chart.colors.next(),
+    "bullet": "./flags/NL.png",
+	"media": 6.06
+}, {
+    "name": "ES",
+    "points": 10.10,
+    "color": chart.colors.next(),
+    "bullet": "./flags/ES.png",
+	"media": 6.06
+}, {
+    "name": "BR",
+    "points": 5.39,
+    "color": chart.colors.next(),
+    "bullet": "./flags/BR.png",
+	"media": 6.06
+}, {
+    "name": "US",
+    "points": 3.74,
+    "color": chart.colors.next(),
+    "bullet": "./flags/US.png",
+	"media": 6.06
+}, {
+    "name": "PT",
+    "points": 2.94,
+    "color": "green",
+    "bullet": "./flags/PT.png",
+	"media": 6.06
+}, {
+    "name": "DE",
+    "points": 2.23,
+    "color": chart.colors.next(),
+    "bullet": "./flags/DE.png",
+	"media": 6.06
+}, {
+    "name": "KR",
+    "points": 2.01,
+    "color": chart.colors.next(),
+    "bullet": "./flags/KR.png",
+	"media": 6.06	
+}];
+
+var title = chart.titles.create();
+title.text = "[bold font-size: 18]Letalidade[/]\n(óbitos/casos confirmados)";
+title.textAlign = "middle";
+
+// Create axes
+var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+categoryAxis.dataFields.category = "name";
+categoryAxis.renderer.grid.template.disabled = true;
+categoryAxis.renderer.minGridDistance = 30;
+categoryAxis.renderer.inside = true;
+categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+categoryAxis.renderer.labels.template.fontSize = 10;
+
+var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+valueAxis.renderer.labels.template.disabled = true;
+valueAxis.title.text = "%";
+valueAxis.title.fontSize = 12;
+valueAxis.renderer.labels.template.fontSize = 10;
+valueAxis.min = 0;
+
+// Do not crop bullets
+chart.maskBullets = false;
+
+// Remove padding
+chart.paddingBottom = 0;
+
+chart.numberFormatter.numberFormat = "#.00";
+
+// Create series
+var series = chart.series.push(new am4charts.ColumnSeries());
+series.dataFields.valueY = "points";
+series.dataFields.categoryX = "name";
+series.columns.template.propertyFields.fill = "color";
+series.columns.template.propertyFields.stroke = "color";
+series.columns.template.column.cornerRadiusTopLeft = 15;
+series.columns.template.column.cornerRadiusTopRight = 15;
+series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/b]";
+
+// Add bullets
+var bullet = series.bullets.push(new am4charts.Bullet());
+var image = bullet.createChild(am4core.Image);
+image.horizontalCenter = "middle";
+image.verticalCenter = "bottom";
+image.dy = 20;
+image.y = am4core.percent(100);
+image.propertyFields.href = "bullet";
+image.tooltipText = series.columns.template.tooltipText;
+image.propertyFields.fill = "color";
+image.filters.push(new am4core.DropShadowFilter());
+
+var lineSeries = chart.series.push(new am4charts.LineSeries());
+lineSeries.name = "Global";
+lineSeries.dataFields.valueY = "media";
+lineSeries.dataFields.categoryX = "name";
+
+lineSeries.stroke = am4core.color("#eee");
+lineSeries.strokeWidth = 2;
+lineSeries.tooltip.label.textAlign = "middle";
+
+var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
+bullet.tooltipText = "[#eee font-size: 12px]MÉDIA GLOBAL:[/][font-weight: bold] {media}%[/]"
+var circle = bullet.createChild(am4core.Circle);
+circle.radius = 1;
+circle.fill = am4core.color("#eee");
+circle.strokeWidth = 1;
+		
 		
     </script>
 </body>
