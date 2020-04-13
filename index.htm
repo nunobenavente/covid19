@@ -21,1022 +21,50 @@
   	border: 0px solid #aaaaaa;
   	background-color: #222a35;
 }
-/*#barrasLinear {
-	width: 35%;
-	height:360px;
-  	float: left;
-	margin: 5px;
-	padding: 0px;
-  	border: 0px solid #aaaaaa;
-  	background-color: #222a35;
-}*/
+
+#loglogAmchartsDiv {
+	background-color:#222;	
+	width: 60%;
+	height: 800px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+/*	border: 1px solid #aaa;*/
+}
 
 #letalidadediv {
   width: 35%;
   height: 360px;
   margin: 10px 20px 20px 10px;
   float:right;
-/*  clear:left;*/
+  /*clear:both;*/
  }
  #casospormilhaodiv {
   width: 35%;
   height: 360px;
   margin: 10px 20px 20px 10px;
   float:right;
-  /*clear:left;*/
+  /*clear:both;*/
  }
 </style>
 
 </head>
 
 <body style="background-color:#222">
-	<div id="logLog" class="container">
+<!--	<div id="logLog" class="container">
     	<canvas id="logLogCanvas" style="background-color:#222a35"></canvas>
     </div>
-<!--	<div id="barrasLinear" class="container">
+	<div id="barrasLinear" class="container">
     	<canvas id="barrasCanvas" style="background-color:#222a35"></canvas>
     </div>-->
+    <div id="loglogAmchartsDiv"></div>
     <div id="letalidadediv"></div>
+    
+    
     <div id="casospormilhaodiv"></div>
     
     <script>
-    	let myChart = document.getElementById('logLogCanvas').getContext('2d');
-		
-		//GLOBAL OPTIONS
-		//Chart.defaults.global.defaultFontFamily = 'Lato';
-		Chart.defaults.global.defaultFontFamily = "Trebuchet MS, Helvetica, sans-serif";
-		Chart.defaults.global.defaultFontColor = 'rgba(217, 217, 217, 1';
-		Chart.defaults.global.defaultFontSize = 10;
-		Chart.defaults.global.showLines = true;
-		Chart.defaults.global.legend.labels.boxWidth = 10;
-		Chart.defaults.global.legend.position = 'bottom';
-		Chart.defaults.global.layout.padding = 10;
-		//Chart.defaults.global.elements.point.hoverRadius = 10;
-						
-		let logLogChart = new Chart(myChart, {
-			type: 'scatter', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-			data: {
-		        datasets: [{
-        		    label: 'POR',
-					showLine:true,
-					borderColor:'rgba(255, 255, 255, 0.8)',
-					backgroundColor:'rgba(255, 255, 255, 0.8)',
-					borderWidth: 2,
-					fill:false,
-            		data: [
-//					{x: 2, y: 2},
-//					{x: 4, y: 4},
-//					{x: 6, y: 6},
-//					{x: 9, y: 9},
-//					{x:13, y:13},
-//					{x:21, y:21},
-//					{x:30, y:30},
-//					{x:39, y:37},
-//					{x:41, y:37},
-//					{x:59, y:53},
-//					{x:78, y:69},
-					{x:112, y:99},
-					{x:169, y:148},
-					{x:245, y:215},
-					{x:331, y:292},
-					{x:448, y:407},
-					{x:642, y:583},
-					{x:785, y:707},
-					{x:1020, y:908},
-					{x:1280, y:1111},
-					{x:1600, y:1355},
-					{x:2060, y:1729},
-					{x:2362, y:1914},
-					{x:2995, y:2353},
-					{x:3544, y:2759},
-					{x:4268, y:3248},
-					{x:5170, y:3890},
-					{x:5962, y:4362},
-					{x:6408, y:4348},
-					{x:7443, y:5081},
-					{x:8251, y:5256},
-					{x:9034, y:5490},
-					{x:9886, y:5618},
-					{x:10524, y:5354},
-					{x:11278, y:5316},
-					{x:11730, y:5322},
-					{x:12442, y:4999},
-					{x:13141, y:4890},
-					{x:13956, y:4922},
-					{x:15472, y:5586},
-					{x:15987, y:5463},
-					{x:16585, y:5307}
-					]
-        		},
-				{
-        		    label: 'BR',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'green',
-					//pointRadius: 3,
-					backgroundColor:'green',
-            		data: [
-					{x:121, y:	108},
-					{x:200, y:	175},
-					{x:234, y:	209},
-					{x:291, y:	257},
-					{x:428, y:	376},
-					{x:621, y:	544},
-					{x:904, y:	806},
-					{x:1128, y:	1007},
-					{x:1546, y:	1346},
-					{x:1891, y:	1657},
-					{x:2201, y:	1910},
-					{x:2433, y:	2005},
-					{x:2915, y:	2294},
-					{x:3417, y:	2513},
-					{x:3904, y:	2776},
-					{x:4256, y:	2710},
-					{x:4579, y:	2688},
-					{x:5717, y:	3516},
-					{x:6836, y:	4403},
-					{x:7910, y:	4995},
-					{x:9056, y:	5639},
-					{x:10278, y:	6374},
-					{x:11130, y:	6874},
-					{x:12056, y:	7477},
-					{x:13717, y:	8000},
-					{x:15927, y:	9091},
-					{x:17857, y:	9947},
-					{x:19638, y:10582},
-					{x:20727, y:10449}
-					]
-        		},
-				{
-        		    label: 'ES',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'pink',
-					//pointRadius: 3,
-					backgroundColor:'pink',
-            		data: [
-//					{x: 1, y: 1},
-//					{x: 5, y: 5},
-//					{x: 10, y: 10},
-//					{x: 23, y: 23},
-//					{x:32, y:32},
-//					{x:64, y:64},
-//					{x:81, y:81},
-					{x:112, y:111},
-					{x:149, y:144},
-					{x:198, y:188},
-					{x:259, y:236},
-					{x:372, y:340},
-					{x:428, y:364},
-					{x:587, y:506},
-					{x:1202, y:1090},
-					{x:1637, y:1488},
-					{x:2138, y:1940},
-					{x:3002, y:2743},
-					{x:4229, y:3857},
-					{x:5751, y:5323},
-					{x:7751, y:7164},
-					{x:9189, y:7987},
-					{x:11176, y:9539},
-					{x:13714, y:11576},
-					{x:17145, y:14143},
-					{x:19978, y:15749},
-					{x:24924, y:19173},
-					{x:28570, y:20819},
-					{x:33087, y:23898},
-					{x:39671, y:28495},
-					{x:47608, y:33894},
-					{x:56186, y:39041},
-					{x:64057, y:44079},
-					{x:72246, y:47322},
-					{x:78795, y:50225},
-					{x:85193, y:52106},
-					{x:94415, y:54744},
-					{x:102134, y:54526},
-					{x:110236, y:54050},
-					{x:117708, y:53651},
-					{x:124734, y:52488},
-					{x:130757, y:51962},
-					{x:135030, y:49837},
-					{x:140508, y:46093},
-					{x:146688, y:44554},
-					{x:152444, y:42208},
-					{x:157020, y:39312},
-					{x:161850, y:37116}
-					]
-        		},
-				{
-        		    label: 'DE',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(255, 255, 0, 0.8)',
-					backgroundColor:'rgba(255, 255, 0, 0.8)',
-            		data: [
-//					{x: 1, y: 1},
-//					{x: 4, y: 4},
-//					{x: 4, y: 4},
-//					{x: 5, y: 5},
-//					{x:7, y:7},
-//					{x:8, y:8},
-//					{x:9, y:9},
-//					{x:11, y:10},
-//					{x:11, y:7},
-//					{x:11, y:7},
-//					{x:12, y:7},
-//					{x:13, y:6},
-//					{x:13, y:5},
-//					{x:13, y:4},
-//					{x:13, y:2},
-//					{x:15, y:4},
-//					{x:15, y:4},
-//					{x:15, y:3},
-//					{x:15, y:2},
-//					{x:15, y:2},
-//					{x:15, y:2},
-//					{x:15, y:2},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:16, y:1},
-//					{x:18, y:2},
-//					{x:21, y:5},
-//					{x:47, y:31},
-//					{x:57, y:41},
-					{x:111, y:95},
-					{x:129, y:113},
-					{x:157, y:141},
-					{x:196, y:178},
-					{x:262, y:241},
-					{x:400, y:353},
-					{x:684, y:627},
-					{x:847, y:736},
-					{x:902, y:773},
-					{x:1139, y:982},
-					{x:1296, y:1100},
-					{x:1567, y:1305},
-					{x:2369, y:1969},
-					{x:3062, y:2378},
-					{x:3795, y:2948},
-					{x:4838, y:3936},
-					{x:6012, y:4873},
-					{x:7156, y:5860},
-					{x:8198, y:6631},
-					{x:14138, y:11769},
-					{x:18187, y:15125},
-					{x:21463, y:17668},
-					{x:24774, y:19936},
-					{x:29212, y:23200},
-					{x:31554, y:24398},
-					{x:36508, y:28310},
-					{x:42288, y:28150},
-					{x:48582, y:30395},
-					{x:52547, y:31084},
-					{x:57298, y:32524},
-					{x:61913, y:32701},
-					{x:67366, y:35812},
-					{x:73522, y:37014},
-					{x:79696, y:37408},
-					{x:85778, y:37196},
-					{x:91714, y:39167},
-					{x:95391, y:38093},
-					{x:99225, y:37312},
-					{x:103228, y:35862},
-					{x:108202, y:34680},
-					{x:113525, y:33829},
-					{x:117658, y:31880},
-					{x:120479, y:28765}
-					]
-        		},
-				{
-        		    label: 'FR',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(50, 50, 255, 0.8)',
-					backgroundColor:'rgba(50, 50, 255, 0.8)',
-            		data: [
-						{x:100, y:	86},
-						{x:130, y:	116},
-						{x:178, y:	164},
-						{x:212, y:	196},
-						{x:285, y:	266},
-						{x:423, y:	385},
-						{x:613, y:	556},
-						{x:716, y:	616},
-						{x:1126, y:	996},
-						{x:1412, y:	1234},
-						{x:1784, y:	1572},
-						{x:2281, y:	1996},
-						{x:2876, y:	2453},
-						{x:3661, y:	3048},
-						{x:4499, y:	3783},
-						{x:5423, y:	4297},
-						{x:6633, y:	5221},
-						{x:7730, y:	5946},
-						{x:9134, y:	6853},
-						{x:10995, y:	8119},
-						{x:12612, y:	8951},
-						{x:14459, y:	9960},
-						{x:16018, y:	10595},
-						{x:19856, y:	13223},
-						{x:22304, y:	14574},
-						{x:25233, y:	16099},
-						{x:29155, y:	18160},
-						{x:32964, y:	20352},
-						{x:37575, y:	23116},
-						{x:40174, y:	24156},
-						{x:44550, y:	24694},
-						{x:52128, y:	29824},
-						{x:56989, y:	31756},
-						{x:59105, y:	29950},
-						{x:82165, y:	49201},
-						{x:89953, y:	52378},
-						{x:92839, y:	52665},
-						{x:98010, y:	53460},
-						{x:109069, y:	56941},
-						{x:112950, y:	55961},
-						{x:117749, y:	58644},
-						{x:124869, y:	42704},
-						{x:129654, y:	39701},
-						{x:132768, y:	39929}
-					]
-        		},
-				{
-        		    label: 'GB',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(46, 117, 182, 0.8)',
-					backgroundColor:'rgba(46, 117, 182, 0.8)',
-            		data: [
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:2,y:	2},
-//					{x:3,y:	1},
-//					{x:3,y:	1},
-//					{x:4,y:	2},
-//					{x:4,y:	2},
-//					{x:8,y:	6},
-//					{x:8,y:	6},
-//					{x:9,y:	7},
-//					{x:9,y:	6},
-//					{x:9,y:	6},
-//					{x:9,y:	5},
-//					{x:9,y:	5},
-//					{x:9,y:	1},
-//					{x:9,y:	1},
-//					{x:10,y:	1},
-//					{x:10,y:	1},
-//					{x:10,y:	1},
-//					{x:10,y:	1},
-//					{x:14,y:	5},
-//					{x:14,y:	5},
-//					{x:14,y:	5},
-//					{x:14,y:	4},
-//					{x:17,y:	7},
-//					{x:19,y:	9},
-//					{x:24,y:	14},
-//					{x:37,y:	23},
-//					{x:41,y:	27},
-//					{x:52,y:	38},
-//					{x:85,y:	71},
-					{x:115,y:	98},
-					{x:163,y:	144},
-					{x:206,y:	182},
-					{x:273,y:	236},
-					{x:321,y:	280},
-					{x:373,y:	321},
-					{x:456,y:	371},
-					{x:590,y:	475},
-					{x:707,y:	544},
-					{x:1140,y:	934},
-					{x:1391,y:	1118},
-					{x:1543,y:	1222},
-					{x:1950,y:	1577},
-					{x:2630,y:	2174},
-					{x:3277,y:	2687},
-					{x:3983,y:	3276},
-					{x:5018,y:	3878},
-					{x:5683,y:	4292},
-					{x:6650,y:	5107},
-					{x:8077,y:	6127},
-					{x:9529,y:	6899},
-					{x:11658,y:	8381},
-					{x:14543,y:	10560},
-					{x:17089,y:	12071},
-					{x:19522,y:	13839},
-					{x:22141,y:	15491},
-					{x:25150,y:	17073},
-					{x:29474,y:	19945},
-					{x:33718,y:	22060},
-					{x:38168,y:	23625},
-					{x:41903,y:	24814},
-					{x:47806,y:	28284},
-					{x:51608,y:	29467},
-					{x:55242,y:	30092},
-					{x:60733,y:	31259},
-					{x:65077,y:	31359},
-					{x:70272, y:32104},
-					{x:78991, y:37088}
-					]
-        		},
-				{
-        		    label: 'IT',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(112, 220, 18, 0.8)',
-					backgroundColor:'rgba(112, 220, 18, 0.8)', // Preenchimento dos pontos
-					
-            		data: [
-					{x:129, y:	129},
-					{x:226, y:	226},
-					{x:319, y:	319},
-					{x:397, y:	397},
-					{x:647, y:	647},
-					{x:885, y:	871},
-					{x:1125, y:	1049},
-					{x:1686, y:	1557},
-					{x:2033, y:	1807},
-					{x:2499, y:	2180},
-					{x:3086, y:	2689},
-					{x:3855, y:	3208},
-					{x:4633, y:	3748},
-					{x:5880, y:	4755},
-					{x:7372, y:	5686},
-					{x:9169, y:	7136},
-					{x:10146, y:	7647},
-					{x:12459, y:	9373},
-					{x:15110, y:	11255},
-					{x:17657, y:	13024},
-					{x:21154, y:	15274},
-					{x:23977, y:	16605},
-					{x:27977, y:	18808},
-					{x:31503, y:	21357},
-					{x:35710, y:	23251},
-					{x:41032, y:	25922},
-					{x:47018, y:	29361},
-					{x:53575, y:	32421},
-					{x:59135, y:	35158},
-					{x:63924, y:	35947},
-					{x:69173, y:	37670},
-					{x:74383, y:	38673},
-					{x:80536, y:	39504},
-					{x:86495, y:	39477},
-					{x:92469, y:	38894},
-					{x:97686, y:	38551},
-					{x:101736, y:	37812},
-					{x:105789, y:	36616},
-					{x:110571, y:	36188},
-					{x:115239, y:	34703},
-					{x:119824, y:	33329},
-					{x:124629, y:	32160},
-					{x:128945, y:	31259},
-					{x:132544, y:	30808},
-					{x:135583, y:	29794},
-					{x:139419, y:	28848},
-					{x:143623, y:	28384},
-					{x:147574, y:27750},
-					{x:152268, y:27639}
-					]
-        		},
-				{
-        		    label: 'LU',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'darkblue',
-					backgroundColor:'darkblue', // Preenchimento dos pontos
-					
-            		data: [
-					{x:140, y:	133},
-					{x:210, y:	203},
-					{x:345, y:	319},
-					{x:484, y:	446},
-					{x:670, y:	632},
-					{x:798, y:	721},
-					{x:875, y:	794},
-					{x:1099, y:	959},
-					{x:1333, y:	1123},
-					{x:1453, y:	1108},
-					{x:1605, y:	1121},
-					{x:1831, y:	1161},
-					{x:1950, y:	1152},
-					{x:1988, y:	1113},
-					{x:2178, y:	1079},
-					{x:2319, y:	986},
-					{x:2487, y:	1034},
-					{x:2612, y:	1007},
-					{x:2729, y:	898},
-					{x:2804, y:	854},
-					{x:2843, y:	855},
-					{x:2970, y: 792},
-					{x:3034, y:	715},
-					{x:3115, y:	628},
-					{x:3223, y:	611},
-					{x:3270, y:	541}
-					]
-        		},
-				{
-        		    label: 'NL',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(212, 97, 18, 0.8)',
-					backgroundColor:'rgba(212, 97, 18, 0.8)', // Preenchimento dos pontos
-					
-            		data: [
-//					{x:1, y:1},
-//					{x:2, y:2},
-//					{x:7, y:7},
-//					{x:13, y:13},
-//					{x:18, y:18},
-//					{x:28, y:28},
-//					{x:38, y:38},
-//					{x:82, y:81},
-					{x:128, y:126},
-					{x:188, y:181},				
-					{x:265, y:252},
-					{x:321, y:303},
-					{x:382, y:354},
-					{x:503, y:465},
-					{x:614, y:532},
-					{x:804, y:676},
-					{x:959, y:771},
-					{x:1135, y:870},
-					{x:1413, y:1092},
-					{x:1705, y:1323},
-					{x:2051, y:1548},
-					{x:2460, y:1846},
-					{x:2994, y:2190},
-					{x:3631, y:2672},
-					{x:4204, y:3069},
-					{x:4749, y:3336},
-					{x:5560, y:3855},
-					{x:6412, y:4361},
-					{x:7431, y:4971},
-					{x:8603, y:5609},
-					{x:9762, y:6131},
-					{x:10866, y:6662},
-					{x:11750, y:7001},
-					{x:12595, y:7035},
-					{x:13614, y:7202},
-					{x:14697, y:7266},
-					{x:15723, y:7120},
-					{x:16627, y:6865},
-					{x:17851, y:6985},
-					{x:18803, y:7053},
-					{x:19580, y:6985},
-					{x:20549, y:6935},
-					{x:21762, y:7065},
-					{x:24413, y:7786}
-					]
-        		},
-				{
-        		    label: 'KR',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(146, 208, 80, 0.8)',
-					backgroundColor:'rgba(146, 208, 80, 0.8)', // Preenchimento dos pontos
-					
-            		data: [
-//					{x:1,	y:1},
-//					{x:1,	y:1},
-//					{x:1,	y:1},
-//					{x:1,	y:1},
-//					{x:2,	y:2},
-//					{x:2,	y:2},
-//					{x:3,	y:3},
-//					{x:4,	y:3},
-//					{x:4,	y:3},
-//					{x:4,	y:3},
-//					{x:4,	y:3},
-//					{x:7,	y:5},
-//					{x:12,	y:10},
-//					{x:15,	y:12},
-//					{x:15,	y:11},
-//					{x:16,	y:12},
-//					{x:18,	y:14},
-//					{x:23,	y:19},
-//					{x:24,	y:17},
-//					{x:24,	y:12},
-//					{x:25,	y:10},
-//					{x:27,	y:12},
-//					{x:28,	y:12},
-//					{x:28,	y:10},
-//					{x:28,	y:5},
-//					{x:28,	y:4},
-//					{x:28,	y:4},
-//					{x:29,	y:4},
-//					{x:30,	y:3},
-//					{x:31,	y:3},
-//					{x:46,	y:18},
-//					{x:80,	y:52},
-					{x:155,	y:127},
-					{x:345,	y:317},
-					{x:601,	y:572},
-					{x:762,	y:732},
-					{x:892,	y:861},
-					{x:1146,	y:1100},
-					{x:1595,	y:1515},
-					{x:2022,	y:1867},
-					{x:2931,	y:2586},
-					{x:3526,	y:2925},
-					{x:4212,	y:3450},
-					{x:4812,	y:3920},
-					{x:5328,	y:4182},
-					{x:5766,	y:4171},
-					{x:6284,	y:4262},
-					{x:6767,	y:3836},
-					{x:7134,	y:3608},
-					{x:7382,	y:3170},
-					{x:7513,	y:2701},
-					{x:7755,	y:2427},
-					{x:7869,	y:2103},
-					{x:7979,	y:1695},
-					{x:8086,	y:1319},
-					{x:8162,	y:1028},
-					{x:8236,	y:854},
-					{x:8320,	y:807},
-					{x:8413,	y:658},
-					{x:8565,	y:696},
-					{x:8652,	y:673},
-					{x:8799,	y:713},
-					{x:8897,	y:735},
-					{x:8961,	y:725},
-					{x:9037,	y:717},
-					{x:9137,	y:724},
-					{x:9241,	y:676},
-					{x:9332,	y:680},
-					{x:9478,	y:679},
-					{x:9583,	y:686},
-					{x:9661,	y:700},
-					{x:9786,	y:749},
-					{x:9786,	y:649},
-					{x:9976,	y:735},
-					{x:10062,	y:730},
-					{x:10156,	y:678},
-					{x:10237,	y:654},
-					{x:10284,	y:623},
-					{x:10331,	y:545},
-					{x:10384,	y:598},
-					{x:10423,	y:447},
-					{x:10450,	y:388},
-					{x:10512, y:275}
-					]
-        		},
-				{
-        		    label: 'US',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'grey',
-					backgroundColor:'grey', // Preenchimento dos pontos
-					
-            		data: [
-					{x:103, y:	50},
-					{x:125, y:	72},
-					{x:159, y:	100},
-					{x:233, y:	173},
-					{x:338, y:	272},
-					{x:433, y:	364},
-					{x:554, y:	465},
-					{x:754, y:	651},
-					{x:1025, y:	900},
-					{x:1312, y:	1153},
-					{x:1663, y:	1430},
-					{x:2174, y:	1836},
-					{x:2951, y:	2518},
-					{x:3774, y:	3220},
-					{x:4661, y:	3907},
-					{x:6427, y:	5402},
-					{x:9415, y:	8103},
-					{x:14250, y:	12587},
-					{x:19624, y:	17450},
-					{x:26747, y:	23796},
-					{x:35206, y:	31432},
-					{x:46442, y:	41781},
-					{x:55231, y:	48804},
-					{x:69194, y:	59779},
-					{x:85991, y:	71741},
-					{x:104686, y:	85062},
-					{x:124665, y:	97918},
-					{x:143025, y:	107819},
-					{x:164620, y:	118178},
-					{x:189618, y:	134387},
-					{x:216721, y:	147527},
-					{x:245540, y:	159549},
-					{x:277965, y:	173279},
-					{x:312237, y:	187572},
-					{x:337635, y:	194610},
-					{x:368196, y:	203576},
-					{x:398809, y:	209191},
-					{x:432132, y:	215411},
-					{x:466033, y:	220493},
-					{x:529951, y:	217714}
-					]
-        		},
-				
-				{
-        		    label: 'GLOBAL',
-					showLine:true,
-					borderWidth: 1,
-					borderColor:'red',
-					backgroundColor:'red',
-					borderDash: [10, 3],
-					hidden: true,
-					
-					fill:false,
-            		data: [
-					{x:455, y:455},
-					{x:654, y:654},
-					{x:941, y:941},
-					{x:1400, y:1400},
-					{x:2100, y:2100},
-					{x:2900, y:2900},
-					{x:5600, y:5600},
-					{x:6200, y:5745},
-					{x:8200, y:7546},
-					{x:9900, y:8959},
-					{x:12000, y:10600},
-					{x:16800, y:14700},
-					{x:19900, y:17000},
-					{x:23900, y:18300},
-					{x:27600, y:21400},
-					{x:30800, y:22600},
-					{x:34400, y:24500},
-					{x:37100, y:25100},
-					{x:40100, y:23300},
-					{x:42800, y:22900},
-					{x:44800, y:20900},
-					{x:45200, y:17600},
-					{x:60400, y:29600},
-					{x:66900, y:32500},
-					{x:69000, y:31900},
-					{x:71200, y:31100},
-					{x:73300, y:30500},
-					{x:75100, y:30300},
-					{x:75600, y:30400},
-					{x:76200, y:15800},
-					{x:76800, y:9900},
-					{x:78600, y:9600},
-					{x:79000, y:7800},
-					{x:79600, y:6300},
-					{x:80400, y:5300},
-					{x:81400, y:5800},
-					{x:82700, y:6500},
-					{x:84100, y:7300},
-					{x:86000, y:7400},
-					{x:88400, y:9400},
-					{x:90300, y:10700},
-					{x:92800, y:12400},
-					{x:95100, y:13700},
-					{x:97900, y:15200},
-					{x:101800, y:17700},
-					{x:105800, y:19800},
-					{x:109800, y:21400},
-					{x:113600, y:23300},
-					{x:118600, y:25800},
-					{x:125900, y:30800},
-					{x:128400, y:30500},
-					{x:145200, y:43400},
-					{x:156100, y:50300},
-					{x:167500, y:57700},
-					{x:181600, y:68000},
-					{x:197100, y:78500},
-					{x:214800, y:88900},
-					{x:242500, y:114100},
-					{x:272000, y:126800},
-					{x:303400, y:147300},
-					{x:337090, y:169500},
-					{x:378200, y:196600},
-					{x:418000, y:220900},
-					{x:467700, y:252900},
-					{x:529600, y:287100},
-					{x:593300, y:321300},
-					{x:660700, y:357300},
-					{x:720100, y:383100},
-					{x:782400, y:404200},
-					{x:857500, y:439500},
-					{x:932600, y:464900},
-					{x:1000000, y:470400},
-					{x:1100000, y:506700},
-					{x:1200000, y:539300},
-					{x:1249107, y:529007},
-					{x:1280046, y:497646},
-					{x:1359398, y:501898},
-					{x:1441128, y:508528},
-					{x:1490790, y:490790},
-					{x:1787766, y:538659}
-					]
-        		},
-				{
-        		    label: '1 Milhao Infectados',
-					showLine:true,
-					fill:false,
-					borderWidth: 1,
-					borderColor:'rgba(200, 200, 200, 0.5)',
-					hidden: true,
-            		data: [
-					{x: 1000000, y: 1},
-					{x: 1000000, y: 1000000},
 
-					]
-        		}]
-    		},
-    		options: {
-				title:{
-					display:true,
-					text:['COVID19 no Mundo - Evolu\xE7\xE3o dos casos confirmados (a partir do 100º caso)','12 Abril'],
-					fontSize:18
-				},
-        		scales: {
-            		xAxes: [{
-                		type: 'logarithmic',
-                		position: 'bottom',
-						scaleLabel: {
-        					display: true,
-        					labelString: 'TOTAL DE CASOS (escala LOG) - clique na legenda para ligar/desligar países',
-							fontSize: 14,
-							padding: 10
-      					},
-						gridLines: {
-							color: 'rgba(200, 200, 200, 0.05)',
-							zeroLineColor: 'rgba(200, 200, 200, 0.05)'
-						},
-						ticks: {
-							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
-                            //return Number(value.toString());//pass tick values as a string into Number function
-							//},
-							fontSize: 10
-							//min: 1000
-						}
-           			}],
-					yAxes: [{
- 		               	id: 'left-y-axis',
-        		       	type: 'logarithmic',
-                		position: 'left',
-						scaleLabel: {
-        					display: true,
-        					labelString: 'CASOS \xDALTIMOS 7 DIAS (escala LOG)',
-							fontSize: 14,
-							padding: 10
-      					},
-						gridLines: {
-							color: 'rgba(200, 200, 200, 0.05)',
-							zeroLineColor: 'rgba(200, 200, 200, 0.05)'
-						},
-						ticks: {
-							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
-                            //return Number(value.toString());//pass tick values as a string into Number function
-							//},
-							fontSize: 10,
-							min: 50
-							//max: 1000000
-							
-						}
-            		}]
-        		},
-
-				elements: {
-        		    line: {
-                		tension: 0 // disables bezier curves
-            		},
-					point: {
-                        radius: 0.6
-                    }
-       			},
-				
-				tooltips: {
-					//mode: 'point'
-		            callbacks: {
-						title: function(tooltipItems, data) {
-               			return data.datasets[tooltipItems[0].datasetIndex].label + " (Tot, 7 dias)";
-						}
-					}
-				},
-				responsive: true,
-  				maintainAspectRatio: true,
-				aspectRatio: 1.5
-    		}
-		}
-		);
 		
-		//let barrasChart = document.getElementById('barrasCanvas').getContext('2d');
-//		let barras = new Chart(barrasChart, {	
-//			type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-//			data: {
-//				labels:['IT', 'GB', 'NL', 'ES', 'BR', 'US', 'PT', 'DE', 'KR'],
-//				datasets:[
-//					{
-//					label:'Letalidade',
-//					data:[
-//						13.12,
-//						12.13,
-//						10.98,
-//						10.09,
-//						5.27,
-//						3.58,
-//						2.81,
-//						2.20,
-//						1.99
-//					],
-//					//backgroundColor:'Green'	
-//					backgroundColor:[
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)',
-//						'green',
-//						'rgba(46, 117, 182, 0.9)',
-//						'rgba(46, 117, 182, 0.9)'
-//					],
-//					hoverBorderWidth:2,
-//					hoverBorderColor:'#fff',
-//					fill: false,
-//					order: 2
-//					},
-//					{
-//					label: 'Global',
-//					borderColor:'rgba(255, 255, 255, 0.8)',
-//					borderWidth: 2,
-//					backgroundColor: 'rgba(255, 255, 255, 0.01)',
-//					data: [6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0],
-//					type: 'line',
-//					pointRadius: 0,
-//					order: 1
-//					}					
-//				]
-//			},
-//			
-//			options: {
-//				title:{
-//					display:true,
-//					text:'COVID19 - Letalidade',
-//					fontSize:18
-//				},
-//				legend: {
-//		            display: false
-//				},
-//				scales: {
-//					yAxes: [{
-// 		               	id: 'left-y-axis',
-//                		position: 'left',
-//						scaleLabel: {
-//        					display: true,
-//        					labelString: '%',
-//							fontSize: 14,
-//							padding: 10
-//      					},
-//						gridLines: {
-//							color: 'rgba(200, 200, 200, 0.05)',
-//							zeroLineColor: 'rgba(200, 200, 200, 0.05)'
-//						},
-//						ticks: {
-//							//callback: function(value, index, values) {//needed to change the scientific notation results from using logarithmic scale
-//                            //return Number(value.toString());//pass tick values as a string into Number function
-//							//},
-//							fontSize: 10
-//							
-//						}
-//            		}]
-//        		},
-//
-//				tooltips: {
-//					//mode: 'point'
-//		            callbacks: {
-//        				label: function(tooltipItem, data) {
-//        					var dataset = data.datasets[tooltipItem.datasetIndex];
-//          					//var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
-//          					//return previousValue + currentValue;
-//          					//});
-//          					var currentValue = dataset.data[tooltipItem.index];
-//          					return currentValue + "%";
-//        				}
-//      				}
-//				},
-//				responsive: true,
-//				aspectRatio: 1.5,
-//				animation: {
-//					onComplete: function () {
-//					}
-//				}
-//			}
-//    	}
-//		);		
 
 		/**
 		 * ---------------------------------------
@@ -1055,6 +83,239 @@
 		am4core.useTheme(am4themes_dark);
 		// Themes end
 		
+		
+		// Create chart instance
+		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
+		
+		loglogAmcharts.dataSource.url = "./dadosMundo.json";
+		
+		loglogAmcharts.legend = new am4charts.Legend();
+		
+		
+		 
+		loglogAmcharts.colors.list = [
+		  am4core.color("#EEE"),
+		  am4core.color("#FFE119"),
+		  am4core.color("#FABEBE"),
+		  am4core.color("#AAFFC3"),
+		  
+		  am4core.color("#000075"),
+		  am4core.color("#FF0000"),
+		  
+		  am4core.color("#00AA00"),
+		  am4core.color("#FF8832"),
+		  am4core.color("#00CC00"),
+		  am4core.color("#008888"),
+		  am4core.color("#4363d8"),
+		  am4core.color("#CCC")
+		];
+		
+		// Create axes
+		var opacidadeLinhas = 0.6;
+		
+		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
+		valueAxisX.title.text = 'TOTAL DE CASOS (escala LOG) - clique na legenda para ligar/desligar países';
+		//valueAxisX.renderer.minGridDistance = 10;
+		valueAxisX.renderer.labels.template.fontSize = 10;
+		valueAxisX.logarithmic = true;
+		
+		// Create value axis
+		var valueAxisY = loglogAmcharts.yAxes.push(new am4charts.ValueAxis());
+		valueAxisY.title.text = 'CASOS NOS ÚLTIMOS 7 DIAS (escala LOG)';
+		valueAxisY.renderer.labels.template.fontSize = 10;
+		valueAxisY.logarithmic = true;
+		
+		var title = loglogAmcharts.titles.create();
+		title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução do surto[/]\n";
+		title.textAlign = "middle";
+		
+		
+		
+		
+	//	valueAxisX.min = 0;
+	//	valueAxisX.max = 6000;
+		
+		
+		// Create series
+		var lineSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries.dataFields.valueY = "pty";
+		lineSeries.dataFields.valueX = "ptx";
+		lineSeries.strokeOpacity = opacidadeLinhas;
+		lineSeries.strokeWidth = 2;
+		lineSeries.name = "PT";
+	
+		
+//		var segment = lineSeries.segments.template;
+//  segment.interactionsEnabled = true;
+//
+//  var hoverState = segment.states.create("hover");
+//  hoverState.properties.strokeWidth = 5;
+//
+//  var dimmed = segment.states.create("dimmed");
+//  dimmed.properties.stroke = am4core.color("#dadada");
+//
+//  segment.events.on("over", function(event) {
+//    processOver(event.target.parent.parent.parent);
+//  });
+//
+//  segment.events.on("out", function(event) {
+//    processOut(event.target.parent.parent.parent);
+//  });
+		
+		var lineSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries2.dataFields.valueY = "dey";
+		lineSeries2.dataFields.valueX = "dex";
+		lineSeries2.strokeOpacity = opacidadeLinhas;
+		lineSeries2.name = "DE";
+		
+		
+		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries3.dataFields.valueY = "esy";
+		lineSeries3.dataFields.valueX = "esx";
+		lineSeries3.strokeOpacity = opacidadeLinhas;
+		lineSeries3.name = "ES";		
+		
+		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries4.dataFields.valueY = "kry";
+		lineSeries4.dataFields.valueX = "krx";
+		lineSeries4.strokeOpacity = opacidadeLinhas;
+		lineSeries4.name = "KR";		
+		
+		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries6.dataFields.valueY = "gby";
+		lineSeries6.dataFields.valueX = "gbx";
+		lineSeries6.strokeOpacity = opacidadeLinhas;
+		lineSeries6.name = "GB";
+		
+		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries7.dataFields.valueY = "usy";
+		lineSeries7.dataFields.valueX = "usx";
+		lineSeries7.strokeOpacity = opacidadeLinhas;
+		lineSeries7.name = "US";
+		
+		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries8.dataFields.valueY = "bry";
+		lineSeries8.dataFields.valueX = "brx";
+		lineSeries8.strokeOpacity = opacidadeLinhas;
+		lineSeries8.name = "BR";
+		
+		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries9.dataFields.valueY = "nly";
+		lineSeries9.dataFields.valueX = "nlx";
+		lineSeries9.strokeOpacity = opacidadeLinhas;
+		lineSeries9.name = "NL";
+		
+		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries10.dataFields.valueY = "ity";
+		lineSeries10.dataFields.valueX = "itx";
+		lineSeries10.strokeOpacity = opacidadeLinhas;
+		lineSeries10.name = "IT";
+		
+		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries11.dataFields.valueY = "luy";
+		lineSeries11.dataFields.valueX = "lux";
+		lineSeries11.strokeOpacity = opacidadeLinhas;
+		lineSeries11.name = "LU";
+		
+		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries12.dataFields.valueY = "fry";
+		lineSeries12.dataFields.valueX = "frx";
+		lineSeries12.strokeOpacity = opacidadeLinhas;
+		lineSeries12.name = "FR";
+		
+		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries5.dataFields.valueY = "globaly";
+		lineSeries5.dataFields.valueX = "globalx";
+		lineSeries5.strokeOpacity = opacidadeLinhas;
+		lineSeries5.strokeWidth = 1.5;
+		lineSeries5.name = "GLOBAL";
+		
+			
+		
+		// Add a bullet
+		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+		
+		// Add a triangle to act as am arrow
+		var arrow = bullet.createChild(am4core.Triangle);
+		arrow.horizontalCenter = "middle";
+		arrow.verticalCenter = "middle";
+		arrow.strokeWidth = 1;
+		arrow.fill = loglogAmcharts.colors.getIndex(0);
+		arrow.direction = "top";
+		arrow.width = 0.8;
+		arrow.height = 0.8;
+		
+		// Add a bullet
+		var bullet2 = lineSeries2.bullets.push(new am4charts.Bullet());
+		
+		// Add a triangle to act as am arrow
+		var arrow2 = bullet2.createChild(am4core.Triangle);
+		arrow2.horizontalCenter = "middle";
+		arrow2.verticalCenter = "middle";
+		arrow2.rotation = 180;
+		arrow2.strokeWidth = 1;
+		arrow2.fill = loglogAmcharts.colors.getIndex(3);
+		arrow2.direction = "top";
+		arrow2.width = 0.8;
+		arrow2.height = 0.8;
+		
+		
+		
+				
+		
+//		lologAmcharts.legend.itemContainers.template.events.on("over", function(event) {
+//  processOver(event.target.dataItem.dataContext);
+//})
+//
+//loglogAmcharts.legend.itemContainers.template.events.on("out", function(event) {
+//  processOut(event.target.dataItem.dataContext);
+//})
+//
+//function processOver(hoveredSeries) {
+//  hoveredSeries.toFront();
+//
+//  hoveredSeries.segments.each(function(segment) {
+//    segment.setState("hover");
+//  })
+//
+//  loglogAmcharts.lineSeries.each(function(series) {
+//    if (series != hoveredSeries) {
+//      lineSeries.segments.each(function(segment) {
+//        segment.setState("dimmed");
+//      })
+//      series.bulletsContainer.setState("dimmed");
+//    }
+//  });
+//}
+//
+//function processOut(hoveredSeries) {
+//  loglogAmcharts.series.each(function(series) {
+//    series.segments.each(function(segment) {
+//      segment.setState("default");
+//    })
+//    series.bulletsContainer.setState("default");
+//  });
+//}
+
+		// CURSOR XY
+		loglogAmcharts.cursor = new am4charts.XYCursor();
+		loglogAmcharts.cursor.behavior = "zoomXY"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		loglogAmcharts.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		loglogAmcharts.cursor.lineY.strokeWidth = 0.5;
+		
+		//scrollbars
+		//loglogAmcharts.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
+		loglogAmcharts.scrollbarY = new am4core.Scrollbar();
+		var scrollbarX = new am4charts.XYChartScrollbar();
+		scrollbarX.series.push(lineSeries);
+		scrollbarX.series.push(lineSeries2);
+		loglogAmcharts.scrollbarX = scrollbarX;
+		loglogAmcharts.scrollbarX.parent = loglogAmcharts.bottomAxesContainer;
+
+
+		
+		
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
 		
@@ -1062,82 +323,82 @@
 		// Add data
 		chart.data = [{
 			"name": "IT",
-			"points": 12.79,
+			"points": 12.73,
 			"color": chart.colors.next(),
 			"bullet": "./flags/IT.png",
 			//"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
-			"media": 6.14,
-			"obitos":19468
+			"media": 6.19,
+			"obitos":19899
 		}, {
 			"name": "GB",
-			"points": 12.38,
+			"points": 12.47,
 			"color": chart.colors.next(),
 			"bullet": "./flags/GB.png",
-			"media": 6.14,
-			"obitos":9892
+			"media": 6.19,
+			"obitos":10629
 		}, {
 			"name": "NL",
-			"points": 10.80,
+			"points": 10.67,
 			"color": chart.colors.next(),
 			"bullet": "./flags/NL.png",
-			"media": 6.14,
-			"obitos":2653
+			"media": 6.19,
+			"obitos":2747
 		}, {
 			"name": "FR",
-			"points": 10.60,
+			"points": 10.78,
 			"color": chart.colors.next(),
 			"bullet": "./flags/FR.png",
-			"media": 6.14,
-			"obitos":13851	
+			"media": 6.19,
+			"obitos":14412
 		}, {
 			"name": "ES",
-			"points": 10.22,
+			"points": 10.32,
 			"color": chart.colors.next(),
 			"bullet": "./flags/ES.png",
-			"media": 6.14,
-			"obitos":16972
+			"media": 6.19,
+			"obitos":17489
 		}, {
 			"name": "BR",
-			"points": 5.44,
+			"points": 5.51,
 			"color": chart.colors.next(),
 			"bullet": "./flags/BR.png",
-			"media": 6.14,
-			"obitos":1141
+			"media": 6.19,
+			"obitos":1230
 		}, {
 			"name": "US",
-			"points": 3.89,
+			"points": 3.97,
 			"color": chart.colors.next(),
 			"bullet": "./flags/US.png",
-			"media": 6.14,
-			"obitos":20608
+			"media": 6.19,
+			"obitos":22109
 		}, {
 			"name": "PT",
-			"points": 3.04,
+			"points": 3.16,
 			"color": "green",
 			"bullet": "./flags/PT.png",
-			"media": 6.14,
-			"obitos":504
+			"media": 6.19,
+			"obitos":535
 		}, {
 			"name": "DE",
-			"points": 2.29,
+			"points": 2.36,
 			"color": chart.colors.next(),
 			"bullet": "./flags/DE.png",
-			"media": 6.14,
-			"obitos":2871
+			"media": 6.19,
+			"obitos":3022
 		}, {
 			"name": "KR",
-			"points": 2.04,
+			"points": 2.06,
 			"color": chart.colors.next(),
 			"bullet": "./flags/KR.png",
-			"media": 6.14,
-			"obitos":214
+			"media": 6.19,
+			"obitos":217
 		}, {
 			"name": "LU",
-			"points": 1.90,
+			"points": 2.01,
 			"color": chart.colors.next(),
 			"bullet": "./flags/LU.png",
-			"media": 6.14,
-			"obitos": 62
+			"media": 6.19,
+			"obitos": 66
 		}];
 		
 		var title = chart.titles.create();
@@ -1169,7 +430,7 @@
 		chart.maskBullets = false;
 		
 		// Remove padding
-		chart.paddingBottom = 0;
+		//chart.paddingBottom = 0;
 		
 		chart.numberFormatter.numberFormat = "#.00";
 		
@@ -1215,20 +476,19 @@
 //		circle.fill = am4core.color("#eee");
 //		circle.strokeWidth = 1;
 
-// Create value axis range
-var range = valueAxis.axisRanges.create();
-range.value = 6.14;							// VALOR DA MÉDIA GLOBAL
-range.grid.stroke = am4core.color("#eee");
-range.grid.strokeWidth = 1;
-range.grid.strokeOpacity = 0.9;
-range.label.inside = true;
-var str1 = "[#eee font-size: 12px]MÉDIA GLOBAL: [/][font-weight: bold]";
-range.label.text = str1.concat(range.value.toString(), "%[/]");
-range.label.fill = range.grid.stroke;
-range.label.align = "right";
-range.label.verticalCenter = "bottom";
-		
-		
+// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
+		var range = valueAxis.axisRanges.create();
+		range.value = 6.19;							// VALOR DA MÉDIA GLOBAL
+		range.grid.stroke = am4core.color("#eee");
+		range.grid.strokeWidth = 1;
+		range.grid.strokeOpacity = 0.9;
+		range.label.inside = true;
+		var str1 = "[#eee font-size: 12px]MÉDIA GLOBAL: [/][font-weight: bold]";
+		range.label.text = str1.concat(range.value.toString(), "%[/]");
+		range.label.fill = range.grid.stroke;
+		range.label.align = "right";
+		range.label.verticalCenter = "bottom";
+		chart.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
 		
 		chart.exporting.menu = new am4core.ExportMenu();
 
@@ -1242,47 +502,47 @@ range.label.verticalCenter = "bottom";
 		// Add data
 		chart.data = [{
 			"pais": "IT",
-			"points": 2520,
+			"points": 2587,
 			"color": chart.colors.next(),
 			"bullet": "./flags/IT.png"
 		}, {
 			"pais": "GB",
-			"points": 1201,
+			"points": 1282,
 			"color": chart.colors.next(),
 			"bullet": "./flags/GB.png"
 		}, {
 			"pais": "NL",
-			"points": 1952,
+			"points": 1494,
 			"color": chart.colors.next(),
 			"bullet": "./flags/NL.png"
 		}, {
 			"pais": "FR",
-			"points": 3553,
+			"points": 1995,
 			"color": chart.colors.next(),
 			"bullet": "./flags/FR.png"
 		}, {
 			"pais": "ES",
-			"points": 3553,
+			"points": 3628,
 			"color": chart.colors.next(),
 			"bullet": "./flags/ES.png"	
 		}, {
 			"pais": "BR",
-			"points": 100,
+			"points": 107,
 			"color": chart.colors.next(),
 			"bullet": "./flags/BR.png"
 		}, {
 			"pais": "US",
-			"points": 1620,
+			"points": 1704,
 			"color": chart.colors.next(),
 			"bullet": "./flags/US.png"
 		}, {
 			"pais": "PT",
-			"points": 1606,
+			"points": 1639,
 			"color": "green",
 			"bullet": "./flags/PT.png"
 		}, {
 			"pais": "DE",
-			"points": 1513,
+			"points": 1542,
 			"color": chart.colors.next(),
 			"bullet": "./flags/DE.png"
 		}, {
@@ -1292,7 +552,7 @@ range.label.verticalCenter = "bottom";
 			"bullet": "./flags/KR.png"
 		}, {
 			"pais": "LU",
-			"points": 5381,
+			"points": 5399,
 			"color": chart.colors.next(),
 			"bullet": "./flags/LU.png"
 			
