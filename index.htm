@@ -12,21 +12,20 @@
 <title>Dados COVID-19</title>
 
 <style>
-#logLog {
-	width: 60%;
-	/*height: 800px;*/
-	float:left;
-	margin: 5px 5px;
-	padding: 10px;
-  	border: 0px solid #aaaaaa;
-  	background-color: #222a35;
-}
+div {
+	margin-top: 8px;
+	background-color: #191919;
+	margin-bottom:8px;
+	margin-left:8px;
+	margin-right:8px;
+	border-style:hidden;
+	border-width:thin;
+	border-radius:6px;
+	}
 
 #loglogAmchartsDiv {
-	background-color:#222;	
 	width: 60%;
 	height: 800px;
-	margin: 10px 10px 10px 10px;
 	float: left;
 /*	border: 1px solid #aaa;*/
 }
@@ -34,22 +33,20 @@
 #letalidadediv {
   width: 35%;
   height: 360px;
-  margin: 10px 20px 20px 10px;
-  float:right;
+  float:left;
   /*clear:both;*/
  }
  #casospormilhaodiv {
   width: 35%;
   height: 360px;
-  margin: 10px 20px 20px 10px;
-  float:right;
+  float:left;
   /*clear:both;*/
  }
 </style>
 
 </head>
 
-<body style="background-color:#222">
+<body style="background-color:#151515">
 <!--	<div id="logLog" class="container">
     	<canvas id="logLogCanvas" style="background-color:#222a35"></canvas>
     </div>
@@ -88,6 +85,7 @@
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
 		
 		loglogAmcharts.dataSource.url = "./dadosMundo.json";
+		loglogAmcharts.cornerRadiusTopLeft = 10;
 		
 		loglogAmcharts.colors.list = [
 		  am4core.color("#EEE"),
@@ -114,7 +112,7 @@
 		var opacidadeLinhas = 0.6;
 		
 		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
-		valueAxisX.title.text = 'TOTAL DE CASOS (escala LOG) - clique na legenda para ligar/desligar países';
+		valueAxisX.title.text = 'TOTAL DE CASOS (escala LOG) - [font-size: 14]clique na legenda para ligar/desligar países[/]';
 		//valueAxisX.renderer.minGridDistance = 10;
 		valueAxisX.renderer.labels.template.fontSize = 10;
 		valueAxisX.logarithmic = true;
@@ -125,15 +123,54 @@
 		valueAxisY.renderer.labels.template.fontSize = 10;
 		valueAxisY.logarithmic = true;
 		
+		valueAxisX.renderer.grid.template.disabled = true;
+		//valueAxisX.renderer.labels.template.disabled = true;
+		function createGrid(value) {
+		  var range = valueAxisX.axisRanges.create();
+		  range.value = value;
+  		  var range = valueAxisY.axisRanges.create();
+		  range.value = value;
+
+		  //range.label.text = "{value}";
+		}
+		var i; var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000]; var m;
+		for (m of ms){
+			for (i=1; i<10; i++){
+			createGrid(i*m);
+			}
+		}
+		valueAxisX.renderer.grid.template.strokeOpacity = 0.2;
+		valueAxisX.renderer.grid.template.stroke = am4core.color("#aaa");
+		valueAxisX.renderer.grid.template.strokeWidth = 0.3;
+		valueAxisY.renderer.grid.template.strokeOpacity = 0.2;
+		valueAxisY.renderer.grid.template.stroke = am4core.color("#aaa");
+		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
+		
+		//createGrid(100);createGrid(100);createGrid(200);
+//		createGrid(200);createGrid(400);createGrid(500);
+//		createGrid(300);createGrid(200);createGrid(300);
+//		createGrid(400);createGrid(500);createGrid(200);
+//		createGrid(500);createGrid(400);createGrid(500);
+//		createGrid(600);createGrid(700);createGrid(800);
+//		createGrid(900);createGrid(1000);
+		
 		var title = loglogAmcharts.titles.create();
-		title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução do surto[/]\n";
+		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+		var dia = new Date();
+		//dia = dia.toString();
+		var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
+		title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+		//title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
 		title.textAlign = "middle";
 		
+		// Pre-zoom
+		//loglogAmcharts.events.on("ready", function () {
+//			valueAxisX.zoomToValues(110000, 1300000, false, true);
+//		});
 		
 		
-		
-	//	valueAxisX.min = 0;
-	//	valueAxisX.max = 6000;
+		valueAxisX.min = 100;
+		valueAxisY.min = 40;
 		
 		
 		// Create series
@@ -143,6 +180,7 @@
 		lineSeries.strokeOpacity = opacidadeLinhas;
 		lineSeries.strokeWidth = 2;
 		lineSeries.name = "PT";
+		lineSeries.showOnInit = false;
 	
 		
 //		var segment = lineSeries.segments.template;
@@ -167,60 +205,70 @@
 		lineSeries2.dataFields.valueX = "dex";
 		lineSeries2.strokeOpacity = opacidadeLinhas;
 		lineSeries2.name = "DE";
+		lineSeries2.showOnInit = false;
 			
 		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries3.dataFields.valueY = "esy";
 		lineSeries3.dataFields.valueX = "esx";
 		lineSeries3.strokeOpacity = opacidadeLinhas;
-		lineSeries3.name = "ES";		
+		lineSeries3.name = "ES";
+		lineSeries3.showOnInit = false;	
 		
 		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries12.dataFields.valueY = "fry";
 		lineSeries12.dataFields.valueX = "frx";
 		lineSeries12.strokeOpacity = opacidadeLinhas;
 		lineSeries12.name = "FR";
+		lineSeries12.showOnInit = false;
 		
 		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries6.dataFields.valueY = "gby";
 		lineSeries6.dataFields.valueX = "gbx";
 		lineSeries6.strokeOpacity = opacidadeLinhas;
 		lineSeries6.name = "GB";
+		lineSeries6.showOnInit = false;
 			
 		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries10.dataFields.valueY = "ity";
 		lineSeries10.dataFields.valueX = "itx";
 		lineSeries10.strokeOpacity = opacidadeLinhas;
 		lineSeries10.name = "IT";
+		lineSeries10.showOnInit = false;
 		
 		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries11.dataFields.valueY = "luy";
 		lineSeries11.dataFields.valueX = "lux";
 		lineSeries11.strokeOpacity = opacidadeLinhas;
 		lineSeries11.name = "LU";
+		lineSeries11.showOnInit = false;
 		
 		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries9.dataFields.valueY = "nly";
 		lineSeries9.dataFields.valueX = "nlx";
 		lineSeries9.strokeOpacity = opacidadeLinhas;
 		lineSeries9.name = "NL";
+		lineSeries9.showOnInit = false;
 	
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries8.dataFields.valueY = "bry";
 		lineSeries8.dataFields.valueX = "brx";
 		lineSeries8.strokeOpacity = opacidadeLinhas;
 		lineSeries8.name = "BR";
+		lineSeries8.showOnInit = false;
 		
 		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries4.dataFields.valueY = "kry";
 		lineSeries4.dataFields.valueX = "krx";
 		lineSeries4.strokeOpacity = opacidadeLinhas;
-		lineSeries4.name = "KR";		
+		lineSeries4.name = "KR";
+		lineSeries4.showOnInit = false;		
 		
 		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries7.dataFields.valueY = "usy";
 		lineSeries7.dataFields.valueX = "usx";
 		lineSeries7.strokeOpacity = opacidadeLinhas;
 		lineSeries7.name = "US";
+		lineSeries7.showOnInit = false;
 		
 		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries5.dataFields.valueY = "globaly";
@@ -229,6 +277,7 @@
 		lineSeries5.strokeWidth = 1.5;
 		lineSeries5.name = "GLOBAL";
 		lineSeries5.hidden = true;
+		lineSeries5.showOnInit = false;
 		
 			
 		
@@ -325,10 +374,16 @@
 		scrollbarX.series.push(lineSeries2);
 		loglogAmcharts.scrollbarX = scrollbarX;
 		loglogAmcharts.scrollbarX.parent = loglogAmcharts.bottomAxesContainer;
+		
+		// PRE ZOOM
+		//loglogAmcharts.events.on("ready", function () {
+//			  yAxis.zoomToValues(4, 14, true);
+//		});
+		loglogAmcharts.exporting.menu = new am4core.ExportMenu();
 
 
 		
-		
+		// GRAFICO LETALIDADE		
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
 		
@@ -336,82 +391,82 @@
 		// Add data
 		chart.data = [{
 			"name": "IT",
-			"points": 12.73,
+			"points": 12.97,
 			"color": chart.colors.next(),
 			"bullet": "./flags/IT.png",
 			//"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
 			"media": 6.19,
-			"obitos":19899
+			"obitos":21067
 		}, {
 			"name": "GB",
-			"points": 12.47,
+			"points": 12.79,
 			"color": chart.colors.next(),
 			"bullet": "./flags/GB.png",
 			"media": 6.19,
-			"obitos":10629
+			"obitos":12125
 		}, {
 			"name": "NL",
-			"points": 10.67,
+			"points": 10.71,
 			"color": chart.colors.next(),
 			"bullet": "./flags/NL.png",
 			"media": 6.19,
-			"obitos":2747
+			"obitos":2955
 		}, {
 			"name": "FR",
-			"points": 10.78,
+			"points": 10.87,
 			"color": chart.colors.next(),
 			"bullet": "./flags/FR.png",
 			"media": 6.19,
-			"obitos":14412
+			"obitos":14986
 		}, {
 			"name": "ES",
-			"points": 10.32,
+			"points": 10.46,
 			"color": chart.colors.next(),
 			"bullet": "./flags/ES.png",
 			"media": 6.19,
-			"obitos":17489
+			"obitos":18056
 		}, {
 			"name": "BR",
-			"points": 5.51,
+			"points": 5.70,
 			"color": chart.colors.next(),
 			"bullet": "./flags/BR.png",
 			"media": 6.19,
-			"obitos":1230
+			"obitos":1378
 		}, {
 			"name": "US",
-			"points": 3.97,
+			"points": 4.19,
 			"color": chart.colors.next(),
 			"bullet": "./flags/US.png",
 			"media": 6.19,
-			"obitos":22109
+			"obitos":24485
 		}, {
 			"name": "PT",
-			"points": 3.16,
+			"points": 3.25,
 			"color": "green",
 			"bullet": "./flags/PT.png",
 			"media": 6.19,
-			"obitos":535
+			"obitos":567
 		}, {
 			"name": "DE",
-			"points": 2.36,
+			"points": 2.49,
 			"color": chart.colors.next(),
 			"bullet": "./flags/DE.png",
 			"media": 6.19,
-			"obitos":3022
+			"obitos":3261
 		}, {
 			"name": "KR",
-			"points": 2.06,
+			"points": 2.10,
 			"color": chart.colors.next(),
 			"bullet": "./flags/KR.png",
 			"media": 6.19,
-			"obitos":217
+			"obitos":222
 		}, {
 			"name": "LU",
-			"points": 2.01,
+			"points": 2.10,
 			"color": chart.colors.next(),
 			"bullet": "./flags/LU.png",
 			"media": 6.19,
-			"obitos": 66
+			"obitos": 69
 		}];
 		
 		var title = chart.titles.create();
@@ -491,7 +546,7 @@
 
 // Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
-		range.value = 6.19;							// VALOR DA MÉDIA GLOBAL
+		range.value = 6.33;							// VALOR DA MÉDIA GLOBAL
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
 		range.grid.strokeOpacity = 0.9;
@@ -515,57 +570,57 @@
 		// Add data
 		chart.data = [{
 			"pais": "IT",
-			"points": 2587,
+			"points": 2689,
 			"color": chart.colors.next(),
 			"bullet": "./flags/IT.png"
 		}, {
 			"pais": "GB",
-			"points": 1282,
+			"points": 1426,
 			"color": chart.colors.next(),
 			"bullet": "./flags/GB.png"
 		}, {
 			"pais": "NL",
-			"points": 1494,
+			"points": 1601,
 			"color": chart.colors.next(),
 			"bullet": "./flags/NL.png"
 		}, {
 			"pais": "FR",
-			"points": 1995,
+			"points": 2058,
 			"color": chart.colors.next(),
 			"bullet": "./flags/FR.png"
 		}, {
 			"pais": "ES",
-			"points": 3628,
+			"points": 3693,
 			"color": chart.colors.next(),
 			"bullet": "./flags/ES.png"	
 		}, {
 			"pais": "BR",
-			"points": 107,
+			"points": 115,
 			"color": chart.colors.next(),
 			"bullet": "./flags/BR.png"
 		}, {
 			"pais": "US",
-			"points": 1704,
+			"points": 1785,
 			"color": chart.colors.next(),
 			"bullet": "./flags/US.png"
 		}, {
 			"pais": "PT",
-			"points": 1639,
+			"points": 1689,
 			"color": "green",
 			"bullet": "./flags/PT.png"
 		}, {
 			"pais": "DE",
-			"points": 1542,
+			"points": 1580,
 			"color": chart.colors.next(),
 			"bullet": "./flags/DE.png"
 		}, {
 			"pais": "KR",
-			"points": 204,
+			"points": 205,
 			"color": chart.colors.next(),
 			"bullet": "./flags/KR.png"
 		}, {
 			"pais": "LU",
-			"points": 5399,
+			"points": 5417,
 			"color": chart.colors.next(),
 			"bullet": "./flags/LU.png"
 			
@@ -613,7 +668,7 @@
 		chart.maskBullets = false;
 		
 		// Remove padding
-		chart.paddingBottom = 0;
+		//chart.paddingBottom = 0;
 		
 		chart.numberFormatter.numberFormat = "#";
 		
