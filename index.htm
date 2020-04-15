@@ -1,83 +1,83 @@
 <!doctype html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<meta charset="utf-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 
-<script src="https://www.amcharts.com/lib/4/core.js"></script>
-<script src="https://www.amcharts.com/lib/4/charts.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
-<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-<title>Dados COVID-19</title>
+	<script src="https://www.amcharts.com/lib/4/core.js"></script>
+	<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+	<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+	<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+	<title>Dados COVID-19</title>
 
-<style>
-div {
-	margin-top: 8px;
-	background-color: #191919;
-	margin-bottom:8px;
-	margin-left:8px;
-	margin-right:8px;
-	border-style:hidden;
-	border-width:thin;
-	border-radius:6px;
-	}
+	<style>
+		div {
+			margin-top: 8px;
+			background-color: #191919;
+			margin-bottom: 8px;
+			margin-left: 8px;
+			margin-right: 8px;
+			border-style: hidden;
+			border-width: thin;
+			border-radius: 6px;
+		}
 
-#loglogAmchartsDiv {
-	width: 60%;
-	height: 800px;
-	float: left;
-/*	border: 1px solid #aaa;*/
-}
+		#loglogAmchartsDiv {
+			width: 60%;
+			height: 800px;
+			float: left;
+			/*	border: 1px solid #aaa;*/
+		}
 
-#letalidadediv {
-  width: 35%;
-  height: 395px;
-  float:left;
-  /*clear:both;*/
- }
- #casospormilhaodiv {
-  width: 35%;
-  height: 395px;
-  float:left;
-  /*clear:both;*/
- }
- #obitospormilhaodiv {
-  width: 35%;
-  height: 360px;
-  float:right;
-  /*clear:both;*/
- }
- #testespormilhaodiv {
-  width: 35%;
-  height: 360px;
-  float:left;
-  /*clear:both;*/
- }
+		#letalidadediv {
+			width: 35%;
+			height: 395px;
+			float: left;
+			/*clear:both;*/
+		}
 
-</style>
+		#casospormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: left;
+			/*clear:both;*/
+		}
+
+		#obitospormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: left;
+			/*clear:both;*/
+		}
+
+		#testespormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: left;
+			/*clear:both;*/
+		}
+	</style>
 
 </head>
 
 <body style="background-color:#151515">
-<!--	<div id="logLog" class="container">
+	<!--	<div id="logLog" class="container">
     	<canvas id="logLogCanvas" style="background-color:#222a35"></canvas>
     </div>
 	<div id="barrasLinear" class="container">
     	<canvas id="barrasCanvas" style="background-color:#222a35"></canvas>
     </div>-->
-    <div id="loglogAmchartsDiv"></div>
-    <div id="letalidadediv"></div>
+	<div id="loglogAmchartsDiv"></div>
+	<div id="letalidadediv"></div>
+	<div id="obitospormilhaodiv"></div>
+
+	<div id="casospormilhaodiv"></div>
+	<div id="testespormilhaodiv"></div>
 
 
-    <div id="casospormilhaodiv"></div>
-    <div id="testespormilhaodiv"></div>
-    <div id="obitospormilhaodiv"></div>
-
-    <script>
-
-
-
+	<script>
 		/**
 		 * ---------------------------------------
 		 * This demo was created using amCharts 4.
@@ -103,20 +103,20 @@ div {
 
 
 		loglogAmcharts.colors.list = [
-		  am4core.color("#EEE"),
-		  am4core.color("#FFE119"),
-		  am4core.color("#FABEBE"),
-		  am4core.color("#AAFFC3"),
+			am4core.color("#EEE"),
+			am4core.color("#FFE119"),
+			am4core.color("#FABEBE"),
+			am4core.color("#AAFFC3"),
 
-		  am4core.color("#000075"),
-		  am4core.color("#FF0000"),
+			am4core.color("#4285f7"),
+			am4core.color("#FF0000"),
 
-		  am4core.color("#00AA00"),
-		  am4core.color("#FF8832"),
-		  am4core.color("#00CC00"),
-		  am4core.color("#008888"),
-		  am4core.color("#4363d8"),
-		  am4core.color("#CCC")
+			am4core.color("#00AA00"),
+			am4core.color("#FF8832"),
+			am4core.color("#00CC00"),
+			am4core.color("#008888"),
+			am4core.color("#642dda"),
+			am4core.color("#CCC")
 		];
 
 
@@ -141,17 +141,19 @@ div {
 		valueAxisX.renderer.grid.template.disabled = true;
 		//valueAxisX.renderer.labels.template.disabled = true;
 		function createGrid(value) {
-		  var range = valueAxisX.axisRanges.create();
-		  range.value = value;
-  		  var range = valueAxisY.axisRanges.create();
-		  range.value = value;
+			var range = valueAxisX.axisRanges.create();
+			range.value = value;
+			var range = valueAxisY.axisRanges.create();
+			range.value = value;
 
-		  //range.label.text = "{value}";
+			//range.label.text = "{value}";
 		}
-		var i; var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000]; var m;
-		for (m of ms){
-			for (i=1; i<10; i++){
-			createGrid(i*m);
+		var i;
+		var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000];
+		var m;
+		for (m of ms) {
+			for (i = 1; i < 10; i++) {
+				createGrid(i * m);
 			}
 		}
 		valueAxisX.renderer.grid.template.strokeOpacity = 0.2;
@@ -162,12 +164,12 @@ div {
 		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
 
 		//createGrid(100);createGrid(100);createGrid(200);
-//		createGrid(200);createGrid(400);createGrid(500);
-//		createGrid(300);createGrid(200);createGrid(300);
-//		createGrid(400);createGrid(500);createGrid(200);
-//		createGrid(500);createGrid(400);createGrid(500);
-//		createGrid(600);createGrid(700);createGrid(800);
-//		createGrid(900);createGrid(1000);
+		//		createGrid(200);createGrid(400);createGrid(500);
+		//		createGrid(300);createGrid(200);createGrid(300);
+		//		createGrid(400);createGrid(500);createGrid(200);
+		//		createGrid(500);createGrid(400);createGrid(500);
+		//		createGrid(600);createGrid(700);createGrid(800);
+		//		createGrid(900);createGrid(1000);
 
 		var title = loglogAmcharts.titles.create();
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -180,8 +182,8 @@ div {
 
 		// Pre-zoom
 		//loglogAmcharts.events.on("ready", function () {
-//			valueAxisX.zoomToValues(110000, 1300000, false, true);
-//		});
+		//			valueAxisX.zoomToValues(110000, 1300000, false, true);
+		//		});
 
 
 		valueAxisX.min = 100;
@@ -196,24 +198,31 @@ div {
 		lineSeries.strokeWidth = 2;
 		lineSeries.name = "PT";
 		lineSeries.showOnInit = false;
+		// render data points as bullets
+		var RADIUS = 2;
+		var bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    // bullet.circle.fill = "#eee"; // desnecessario porque a bullet adquire a cor da series automaticamente
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 
-//		var segment = lineSeries.segments.template;
-//  segment.interactionsEnabled = true;
-//
-//  var hoverState = segment.states.create("hover");
-//  hoverState.properties.strokeWidth = 5;
-//
-//  var dimmed = segment.states.create("dimmed");
-//  dimmed.properties.stroke = am4core.color("#dadada");
-//
-//  segment.events.on("over", function(event) {
-//    processOver(event.target.parent.parent.parent);
-//  });
-//
-//  segment.events.on("out", function(event) {
-//    processOut(event.target.parent.parent.parent);
-//  });
+		//		var segment = lineSeries.segments.template;
+		//  segment.interactionsEnabled = true;
+		//
+		//  var hoverState = segment.states.create("hover");
+		//  hoverState.properties.strokeWidth = 5;
+		//
+		//  var dimmed = segment.states.create("dimmed");
+		//  dimmed.properties.stroke = am4core.color("#dadada");
+		//
+		//  segment.events.on("over", function(event) {
+		//    processOver(event.target.parent.parent.parent);
+		//  });
+		//
+		//  segment.events.on("out", function(event) {
+		//    processOut(event.target.parent.parent.parent);
+		//  });
 
 		var lineSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries2.dataFields.valueY = "dey";
@@ -221,6 +230,11 @@ div {
 		lineSeries2.strokeOpacity = opacidadeLinhas;
 		lineSeries2.name = "DE";
 		lineSeries2.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries2.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries3.dataFields.valueY = "esy";
@@ -228,6 +242,11 @@ div {
 		lineSeries3.strokeOpacity = opacidadeLinhas;
 		lineSeries3.name = "ES";
 		lineSeries3.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries3.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries12.dataFields.valueY = "fry";
@@ -235,6 +254,11 @@ div {
 		lineSeries12.strokeOpacity = opacidadeLinhas;
 		lineSeries12.name = "FR";
 		lineSeries12.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries12.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries6.dataFields.valueY = "gby";
@@ -242,6 +266,11 @@ div {
 		lineSeries6.strokeOpacity = opacidadeLinhas;
 		lineSeries6.name = "GB";
 		lineSeries6.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries6.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries10.dataFields.valueY = "ity";
@@ -249,6 +278,11 @@ div {
 		lineSeries10.strokeOpacity = opacidadeLinhas;
 		lineSeries10.name = "IT";
 		lineSeries10.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries10.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries11.dataFields.valueY = "luy";
@@ -256,6 +290,11 @@ div {
 		lineSeries11.strokeOpacity = opacidadeLinhas;
 		lineSeries11.name = "LU";
 		lineSeries11.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries11.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries9.dataFields.valueY = "nly";
@@ -263,6 +302,11 @@ div {
 		lineSeries9.strokeOpacity = opacidadeLinhas;
 		lineSeries9.name = "NL";
 		lineSeries9.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries9.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries8.dataFields.valueY = "bry";
@@ -270,6 +314,11 @@ div {
 		lineSeries8.strokeOpacity = opacidadeLinhas;
 		lineSeries8.name = "BR";
 		lineSeries8.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries8.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries4.dataFields.valueY = "kry";
@@ -277,6 +326,11 @@ div {
 		lineSeries4.strokeOpacity = opacidadeLinhas;
 		lineSeries4.name = "KR";
 		lineSeries4.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries4.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries7.dataFields.valueY = "usy";
@@ -284,6 +338,11 @@ div {
 		lineSeries7.strokeOpacity = opacidadeLinhas;
 		lineSeries7.name = "US";
 		lineSeries7.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries7.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries5.dataFields.valueY = "globaly";
@@ -293,35 +352,40 @@ div {
 		lineSeries5.name = "GLOBAL";
 		lineSeries5.hidden = true;
 		lineSeries5.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries5.bullets.push(new am4charts.CircleBullet());
+		bullet.circle.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
 
 
 
 		//// Add a bullet
-//		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
-//
-//		// Add a triangle to act as am arrow
-//		var arrow = bullet.createChild(am4core.Triangle);
-//		arrow.horizontalCenter = "middle";
-//		arrow.verticalCenter = "middle";
-//		arrow.strokeWidth = 1;
-//		arrow.fill = loglogAmcharts.colors.getIndex(0);
-//		arrow.direction = "top";
-//		arrow.width = 0.8;
-//		arrow.height = 0.8;
-//
-//		// Add a bullet
-//		var bullet2 = lineSeries2.bullets.push(new am4charts.Bullet());
-//
-//		// Add a triangle to act as am arrow
-//		var arrow2 = bullet2.createChild(am4core.Triangle);
-//		arrow2.horizontalCenter = "middle";
-//		arrow2.verticalCenter = "middle";
-//		arrow2.rotation = 180;
-//		arrow2.strokeWidth = 1;
-//		arrow2.fill = loglogAmcharts.colors.getIndex(3);
-//		arrow2.direction = "top";
-//		arrow2.width = 0.8;
-//		arrow2.height = 0.8;
+		//		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+		//
+		//		// Add a triangle to act as am arrow
+		//		var arrow = bullet.createChild(am4core.Triangle);
+		//		arrow.horizontalCenter = "middle";
+		//		arrow.verticalCenter = "middle";
+		//		arrow.strokeWidth = 1;
+		//		arrow.fill = loglogAmcharts.colors.getIndex(0);
+		//		arrow.direction = "top";
+		//		arrow.width = 0.8;
+		//		arrow.height = 0.8;
+		//
+		//		// Add a bullet
+		//		var bullet2 = lineSeries2.bullets.push(new am4charts.Bullet());
+		//
+		//		// Add a triangle to act as am arrow
+		//		var arrow2 = bullet2.createChild(am4core.Triangle);
+		//		arrow2.horizontalCenter = "middle";
+		//		arrow2.verticalCenter = "middle";
+		//		arrow2.rotation = 180;
+		//		arrow2.strokeWidth = 1;
+		//		arrow2.fill = loglogAmcharts.colors.getIndex(3);
+		//		arrow2.direction = "top";
+		//		arrow2.width = 0.8;
+		//		arrow2.height = 0.8;
 
 
 		// Legenda
@@ -340,39 +404,39 @@ div {
 		as.properties.fill = am4core.color("#eee");
 
 
-//		lologAmcharts.legend.itemContainers.template.events.on("over", function(event) {
-//  processOver(event.target.dataItem.dataContext);
-//})
-//
-//loglogAmcharts.legend.itemContainers.template.events.on("out", function(event) {
-//  processOut(event.target.dataItem.dataContext);
-//})
-//
-//function processOver(hoveredSeries) {
-//  hoveredSeries.toFront();
-//
-//  hoveredSeries.segments.each(function(segment) {
-//    segment.setState("hover");
-//  })
-//
-//  loglogAmcharts.lineSeries.each(function(series) {
-//    if (series != hoveredSeries) {
-//      lineSeries.segments.each(function(segment) {
-//        segment.setState("dimmed");
-//      })
-//      series.bulletsContainer.setState("dimmed");
-//    }
-//  });
-//}
-//
-//function processOut(hoveredSeries) {
-//  loglogAmcharts.series.each(function(series) {
-//    series.segments.each(function(segment) {
-//      segment.setState("default");
-//    })
-//    series.bulletsContainer.setState("default");
-//  });
-//}
+		//		lologAmcharts.legend.itemContainers.template.events.on("over", function(event) {
+		//  processOver(event.target.dataItem.dataContext);
+		//})
+		//
+		//loglogAmcharts.legend.itemContainers.template.events.on("out", function(event) {
+		//  processOut(event.target.dataItem.dataContext);
+		//})
+		//
+		//function processOver(hoveredSeries) {
+		//  hoveredSeries.toFront();
+		//
+		//  hoveredSeries.segments.each(function(segment) {
+		//    segment.setState("hover");
+		//  })
+		//
+		//  loglogAmcharts.lineSeries.each(function(series) {
+		//    if (series != hoveredSeries) {
+		//      lineSeries.segments.each(function(segment) {
+		//        segment.setState("dimmed");
+		//      })
+		//      series.bulletsContainer.setState("dimmed");
+		//    }
+		//  });
+		//}
+		//
+		//function processOut(hoveredSeries) {
+		//  loglogAmcharts.series.each(function(series) {
+		//    series.segments.each(function(segment) {
+		//      segment.setState("default");
+		//    })
+		//    series.bulletsContainer.setState("default");
+		//  });
+		//}
 
 		// CURSOR XY
 		loglogAmcharts.cursor = new am4charts.XYCursor();
@@ -392,8 +456,8 @@ div {
 
 		// PRE ZOOM
 		//loglogAmcharts.events.on("ready", function () {
-//			  yAxis.zoomToValues(4, 14, true);
-//		});
+		//			  yAxis.zoomToValues(4, 14, true);
+		//		});
 		loglogAmcharts.exporting.menu = new am4core.ExportMenu();
 
 
@@ -401,88 +465,89 @@ div {
 		// GRAFICO LETALIDADE
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
 
 
-		// Add data
-		chart.data = [{
-			"name": "IT",
-			"points": 12.97,
-			"color": chart.colors.next(),
-			"bullet": "./flags/IT.png",
-			//"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
-			"media": 6.19,
-			"obitos":21067
-		}, {
-			"name": "GB",
-			"points": 12.79,
-			"color": chart.colors.next(),
-			"bullet": "./flags/GB.png",
-			"media": 6.19,
-			"obitos":12125
-		}, {
-			"name": "NL",
-			"points": 10.71,
-			"color": chart.colors.next(),
-			"bullet": "./flags/NL.png",
-			"media": 6.19,
-			"obitos":2955
-		}, {
-			"name": "FR",
-			"points": 10.87,
-			"color": chart.colors.next(),
-			"bullet": "./flags/FR.png",
-			"media": 6.19,
-			"obitos":14986
-		}, {
-			"name": "ES",
-			"points": 10.46,
-			"color": chart.colors.next(),
-			"bullet": "./flags/ES.png",
-			"media": 6.19,
-			"obitos":18056
-		}, {
-			"name": "BR",
-			"points": 5.70,
-			"color": chart.colors.next(),
-			"bullet": "./flags/BR.png",
-			"media": 6.19,
-			"obitos":1378
-		}, {
-			"name": "US",
-			"points": 4.19,
-			"color": chart.colors.next(),
-			"bullet": "./flags/US.png",
-			"media": 6.19,
-			"obitos":24485
-		}, {
-			"name": "PT",
-			"points": 3.25,
-			"color": "green",
-			"bullet": "./flags/PT.png",
-			"media": 6.19,
-			"obitos":567
-		}, {
-			"name": "DE",
-			"points": 2.49,
-			"color": chart.colors.next(),
-			"bullet": "./flags/DE.png",
-			"media": 6.19,
-			"obitos":3261
-		}, {
-			"name": "KR",
-			"points": 2.10,
-			"color": chart.colors.next(),
-			"bullet": "./flags/KR.png",
-			"media": 6.19,
-			"obitos":222
-		}, {
-			"name": "LU",
-			"points": 2.10,
-			"color": chart.colors.next(),
-			"bullet": "./flags/LU.png",
-			"media": 6.19,
-			"obitos": 69
-		}];
+		// // Add data
+		// chart.data = [{
+		// 	"name": "IT",
+		// 	"points": 12.97,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/IT.png",
+		// 	//"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
+		// 	"media": 6.19,
+		// 	"obitos": 21067
+		// }, {
+		// 	"name": "GB",
+		// 	"points": 12.79,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/GB.png",
+		// 	"media": 6.19,
+		// 	"obitos": 12125
+		// }, {
+		// 	"name": "NL",
+		// 	"points": 10.71,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/NL.png",
+		// 	"media": 6.19,
+		// 	"obitos": 2955
+		// }, {
+		// 	"name": "FR",
+		// 	"points": 10.87,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/FR.png",
+		// 	"media": 6.19,
+		// 	"obitos": 14986
+		// }, {
+		// 	"name": "ES",
+		// 	"points": 10.46,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/ES.png",
+		// 	"media": 6.19,
+		// 	"obitos": 18056
+		// }, {
+		// 	"name": "BR",
+		// 	"points": 5.70,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/BR.png",
+		// 	"media": 6.19,
+		// 	"obitos": 1378
+		// }, {
+		// 	"name": "US",
+		// 	"points": 4.19,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/US.png",
+		// 	"media": 6.19,
+		// 	"obitos": 24485
+		// }, {
+		// 	"name": "PT",
+		// 	"points": 3.25,
+		// 	"color": "green",
+		// 	"bullet": "./flags/PT.png",
+		// 	"media": 6.19,
+		// 	"obitos": 567
+		// }, {
+		// 	"name": "DE",
+		// 	"points": 2.49,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/DE.png",
+		// 	"media": 6.19,
+		// 	"obitos": 3261
+		// }, {
+		// 	"name": "KR",
+		// 	"points": 2.10,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/KR.png",
+		// 	"media": 6.19,
+		// 	"obitos": 222
+		// }, {
+		// 	"name": "LU",
+		// 	"points": 2.10,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/LU.png",
+		// 	"media": 6.19,
+		// 	"obitos": 69
+		// }];
 
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Letalidade[/]\n(óbitos/casos confirmados)";
@@ -490,7 +555,7 @@ div {
 
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-		categoryAxis.dataFields.category = "name";
+		categoryAxis.dataFields.category = "country";
 		categoryAxis.renderer.grid.template.disabled = true;
 		categoryAxis.renderer.minGridDistance = 30;
 		categoryAxis.renderer.inside = true;
@@ -505,7 +570,7 @@ div {
 		valueAxis.numberFormatter = new am4core.NumberFormatter();
 		valueAxis.numberFormatter.numberFormat = "#'%'"
 		//valueAxis.renderer.labels.template.adapter.add("text", function(text) {
-		 // return text + "%";});
+		// return text + "%";});
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
 
@@ -519,13 +584,23 @@ div {
 
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
-		series.dataFields.valueY = "points";
-		series.dataFields.categoryX = "name";
-		series.columns.template.propertyFields.fill = "color";
-		series.columns.template.propertyFields.stroke = "color";
+		series.dataFields.valueY = "letalidade";
+		series.calculatePercent = true;
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = "color";
+		//series.columns.template.propertyFields.stroke = "color";
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
-		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.percent}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
+		series.strokeWidth = 0;
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
 
 		// Add bullets
 		var bullet = series.bullets.push(new am4charts.Bullet());
@@ -537,41 +612,72 @@ div {
 		image.y = am4core.percent(100);
 		image.propertyFields.href = "bullet";
 		image.tooltipText = series.columns.template.tooltipText;
-		image.propertyFields.fill = "color";
+		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
 
 
 		//// series da media global (linha)
-//		var lineSeries = chart.series.push(new am4charts.LineSeries());
-//		lineSeries.name = "Global";
-//		lineSeries.dataFields.valueY = "media";
-//		lineSeries.dataFields.categoryX = "name";
-//
-//		lineSeries.stroke = am4core.color("#eee");
-//		lineSeries.strokeWidth = 2;
-//		lineSeries.tooltip.label.textAlign = "middle";
-//
-//		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
-//		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
-//		bullet.tooltipText = "[#eee font-size: 12px]MÉDIA GLOBAL:[/][font-weight: bold] {media}%[/]"
-//		var circle = bullet.createChild(am4core.Circle);
-//		circle.radius = 1;
-//		circle.fill = am4core.color("#eee");
-//		circle.strokeWidth = 1;
+		//		var lineSeries = chart.series.push(new am4charts.LineSeries());
+		//		lineSeries.name = "Global";
+		//		lineSeries.dataFields.valueY = "media";
+		//		lineSeries.dataFields.categoryX = "name";
+		//
+		//		lineSeries.stroke = am4core.color("#eee");
+		//		lineSeries.strokeWidth = 2;
+		//		lineSeries.tooltip.label.textAlign = "middle";
+		//
+		//		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+		//		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
+		//		bullet.tooltipText = "[#eee font-size: 12px]MÉDIA GLOBAL:[/][font-weight: bold] {media}%[/]"
+		//		var circle = bullet.createChild(am4core.Circle);
+		//		circle.radius = 1;
+		//		circle.fill = am4core.color("#eee");
+		//		circle.strokeWidth = 1;
 
-// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
+		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
-		range.value = 6.39;							// VALOR DA MÉDIA GLOBAL
+		range.calculatePercent = true;
+		range.value = 0.0639; // VALOR DA MÉDIA GLOBAL
+		var media = range.value*100;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
 		range.grid.strokeOpacity = 0.9;
 		range.label.inside = true;
 		var str1 = "[#eee font-size: 12px]MÉDIA GLOBAL: [/][font-weight: bold]";
-		range.label.text = str1.concat(range.value.toString(), "%[/]");
+		range.label.text = str1.concat(media.toString(), "%[/]");
 		range.label.fill = range.grid.stroke;
 		range.label.align = "right";
 		range.label.verticalCenter = "bottom";
 		chart.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
+
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
 
 		chart.exporting.menu = new am4core.ExportMenu();
 
@@ -580,66 +686,67 @@ div {
 		// CASOS POR MILHAO
 		// Create chart instance
 		var chart = am4core.create("casospormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
 
 
-		// Add data
-		chart.data = [{
-			"pais": "IT",
-			"points": 2689,
-			"color": chart.colors.next(),
-			"bullet": "./flags/IT.png"
-		}, {
-			"pais": "GB",
-			"points": 1426,
-			"color": chart.colors.next(),
-			"bullet": "./flags/GB.png"
-		}, {
-			"pais": "NL",
-			"points": 1601,
-			"color": chart.colors.next(),
-			"bullet": "./flags/NL.png"
-		}, {
-			"pais": "FR",
-			"points": 2058,
-			"color": chart.colors.next(),
-			"bullet": "./flags/FR.png"
-		}, {
-			"pais": "ES",
-			"points": 3693,
-			"color": chart.colors.next(),
-			"bullet": "./flags/ES.png"
-		}, {
-			"pais": "BR",
-			"points": 115,
-			"color": chart.colors.next(),
-			"bullet": "./flags/BR.png"
-		}, {
-			"pais": "US",
-			"points": 1785,
-			"color": chart.colors.next(),
-			"bullet": "./flags/US.png"
-		}, {
-			"pais": "PT",
-			"points": 1689,
-			"color": "green",
-			"bullet": "./flags/PT.png"
-		}, {
-			"pais": "DE",
-			"points": 1580,
-			"color": chart.colors.next(),
-			"bullet": "./flags/DE.png"
-		}, {
-			"pais": "KR",
-			"points": 205,
-			"color": chart.colors.next(),
-			"bullet": "./flags/KR.png"
-		}, {
-			"pais": "LU",
-			"points": 5417,
-			"color": chart.colors.next(),
-			"bullet": "./flags/LU.png"
-
-		}];
+		// // Add data
+		// chart.data = [{
+		// 	"pais": "IT",
+		// 	"points": 2689,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/IT.png"
+		// }, {
+		// 	"pais": "GB",
+		// 	"points": 1426,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/GB.png"
+		// }, {
+		// 	"pais": "NL",
+		// 	"points": 1601,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/NL.png"
+		// }, {
+		// 	"pais": "FR",
+		// 	"points": 2058,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/FR.png"
+		// }, {
+		// 	"pais": "ES",
+		// 	"points": 3693,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/ES.png"
+		// }, {
+		// 	"pais": "BR",
+		// 	"points": 115,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/BR.png"
+		// }, {
+		// 	"pais": "US",
+		// 	"points": 1785,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/US.png"
+		// }, {
+		// 	"pais": "PT",
+		// 	"points": 1689,
+		// 	"color": "green",
+		// 	"bullet": "./flags/PT.png"
+		// }, {
+		// 	"pais": "DE",
+		// 	"points": 1580,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/DE.png"
+		// }, {
+		// 	"pais": "KR",
+		// 	"points": 205,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/KR.png"
+		// }, {
+		// 	"pais": "LU",
+		// 	"points": 5417,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/LU.png"
+		//
+		// }];
 
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Casos confirmados/milhão de habitantes[/]\n";
@@ -647,7 +754,7 @@ div {
 
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-		categoryAxis.dataFields.category = "pais";
+		categoryAxis.dataFields.category = "country";
 		categoryAxis.renderer.grid.template.disabled = true;
 		categoryAxis.renderer.minGridDistance = 30;
 		categoryAxis.renderer.inside = true;
@@ -663,39 +770,32 @@ div {
 		valueAxis.min = 0;
 		valueAxis.max = 6000;
 
-		//// axis break
-		//var axisBreak = valueAxis.axisBreaks.create();
-		//axisBreak.startValue = 3600;
-		//axisBreak.endValue = 5000;
-		//// fixed axis break
-		//var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
-		//axisBreak.breakSize = 0.1 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
-		//
-		//// make break expand on hover
-		//var hoverState = axisBreak.states.create("hover");
-		//hoverState.properties.breakSize = 1;
-		//hoverState.properties.opacity = 0.1;
-		//hoverState.transitionDuration = 500;
-		//
-		//axisBreak.defaultState.transitionDuration = 1000;
-
 		// Do not crop bullets
 		chart.maskBullets = false;
 
 		// Remove padding
 		//chart.paddingBottom = 0;
 
-		chart.numberFormatter.numberFormat = "#";
+		chart.numberFormatter.numberFormat = "#.";
 
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
-		series.dataFields.valueY = "points";
-		series.dataFields.categoryX = "pais";
-		series.columns.template.propertyFields.fill = "color";
-		series.columns.template.propertyFields.stroke = "color";
+		series.dataFields.valueY = "casosMilhao";
+		series.dataFields.categoryX = "country";
+		series.strokeWidth = 0;
+		// series.columns.template.propertyFields.fill = "color";
+		// series.columns.template.propertyFields.stroke = "color";
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
 
 		// Add bullets
 		var bullet = series.bullets.push(new am4charts.Bullet());
@@ -707,8 +807,37 @@ div {
 		image.y = am4core.percent(100);
 		image.propertyFields.href = "bullet";
 		image.tooltipText = series.columns.template.tooltipText;
-		image.propertyFields.fill = "color";
+		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
+
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
 
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
@@ -725,32 +854,32 @@ div {
 
 		// Add data
 		//chart.data = [{
-//			"pais": "IT",
-//			"points": 2689,
-//			"color": chart.colors.next(),
-//			"bullet": "./flags/IT.png"
-//		}, {
-//			"pais": "GB",
-//			"points": 1426,
-//			"color": chart.colors.next(),
-//			"bullet": "./flags/GB.png"
-//		}, {
-//			"pais": "NL",
-//			"points": 1601,
-//			"color": chart.colors.next(),
-//			"bullet": "./flags/NL.png"
-//		}, {
-//			"pais": "FR",
-//			"points": 2058,
-//			"color": chart.colors.next(),
-//			"bullet": "./flags/FR.png"
-//		}, {
-//			"pais": "ES",
-//			"points": 3693,
-//			"color": chart.colors.next(),
-//			"bullet": "./flags/ES.png"
-//
-//		}];
+		//			"pais": "IT",
+		//			"points": 2689,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/IT.png"
+		//		}, {
+		//			"pais": "GB",
+		//			"points": 1426,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/GB.png"
+		//		}, {
+		//			"pais": "NL",
+		//			"points": 1601,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/NL.png"
+		//		}, {
+		//			"pais": "FR",
+		//			"points": 2058,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/FR.png"
+		//		}, {
+		//			"pais": "ES",
+		//			"points": 3693,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/ES.png"
+		//
+		//		}];
 
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Óbitos/milhão de habitantes[/]\n";
@@ -782,7 +911,7 @@ div {
 		// Remove padding
 		//chart.paddingBottom = 0;
 
-		chart.numberFormatter.numberFormat = "#.0";
+		chart.numberFormatter.numberFormat = "#.";
 
 
 		// Create series
@@ -794,12 +923,13 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		series.strokeWidth = 0;
 
 		series.heatRules.push({
-			"target":series.columns.template,
-			"property":"fill",
-			"min": am4core.color("#00AAFF"),
-			"max": am4core.color("#FF6A00"),
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
 			"dataField": "valueY"
 		});
 		// Add bullets
@@ -815,14 +945,43 @@ div {
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
 
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
+
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
 
 
 
 
-				/////////////////////////////////////////////
-		// ÓBITOS POR MILHAO
+		/////////////////////////////////////////////
+		//TESTES POR MILHAO
 		// Create chart instance
 		var chart = am4core.create("testespormilhaodiv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
@@ -886,12 +1045,13 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		series.strokeWidth = 0;
 
 		series.heatRules.push({
-			"target":series.columns.template,
-			"property":"fill",
-			"min": am4core.color("#00AAFF"),
-			"max": am4core.color("#FF6A00"),
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#1b8a5a"),
 			"dataField": "valueY"
 		});
 		// Add bullets
@@ -918,7 +1078,6 @@ div {
 		chart.cursor.lineX.strokeWidth = 0;
 		chart.cursor.lineX.fill = am4core.color("#8F3985");
 		chart.cursor.lineX.fillOpacity = 0.1;
-
 		categoryAxis.cursorTooltipEnabled = false;
 
 		var axisTooltip = valueAxis.tooltip;
@@ -929,7 +1088,6 @@ div {
 		axisTooltip.fillOpacity = 0.8;
 		axisTooltip.fontSize = 12;
 
-
 		var dropShadow = new am4core.DropShadowFilter();
 		dropShadow.dy = 1;
 		dropShadow.dx = 1;
@@ -938,8 +1096,7 @@ div {
 
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
-
-
-    </script>
+	</script>
 </body>
+
 </html>
