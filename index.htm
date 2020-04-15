@@ -32,16 +32,29 @@ div {
 
 #letalidadediv {
   width: 35%;
-  height: 360px;
+  height: 395px;
   float:left;
   /*clear:both;*/
  }
  #casospormilhaodiv {
   width: 35%;
+  height: 395px;
+  float:left;
+  /*clear:both;*/
+ }
+ #obitospormilhaodiv {
+  width: 35%;
+  height: 360px;
+  float:right;
+  /*clear:both;*/
+ }
+ #testespormilhaodiv {
+  width: 35%;
   height: 360px;
   float:left;
   /*clear:both;*/
  }
+ 
 </style>
 
 </head>
@@ -58,6 +71,8 @@ div {
     
     
     <div id="casospormilhaodiv"></div>
+    <div id="testespormilhaodiv"></div>
+    <div id="obitospormilhaodiv"></div>
     
     <script>
 
@@ -85,7 +100,7 @@ div {
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
 		
 		loglogAmcharts.dataSource.url = "./dadosMundo.json";
-		loglogAmcharts.cornerRadiusTopLeft = 10;
+		
 		
 		loglogAmcharts.colors.list = [
 		  am4core.color("#EEE"),
@@ -698,6 +713,202 @@ div {
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
 
+
+
+
+		/////////////////////////////////////////////
+		// ÓBITOS POR MILHAO 
+		// Create chart instance
+		var chart = am4core.create("obitospormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+		
+		
+		// Add data
+		//chart.data = [{
+//			"pais": "IT",
+//			"points": 2689,
+//			"color": chart.colors.next(),
+//			"bullet": "./flags/IT.png"
+//		}, {
+//			"pais": "GB",
+//			"points": 1426,
+//			"color": chart.colors.next(),
+//			"bullet": "./flags/GB.png"
+//		}, {
+//			"pais": "NL",
+//			"points": 1601,
+//			"color": chart.colors.next(),
+//			"bullet": "./flags/NL.png"
+//		}, {
+//			"pais": "FR",
+//			"points": 2058,
+//			"color": chart.colors.next(),
+//			"bullet": "./flags/FR.png"
+//		}, {
+//			"pais": "ES",
+//			"points": 3693,
+//			"color": chart.colors.next(),
+//			"bullet": "./flags/ES.png"
+//			
+//		}];
+		
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Óbitos/milhão de habitantes[/]\n";
+		title.textAlign = "middle";
+		
+		//let colorSet = new am4core.ColorSet();
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+		
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.max = 500;
+		
+		
+		// Do not crop bullets
+		chart.maskBullets = false;
+		
+		// Remove padding
+		//chart.paddingBottom = 0;
+		
+		chart.numberFormatter.numberFormat = "#.0";
+		
+		
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "obitosMilhao";
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = am4core.color("#000");
+		//series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		
+		series.heatRules.push({
+			"target":series.columns.template,
+			"property":"fill",
+			"min": am4core.color("#00AAFF"),
+			"max": am4core.color("#FF6A00"),
+			"dataField": "valueY"
+		});
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+		
+		// Enable export
+		chart.exporting.menu = new am4core.ExportMenu();
+		
+		
+		
+		
+				/////////////////////////////////////////////
+		// ÓBITOS POR MILHAO 
+		// Create chart instance
+		var chart = am4core.create("testespormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+		
+			
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Testes/milhão de habitantes[/]\n";
+		title.textAlign = "middle";
+		
+		//let colorSet = new am4core.ColorSet();
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+		
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.max = 55000;
+		
+		// axis break
+		var axisBreak = valueAxis.axisBreaks.create();
+		axisBreak.startValue = 24500;
+		axisBreak.endValue = 45500;
+		// fixed axis break
+		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
+		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
+		
+		//make break expand on hover
+		var hoverState = axisBreak.states.create("hover");
+		hoverState.properties.breakSize = 1;
+		hoverState.properties.opacity = 0.1;
+		hoverState.transitionDuration = 500;
+		
+		axisBreak.defaultState.transitionDuration = 1000;
+		
+		
+		// Do not crop bullets
+		chart.maskBullets = false;
+		
+		// Remove padding
+		//chart.paddingBottom = 0;
+		
+		chart.numberFormatter.numberFormat = "#";
+		
+		
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "testesMilhao";
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = am4core.color("#000");
+		//series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		
+		series.heatRules.push({
+			"target":series.columns.template,
+			"property":"fill",
+			"min": am4core.color("#00AAFF"),
+			"max": am4core.color("#FF6A00"),
+			"dataField": "valueY"
+		});
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+		
+		// Enable export
+		chart.exporting.menu = new am4core.ExportMenu();
 		
 		
     </script>
