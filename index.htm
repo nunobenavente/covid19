@@ -13,7 +13,7 @@
 	<title>Dados COVID-19</title>
 	<meta property="og:title" content="Dados COVID-19" />
 	<meta property="og:type" content="website" />
-	<meta property="og:description" content="Infografia sobre a pandemia COVID-19 no mundo. Concebido por Nuno Benavente" />
+	<meta property="og:description" content="Alguma infografia sobre a pandemia COVID-19" />
 	<meta property="og:url" content="http://nunobenavente.github.io/covid19/" />
 	<meta property="og:image" content="http://nunobenavente.github.io/covid19/covid19.PNG" />
 
@@ -712,6 +712,14 @@
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
 
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{valueY.percent}%[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
 
 		//// series da media global (linha)
 		//		var lineSeries = chart.series.push(new am4charts.LineSeries());
@@ -797,52 +805,6 @@
 		// 	"points": 1426,
 		// 	"color": chart.colors.next(),
 		// 	"bullet": "./flags/GB.png"
-		// }, {
-		// 	"pais": "NL",
-		// 	"points": 1601,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/NL.png"
-		// }, {
-		// 	"pais": "FR",
-		// 	"points": 2058,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/FR.png"
-		// }, {
-		// 	"pais": "ES",
-		// 	"points": 3693,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/ES.png"
-		// }, {
-		// 	"pais": "BR",
-		// 	"points": 115,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/BR.png"
-		// }, {
-		// 	"pais": "US",
-		// 	"points": 1785,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/US.png"
-		// }, {
-		// 	"pais": "PT",
-		// 	"points": 1689,
-		// 	"color": "green",
-		// 	"bullet": "./flags/PT.png"
-		// }, {
-		// 	"pais": "DE",
-		// 	"points": 1580,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/DE.png"
-		// }, {
-		// 	"pais": "KR",
-		// 	"points": 205,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/KR.png"
-		// }, {
-		// 	"pais": "LU",
-		// 	"points": 5417,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/LU.png"
-		//
 		// }];
 
 		var title = chart.titles.create();
@@ -906,6 +868,14 @@
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{casosMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
 
 
 		// CURSOR XY para ligar axis tooltips
@@ -1042,6 +1012,14 @@
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
 
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{obitosMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
 
 		// CURSOR XY para ligar axis tooltips
 		chart.cursor = new am4charts.XYCursor();
@@ -1163,6 +1141,14 @@
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{testesMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
 
 		// CURSOR XY para ligar axis tooltips
 		chart.cursor = new am4charts.XYCursor();
