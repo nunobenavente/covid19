@@ -113,6 +113,7 @@
 
 			am4core.color("#00AA00"),
 			am4core.color("#FF8832"),
+			am4core.color("#e43232"),
 			am4core.color("#00CC00"),
 			am4core.color("#008888"),
 			am4core.color("#642dda"),
@@ -199,12 +200,20 @@
 		lineSeries.name = "PT";
 		lineSeries.showOnInit = false;
 		// render data points as bullets
-		var RADIUS = 2;
+		var RADIUS = 2; var DESVIOLABEL = 10; TAMANHOLETRA = 10;
+
 		var bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     // bullet.circle.fill = "#eee"; // desnecessario porque a bullet adquire a cor da series automaticamente
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+		//bullet.tooltipText = "[bold font-size: 12]Data: {data}[/]";
 
 
 		//		var segment = lineSeries.segments.template;
@@ -232,9 +241,15 @@
 		lineSeries2.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries2.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries2.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries2.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries3.dataFields.valueY = "esy";
@@ -244,9 +259,15 @@
 		lineSeries3.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries3.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries3.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries3.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries12.dataFields.valueY = "fry";
@@ -256,9 +277,15 @@
 		lineSeries12.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries12.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries12.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries12.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries6.dataFields.valueY = "gby";
@@ -268,9 +295,15 @@
 		lineSeries6.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries6.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries6.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries6.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries10.dataFields.valueY = "ity";
@@ -280,9 +313,15 @@
 		lineSeries10.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries10.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries10.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries10.name;
 		bullet.circle.opacity = 0;
-    bullet.circle.propertyFields.opacity = "bullet";
-    bullet.circle.radius = RADIUS;
+		labelBullet.label.opacity = 0;
+		bullet.circle.propertyFields.opacity = "bullet";
+		bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries11.dataFields.valueY = "luy";
@@ -292,9 +331,15 @@
 		lineSeries11.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries11.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries11.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries11.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries9.dataFields.valueY = "nly";
@@ -304,9 +349,33 @@
 		lineSeries9.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries9.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries9.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries9.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		var lineSeries13 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries13.dataFields.valueY = "chy";
+		lineSeries13.dataFields.valueX = "chx";
+		lineSeries13.strokeOpacity = opacidadeLinhas;
+		lineSeries13.name = "CH";
+		lineSeries13.showOnInit = false;
+		// render data points as bullets
+		var bullet = lineSeries13.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries13.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries13.name;
+		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
+    bullet.circle.propertyFields.opacity = "bullet";
+    bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries8.dataFields.valueY = "bry";
@@ -316,9 +385,15 @@
 		lineSeries8.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries8.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries8.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries8.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries4.dataFields.valueY = "kry";
@@ -328,9 +403,15 @@
 		lineSeries4.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries4.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries4.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries4.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries7.dataFields.valueY = "usy";
@@ -340,9 +421,15 @@
 		lineSeries7.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries7.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries7.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries7.name;
 		bullet.circle.opacity = 0;
+		labelBullet.label.opacity = 0;
     bullet.circle.propertyFields.opacity = "bullet";
     bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries5.dataFields.valueY = "globaly";
@@ -354,10 +441,15 @@
 		lineSeries5.showOnInit = false;
 		// render data points as bullets
 		var bullet = lineSeries5.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lineSeries5.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries5.name;
 		bullet.circle.opacity = 0;
-    bullet.circle.propertyFields.opacity = "bullet";
-    bullet.circle.radius = RADIUS;
-
+		labelBullet.label.opacity = 0;
+		bullet.circle.propertyFields.opacity = "bullet";
+		bullet.circle.radius = RADIUS;
+		labelBullet.label.propertyFields.opacity = "bullet";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
 
 
 		//// Add a bullet
@@ -1012,7 +1104,7 @@
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 24500;
+		axisBreak.startValue = 30000;
 		axisBreak.endValue = 45500;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
