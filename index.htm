@@ -45,7 +45,7 @@ div {
  #obitospormilhaodiv {
   width: 35%;
   height: 360px;
-  float:left;
+  float:right;
   /*clear:both;*/
  }
  #testespormilhaodiv {
@@ -54,7 +54,7 @@ div {
   float:left;
   /*clear:both;*/
  }
- 
+
 </style>
 
 </head>
@@ -68,49 +68,49 @@ div {
     </div>-->
     <div id="loglogAmchartsDiv"></div>
     <div id="letalidadediv"></div>
-    
-    
+
+
     <div id="casospormilhaodiv"></div>
     <div id="testespormilhaodiv"></div>
     <div id="obitospormilhaodiv"></div>
-    
+
     <script>
 
-		
+
 
 		/**
 		 * ---------------------------------------
 		 * This demo was created using amCharts 4.
-		 * 
+		 *
 		 * For more information visit:
 		 * https://www.amcharts.com/
-		 * 
+		 *
 		 * Documentation is available at:
 		 * https://www.amcharts.com/docs/v4/
 		 * ---------------------------------------
 		 */
-		
+
 		// Themes begin
 		am4core.useTheme(am4themes_animated);
 		am4core.useTheme(am4themes_dark);
 		// Themes end
-		
-		
+
+
 		// Create chart instance
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
-		
+
 		loglogAmcharts.dataSource.url = "./dadosMundo.json";
-		
-		
+
+
 		loglogAmcharts.colors.list = [
 		  am4core.color("#EEE"),
 		  am4core.color("#FFE119"),
 		  am4core.color("#FABEBE"),
 		  am4core.color("#AAFFC3"),
-		  
+
 		  am4core.color("#000075"),
 		  am4core.color("#FF0000"),
-		  
+
 		  am4core.color("#00AA00"),
 		  am4core.color("#FF8832"),
 		  am4core.color("#00CC00"),
@@ -118,26 +118,26 @@ div {
 		  am4core.color("#4363d8"),
 		  am4core.color("#CCC")
 		];
-		
-		
-		 
-		
-		
+
+
+
+
+
 		// Create axes
 		var opacidadeLinhas = 0.6;
-		
+
 		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
-		valueAxisX.title.text = 'TOTAL DE CASOS (escala LOG) - [font-size: 14]clique na legenda para ligar/desligar países[/]';
+		valueAxisX.title.text = 'TOTAL CASOS CONFIRMADOS (escala LOG) - [font-size: 14]clique na legenda para ligar/desligar países[/]';
 		//valueAxisX.renderer.minGridDistance = 10;
 		valueAxisX.renderer.labels.template.fontSize = 10;
 		valueAxisX.logarithmic = true;
-		
+
 		// Create value axis
 		var valueAxisY = loglogAmcharts.yAxes.push(new am4charts.ValueAxis());
-		valueAxisY.title.text = 'CASOS NOS ÚLTIMOS 7 DIAS (escala LOG)';
+		valueAxisY.title.text = 'CASOS CONFIRMADOS ÚLTIMOS 7 DIAS (escala LOG)';
 		valueAxisY.renderer.labels.template.fontSize = 10;
 		valueAxisY.logarithmic = true;
-		
+
 		valueAxisX.renderer.grid.template.disabled = true;
 		//valueAxisX.renderer.labels.template.disabled = true;
 		function createGrid(value) {
@@ -160,7 +160,7 @@ div {
 		valueAxisY.renderer.grid.template.strokeOpacity = 0.2;
 		valueAxisY.renderer.grid.template.stroke = am4core.color("#aaa");
 		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
-		
+
 		//createGrid(100);createGrid(100);createGrid(200);
 //		createGrid(200);createGrid(400);createGrid(500);
 //		createGrid(300);createGrid(200);createGrid(300);
@@ -168,7 +168,7 @@ div {
 //		createGrid(500);createGrid(400);createGrid(500);
 //		createGrid(600);createGrid(700);createGrid(800);
 //		createGrid(900);createGrid(1000);
-		
+
 		var title = loglogAmcharts.titles.create();
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 		var dia = new Date();
@@ -177,17 +177,17 @@ div {
 		title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
 		//title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
 		title.textAlign = "middle";
-		
+
 		// Pre-zoom
 		//loglogAmcharts.events.on("ready", function () {
 //			valueAxisX.zoomToValues(110000, 1300000, false, true);
 //		});
-		
-		
+
+
 		valueAxisX.min = 100;
 		valueAxisY.min = 40;
-		
-		
+
+
 		// Create series
 		var lineSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries.dataFields.valueY = "pty";
@@ -196,8 +196,8 @@ div {
 		lineSeries.strokeWidth = 2;
 		lineSeries.name = "PT";
 		lineSeries.showOnInit = false;
-	
-		
+
+
 //		var segment = lineSeries.segments.template;
 //  segment.interactionsEnabled = true;
 //
@@ -214,77 +214,77 @@ div {
 //  segment.events.on("out", function(event) {
 //    processOut(event.target.parent.parent.parent);
 //  });
-		
+
 		var lineSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries2.dataFields.valueY = "dey";
 		lineSeries2.dataFields.valueX = "dex";
 		lineSeries2.strokeOpacity = opacidadeLinhas;
 		lineSeries2.name = "DE";
 		lineSeries2.showOnInit = false;
-			
+
 		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries3.dataFields.valueY = "esy";
 		lineSeries3.dataFields.valueX = "esx";
 		lineSeries3.strokeOpacity = opacidadeLinhas;
 		lineSeries3.name = "ES";
-		lineSeries3.showOnInit = false;	
-		
+		lineSeries3.showOnInit = false;
+
 		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries12.dataFields.valueY = "fry";
 		lineSeries12.dataFields.valueX = "frx";
 		lineSeries12.strokeOpacity = opacidadeLinhas;
 		lineSeries12.name = "FR";
 		lineSeries12.showOnInit = false;
-		
+
 		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries6.dataFields.valueY = "gby";
 		lineSeries6.dataFields.valueX = "gbx";
 		lineSeries6.strokeOpacity = opacidadeLinhas;
 		lineSeries6.name = "GB";
 		lineSeries6.showOnInit = false;
-			
+
 		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries10.dataFields.valueY = "ity";
 		lineSeries10.dataFields.valueX = "itx";
 		lineSeries10.strokeOpacity = opacidadeLinhas;
 		lineSeries10.name = "IT";
 		lineSeries10.showOnInit = false;
-		
+
 		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries11.dataFields.valueY = "luy";
 		lineSeries11.dataFields.valueX = "lux";
 		lineSeries11.strokeOpacity = opacidadeLinhas;
 		lineSeries11.name = "LU";
 		lineSeries11.showOnInit = false;
-		
+
 		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries9.dataFields.valueY = "nly";
 		lineSeries9.dataFields.valueX = "nlx";
 		lineSeries9.strokeOpacity = opacidadeLinhas;
 		lineSeries9.name = "NL";
 		lineSeries9.showOnInit = false;
-	
+
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries8.dataFields.valueY = "bry";
 		lineSeries8.dataFields.valueX = "brx";
 		lineSeries8.strokeOpacity = opacidadeLinhas;
 		lineSeries8.name = "BR";
 		lineSeries8.showOnInit = false;
-		
+
 		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries4.dataFields.valueY = "kry";
 		lineSeries4.dataFields.valueX = "krx";
 		lineSeries4.strokeOpacity = opacidadeLinhas;
 		lineSeries4.name = "KR";
-		lineSeries4.showOnInit = false;		
-		
+		lineSeries4.showOnInit = false;
+
 		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries7.dataFields.valueY = "usy";
 		lineSeries7.dataFields.valueX = "usx";
 		lineSeries7.strokeOpacity = opacidadeLinhas;
 		lineSeries7.name = "US";
 		lineSeries7.showOnInit = false;
-		
+
 		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries5.dataFields.valueY = "globaly";
 		lineSeries5.dataFields.valueX = "globalx";
@@ -293,12 +293,12 @@ div {
 		lineSeries5.name = "GLOBAL";
 		lineSeries5.hidden = true;
 		lineSeries5.showOnInit = false;
-		
-			
-		
+
+
+
 		//// Add a bullet
 //		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
-//		
+//
 //		// Add a triangle to act as am arrow
 //		var arrow = bullet.createChild(am4core.Triangle);
 //		arrow.horizontalCenter = "middle";
@@ -308,10 +308,10 @@ div {
 //		arrow.direction = "top";
 //		arrow.width = 0.8;
 //		arrow.height = 0.8;
-//		
+//
 //		// Add a bullet
 //		var bullet2 = lineSeries2.bullets.push(new am4charts.Bullet());
-//		
+//
 //		// Add a triangle to act as am arrow
 //		var arrow2 = bullet2.createChild(am4core.Triangle);
 //		arrow2.horizontalCenter = "middle";
@@ -322,8 +322,8 @@ div {
 //		arrow2.direction = "top";
 //		arrow2.width = 0.8;
 //		arrow2.height = 0.8;
-		
-		
+
+
 		// Legenda
 		loglogAmcharts.legend = new am4charts.Legend();
 		loglogAmcharts.legend.useDefaultMarker = true; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
@@ -331,15 +331,15 @@ div {
 		markerTemplate.width = 18;
 		markerTemplate.height = 18;
 		loglogAmcharts.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
-		
+
 		loglogAmcharts.legend.labels.template.textDecoration = "none";
 		loglogAmcharts.legend.valueLabels.template.textDecoration = "none";
-		
+
 		var as = loglogAmcharts.legend.labels.template.states.getKey("active");
 		as.properties.textDecoration = "line-through";
 		as.properties.fill = am4core.color("#eee");
-				
-		
+
+
 //		lologAmcharts.legend.itemContainers.template.events.on("over", function(event) {
 //  processOver(event.target.dataItem.dataContext);
 //})
@@ -380,7 +380,7 @@ div {
 		loglogAmcharts.cursor.lineX.strokeWidth = 0.5;
 		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
 		loglogAmcharts.cursor.lineY.strokeWidth = 0.5;
-		
+
 		//scrollbars
 		//loglogAmcharts.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
 		loglogAmcharts.scrollbarY = new am4core.Scrollbar();
@@ -389,7 +389,7 @@ div {
 		scrollbarX.series.push(lineSeries2);
 		loglogAmcharts.scrollbarX = scrollbarX;
 		loglogAmcharts.scrollbarX.parent = loglogAmcharts.bottomAxesContainer;
-		
+
 		// PRE ZOOM
 		//loglogAmcharts.events.on("ready", function () {
 //			  yAxis.zoomToValues(4, 14, true);
@@ -397,12 +397,12 @@ div {
 		loglogAmcharts.exporting.menu = new am4core.ExportMenu();
 
 
-		
-		// GRAFICO LETALIDADE		
+
+		// GRAFICO LETALIDADE
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
-		
-		
+
+
 		// Add data
 		chart.data = [{
 			"name": "IT",
@@ -483,11 +483,11 @@ div {
 			"media": 6.19,
 			"obitos": 69
 		}];
-		
+
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Letalidade[/]\n(óbitos/casos confirmados)";
 		title.textAlign = "middle";
-		
+
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.dataFields.category = "name";
@@ -496,7 +496,7 @@ div {
 		categoryAxis.renderer.inside = true;
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
-		
+
 		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
@@ -508,15 +508,15 @@ div {
 		 // return text + "%";});
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		
+
 		// Do not crop bullets
 		chart.maskBullets = false;
-		
+
 		// Remove padding
 		//chart.paddingBottom = 0;
-		
+
 		chart.numberFormatter.numberFormat = "#.00";
-		
+
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "points";
@@ -526,7 +526,7 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
-		
+
 		// Add bullets
 		var bullet = series.bullets.push(new am4charts.Bullet());
 		var image = bullet.createChild(am4core.Image);
@@ -539,18 +539,18 @@ div {
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = "color";
 		image.filters.push(new am4core.DropShadowFilter());
-		
-		
+
+
 		//// series da media global (linha)
 //		var lineSeries = chart.series.push(new am4charts.LineSeries());
 //		lineSeries.name = "Global";
 //		lineSeries.dataFields.valueY = "media";
 //		lineSeries.dataFields.categoryX = "name";
-//		
+//
 //		lineSeries.stroke = am4core.color("#eee");
 //		lineSeries.strokeWidth = 2;
 //		lineSeries.tooltip.label.textAlign = "middle";
-//		
+//
 //		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
 //		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
 //		bullet.tooltipText = "[#eee font-size: 12px]MÉDIA GLOBAL:[/][font-weight: bold] {media}%[/]"
@@ -572,16 +572,16 @@ div {
 		range.label.align = "right";
 		range.label.verticalCenter = "bottom";
 		chart.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
-		
+
 		chart.exporting.menu = new am4core.ExportMenu();
 
 
 		/////////////////////////////////////////////
-		// CASOS POR MILHAO 
+		// CASOS POR MILHAO
 		// Create chart instance
 		var chart = am4core.create("casospormilhaodiv", am4charts.XYChart);
-		
-		
+
+
 		// Add data
 		chart.data = [{
 			"pais": "IT",
@@ -607,7 +607,7 @@ div {
 			"pais": "ES",
 			"points": 3693,
 			"color": chart.colors.next(),
-			"bullet": "./flags/ES.png"	
+			"bullet": "./flags/ES.png"
 		}, {
 			"pais": "BR",
 			"points": 115,
@@ -638,13 +638,13 @@ div {
 			"points": 5417,
 			"color": chart.colors.next(),
 			"bullet": "./flags/LU.png"
-			
+
 		}];
-		
+
 		var title = chart.titles.create();
-		title.text = "[bold font-size: 18]Casos/milhão de habitantes[/]\n";
+		title.text = "[bold font-size: 18]Casos confirmados/milhão de habitantes[/]\n";
 		title.textAlign = "middle";
-		
+
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.dataFields.category = "pais";
@@ -653,7 +653,7 @@ div {
 		categoryAxis.renderer.inside = true;
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
-		
+
 		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
@@ -662,7 +662,7 @@ div {
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
 		valueAxis.max = 6000;
-		
+
 		//// axis break
 		//var axisBreak = valueAxis.axisBreaks.create();
 		//axisBreak.startValue = 3600;
@@ -678,15 +678,15 @@ div {
 		//hoverState.transitionDuration = 500;
 		//
 		//axisBreak.defaultState.transitionDuration = 1000;
-		
+
 		// Do not crop bullets
 		chart.maskBullets = false;
-		
+
 		// Remove padding
 		//chart.paddingBottom = 0;
-		
+
 		chart.numberFormatter.numberFormat = "#";
-		
+
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "points";
@@ -696,7 +696,7 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
-		
+
 		// Add bullets
 		var bullet = series.bullets.push(new am4charts.Bullet());
 		var image = bullet.createChild(am4core.Image);
@@ -709,7 +709,7 @@ div {
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = "color";
 		image.filters.push(new am4core.DropShadowFilter());
-		
+
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
 
@@ -717,12 +717,12 @@ div {
 
 
 		/////////////////////////////////////////////
-		// ÓBITOS POR MILHAO 
+		// ÓBITOS POR MILHAO
 		// Create chart instance
 		var chart = am4core.create("obitospormilhaodiv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
-		
-		
+
+
 		// Add data
 		//chart.data = [{
 //			"pais": "IT",
@@ -749,13 +749,13 @@ div {
 //			"points": 3693,
 //			"color": chart.colors.next(),
 //			"bullet": "./flags/ES.png"
-//			
+//
 //		}];
-		
+
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Óbitos/milhão de habitantes[/]\n";
 		title.textAlign = "middle";
-		
+
 		//let colorSet = new am4core.ColorSet();
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -765,7 +765,7 @@ div {
 		categoryAxis.renderer.inside = true;
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
-		
+
 		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
@@ -774,17 +774,17 @@ div {
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
 		valueAxis.max = 500;
-		
-		
+
+
 		// Do not crop bullets
 		chart.maskBullets = false;
-		
+
 		// Remove padding
 		//chart.paddingBottom = 0;
-		
+
 		chart.numberFormatter.numberFormat = "#.0";
-		
-		
+
+
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "obitosMilhao";
@@ -794,7 +794,7 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
-		
+
 		series.heatRules.push({
 			"target":series.columns.template,
 			"property":"fill",
@@ -814,24 +814,24 @@ div {
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
-		
+
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
-		
-		
-		
-		
+
+
+
+
 				/////////////////////////////////////////////
-		// ÓBITOS POR MILHAO 
+		// ÓBITOS POR MILHAO
 		// Create chart instance
 		var chart = am4core.create("testespormilhaodiv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
-		
-			
+
+
 		var title = chart.titles.create();
 		title.text = "[bold font-size: 18]Testes/milhão de habitantes[/]\n";
 		title.textAlign = "middle";
-		
+
 		//let colorSet = new am4core.ColorSet();
 		// Create axes
 		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
@@ -841,7 +841,7 @@ div {
 		categoryAxis.renderer.inside = true;
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
-		
+
 		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
@@ -850,7 +850,7 @@ div {
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
 		valueAxis.max = 55000;
-		
+
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
 		axisBreak.startValue = 24500;
@@ -858,25 +858,25 @@ div {
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
-		
+
 		//make break expand on hover
 		var hoverState = axisBreak.states.create("hover");
 		hoverState.properties.breakSize = 1;
 		hoverState.properties.opacity = 0.1;
 		hoverState.transitionDuration = 500;
-		
+
 		axisBreak.defaultState.transitionDuration = 1000;
-		
-		
+
+
 		// Do not crop bullets
 		chart.maskBullets = false;
-		
+
 		// Remove padding
 		//chart.paddingBottom = 0;
-		
+
 		chart.numberFormatter.numberFormat = "#";
-		
-		
+
+
 		// Create series
 		var series = chart.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "testesMilhao";
@@ -886,7 +886,7 @@ div {
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
 		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
-		
+
 		series.heatRules.push({
 			"target":series.columns.template,
 			"property":"fill",
@@ -906,11 +906,40 @@ div {
 		image.tooltipText = series.columns.template.tooltipText;
 		image.propertyFields.fill = am4core.color("#eee");
 		image.filters.push(new am4core.DropShadowFilter());
-		
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
-		
-		
+
+
     </script>
 </body>
 </html>
