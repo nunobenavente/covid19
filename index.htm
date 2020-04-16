@@ -85,12 +85,11 @@
 <body style="background-color:#151515">
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
-	<div id="loglogAmchartsDiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div>
+	<div id="loglogAmchartsDiv"></div>
 	<div id="letalidadediv"></div>
 	<div id="obitospormilhaodiv"></div>
-
-	<div id="casospormilhaodiv"></div>
 	<div id="testespormilhaodiv"></div>
+	<div id="casospormilhaodiv"></div>
 
 
 	<script>
@@ -114,12 +113,13 @@
 		am4core.options.minPolylineStep = 5; // só plota pontos que estejam a uma distancia de pelo menos x px para poupar cpu
 		//am4core.options.queue = true; // piorou
 		am4core.options.onlyShowOnViewport = true; // grafico so inicia quando aparece no ecrã
-		var BULLETDISTMIN = 9; // distancia minima entre bullets consecutivas - melhora bastante a performance quanto maior o numero
+		var BULLETDISTMIN = 5; // distancia minima entre bullets consecutivas - melhora bastante a performance quanto maior o numero
 
 		// CONSTANTES
 		var RADIUS = 2; // raio das bullets
 		var DESVIOLABEL = 10; // distancia do label para a bullet
 		var TAMANHOLETRA = 10;
+		var DIMMED = am4core.color("#0a0");
 
 
 		// Create chart instance
@@ -154,14 +154,14 @@
 		var opacidadeLinhas = 1;
 
 		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
-		valueAxisX.title.text = 'TOTAL CASOS CONFIRMADOS - [font-size: 14]clique na legenda para ligar/desligar países[/]';
+		valueAxisX.title.text = '[font-size: 13]TOTAL CASOS CONFIRMADOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
 		//valueAxisX.renderer.minGridDistance = 10;
 		valueAxisX.renderer.labels.template.fontSize = 10;
 		valueAxisX.logarithmic = true;
 
 		// Create value axis
 		var valueAxisY = loglogAmcharts.yAxes.push(new am4charts.ValueAxis());
-		valueAxisY.title.text = 'CASOS CONFIRMADOS ÚLTIMOS 7 DIAS';
+		valueAxisY.title.text = '[font-size: 13]CASOS CONFIRMADOS ÚLTIMOS 7 DIAS[/]';
 		valueAxisY.renderer.labels.template.fontSize = 10;
 		valueAxisY.logarithmic = true;
 
@@ -190,13 +190,6 @@
 		valueAxisY.renderer.grid.template.stroke = am4core.color("#aaa");
 		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
 
-		//createGrid(100);createGrid(100);createGrid(200);
-		//		createGrid(200);createGrid(400);createGrid(500);
-		//		createGrid(300);createGrid(200);createGrid(300);
-		//		createGrid(400);createGrid(500);createGrid(200);
-		//		createGrid(500);createGrid(400);createGrid(500);
-		//		createGrid(600);createGrid(700);createGrid(800);
-		//		createGrid(900);createGrid(1000);
 
 		var title = loglogAmcharts.titles.create();
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -556,14 +549,27 @@
 		//		});
 		loglogAmcharts.exporting.menu = new am4core.ExportMenu();
 
-		var button = loglogAmcharts.chartContainer.createChild(am4core.Button);
-		button.label.text = "Log -> Linear";
-		button.padding(5, 5, 5, 5);
-		button.width = 100;
-		button.align = "right";
-		button.marginRight = 15;
-		button.events.on("hit", function() {
-		  toggle(loglogAmcharts, valueAxisY);
+		var buttonYY = loglogAmcharts.plotContainer.createChild(am4core.Button);
+		buttonYY.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonYY.label.fontSize = 12;
+		buttonYY.padding(5, 5, 5, 5);
+		buttonYY.width =90;
+		buttonYY.align = "left";
+		buttonYY.marginLeft = 15;
+		buttonYY.events.on("hit", function() {
+		  toggle(loglogAmcharts, valueAxisY, buttonYY);
+		});
+
+		var buttonXX = loglogAmcharts.plotContainer.createChild(am4core.Button);
+		buttonXX.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonXX.label.fontSize = 12;
+		buttonXX.padding(5, 5, 5, 5);
+		buttonXX.width = 90;
+		buttonXX.align = "right";
+		buttonXX.marginRight = 15;
+		buttonXX.dy = 500;
+		buttonXX.events.on("hit", function() {
+			toggle(loglogAmcharts, valueAxisX, buttonXX);
 		});
 
 
@@ -597,62 +603,6 @@
 		// 	"bullet": "./flags/NL.png",
 		// 	"media": 6.19,
 		// 	"obitos": 2955
-		// }, {
-		// 	"name": "FR",
-		// 	"points": 10.87,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/FR.png",
-		// 	"media": 6.19,
-		// 	"obitos": 14986
-		// }, {
-		// 	"name": "ES",
-		// 	"points": 10.46,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/ES.png",
-		// 	"media": 6.19,
-		// 	"obitos": 18056
-		// }, {
-		// 	"name": "BR",
-		// 	"points": 5.70,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/BR.png",
-		// 	"media": 6.19,
-		// 	"obitos": 1378
-		// }, {
-		// 	"name": "US",
-		// 	"points": 4.19,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/US.png",
-		// 	"media": 6.19,
-		// 	"obitos": 24485
-		// }, {
-		// 	"name": "PT",
-		// 	"points": 3.25,
-		// 	"color": "green",
-		// 	"bullet": "./flags/PT.png",
-		// 	"media": 6.19,
-		// 	"obitos": 567
-		// }, {
-		// 	"name": "DE",
-		// 	"points": 2.49,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/DE.png",
-		// 	"media": 6.19,
-		// 	"obitos": 3261
-		// }, {
-		// 	"name": "KR",
-		// 	"points": 2.10,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/KR.png",
-		// 	"media": 6.19,
-		// 	"obitos": 222
-		// }, {
-		// 	"name": "LU",
-		// 	"points": 2.10,
-		// 	"color": chart.colors.next(),
-		// 	"bullet": "./flags/LU.png",
-		// 	"media": 6.19,
-		// 	"obitos": 69
 		// }];
 
 		var title = chart.titles.create();
@@ -1189,15 +1139,19 @@
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
 
-		function toggle(chart, eixo) {
+		function toggle(chart, eixo, botao) {
 				eixo.logarithmic = eixo.logarithmic ? false : true;
 				chart.invalidateData();
-				if (button.value == "Log -> Linear") {
-					button.value = "Linear -> Log";
+				// if (button.value == "Log -> Linear") {
+				// 	button.value = "Linear -> Log";
+				// }else{
+				// 	button.value = "Log -> Linear";
+				// }
+				if (botao.label.text == "[bold #eee]Log[/] - [#800]Linear[/]") {
+					botao.label.text = "[#800]Log[/] - [bold #eee]Linear[/]";
 				}else{
-					button.value = "Log -> Linear";
+					botao.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
 				}
-
 				//chart.invalidateRawData();
 		}
 
