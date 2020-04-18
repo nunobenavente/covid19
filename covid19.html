@@ -1,0 +1,1495 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+	<script src="https://www.amcharts.com/lib/4/core.js"></script>
+	<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+	<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
+	<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+	<title>Dados COVID-19</title>
+	<meta property="og:title" content="Dados COVID-19" />
+	<meta property="og:type" content="website" />
+	<meta property="og:description" content="Alguma infografia sobre a pandemia COVID-19" />
+	<meta property="og:url" content="http://nunobenavente.github.io/covid19/" />
+	<meta property="og:image" content="http://nunobenavente.github.io/covid19/covid19.PNG" />
+
+	<style>
+		div {
+			margin-top: 8px;
+			background-color: #191919;
+			margin-bottom: 8px;
+			margin-left: 8px;
+			margin-right: 8px;
+			border-style: hidden;
+			border-width: thin;
+			border-radius: 6px;
+		}
+
+		#topo {width:100%; height:20px; float:left; clear:both; background-color: "#b92b2b"; z-index: 20;}
+
+		#loglogAmchartsDiv {
+			width: 70%;
+			height: 800px;
+			float:none;
+			/*	border: 1px solid #aaa;*/
+		}
+
+		#chartPT {
+			width: 70%;
+			height: 600px;
+			float:none;
+			/*	border: 1px solid #aaa;*/
+		}
+
+		#letalidadediv {
+			width: 35%;
+			height: 395px;
+			float: none;
+			/*clear:both;*/
+		}
+
+		#casospormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: none;
+			/*clear:both;*/
+		}
+
+		#obitospormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: none;
+			/*clear:both;*/
+		}
+
+		#testespormilhaodiv {
+			width: 35%;
+			height: 395px;
+			float: none;
+			/*clear:both;*/
+		}
+
+		#button {
+		  /*padding: 10px;*/
+		  font-size: 12px;
+		  position: relative;
+		  top: 5px;
+		  left: 30px;
+			z-index: 100;
+		}
+	</style>
+
+</head>
+
+<body style="background-color:#151515">
+
+	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
+	<!-- <div id="topo"></div> -->
+
+	<div id="loglogAmchartsDiv"></div>
+	<div id="chartPT"></div>
+	<div id="testespormilhaodiv" style="align:center;"></div>
+	<div id="casospormilhaodiv"></div>
+	<div id="letalidadediv"></div>
+	<div id="obitospormilhaodiv"></div>
+
+	<script>
+
+		// Themes begin
+		am4core.useTheme(am4themes_animated);
+		am4core.useTheme(am4themes_dark);
+		// Themes end
+		// Optimizacao CPU
+		am4core.options.minPolylineStep = 5; // só plota pontos que estejam a uma distancia de pelo menos x px para poupar cpu
+		//am4core.options.queue = true; // piorou
+		am4core.options.onlyShowOnViewport = true; // grafico so inicia quando aparece no ecrã
+		var BULLETDISTMIN = 5; // distancia minima entre bullets consecutivas - melhora bastante a performance quanto maior o numero
+
+		// CONSTANTES
+		var RADIUS = 2; // raio das bullets
+		var DESVIOLABEL = 10; // distancia do label para a bullet
+		var TAMANHOLETRA = 10;
+		var DIMMED = am4core.color("#0a0");
+
+		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+		var dia = new Date();
+
+		// GRAFICO PORTUGAL
+		var chartPT = am4core.create("chartPT", am4charts.XYChart);
+		chartPT.dataSource.url = "./statsPT.json";
+		//chartPT.dataSource.parser.options.dateFields = ["data"];
+		chartPT.dateFormatter.inputDateFormat = "dd-MM-yyyy";
+
+		// Titulo
+		var title = chartPT.titles.create();
+		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução dos casos[/]\n";
+		title.text = titulo.concat("[font-size: 14 #EEE]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+		title.textAlign = "middle";
+
+		// Eixos
+		var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
+		//dateAxis.title.text = "DATA";
+		dateAxis.renderer.minGridDistance = 40;
+		dateAxis.renderer.grid.template.location = 0;
+		dateAxis.renderer.labels.template.fontSize = 10;
+		dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
+		dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
+		dateAxis.renderer.ticks.template.length = 2;
+
+		// YY Casos Totais - eixo da esquerda
+		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
+		valueAxisTot.title.text = "[font-size:12 #FFE119]TOTAL DE CASOS[/]";
+		valueAxisTot.renderer.labels.template.fontSize = 10;
+		valueAxisTot.renderer.labels.template.fill = am4core.color("#FFE119");
+		valueAxisTot.logarithmic = true;
+
+		//YY Casos Diários - eixo da direita
+		var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
+		valueAxisDta.title.text = "[font-size:12]CASOS DIÁRIOS[/]";
+		valueAxisDta.renderer.labels.template.fontSize = 10;
+		valueAxisDta.renderer.opposite = true;
+		valueAxisDta.max = 2000;
+
+		// Series
+		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
+		seriesTotal.name = "Total Casos";
+		seriesTotal.dataFields.valueY = "total";
+		seriesTotal.dataFields.dateX = "data";
+		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
+		seriesTotal.tooltip.pointerOrientation = "vertical";
+		seriesTotal.tooltip.label.textAlign = "middle";
+		seriesTotal.stroke = am4core.color("#FFE119");
+		seriesTotal.strokeWidth = 2;
+		seriesTotal.zIndex = 5;
+
+		var bullet = seriesTotal.bullets.push(new am4charts.CircleBullet());
+		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
+		bullet.circle.radius = RADIUS + 1;
+		bullet.tooltipText = "[#eee font-size: 12px]{data}\nTOTAL DE CASOS:[/][font-weight: bold] {total}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
+
+		var seriesDia = chartPT.series.push(new am4charts.ColumnSeries());
+		seriesDia.name = "Casos diários";
+		seriesDia.dataFields.valueY = "dia";
+		seriesDia.dataFields.dateX = "data";
+		seriesDia.yAxis = valueAxisDta;
+		seriesDia.columns.template.width = am4core.percent(60);
+		seriesDia.tooltipText = "[font-size: 12px]CASOS DIA: [/][font-weight: bold]{dia}[/]";
+		seriesDia.strokeWidth = 0;
+		seriesDia.heatRules.push({
+			"target": seriesDia.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
+
+		// Legenda
+		chartPT.legend = new am4charts.Legend();
+		chartPT.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+		var markerTemplate = chartPT.legend.markers.template; // vamos modificar o tamanho dos quadrados
+		markerTemplate.width = 18;
+		markerTemplate.height = 18;
+		chartPT.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
+
+		// chart cursor
+		chartPT.cursor = new am4charts.XYCursor();
+		chartPT.cursor.behavior = "none";
+		chartPT.cursor.xAxis = dateAxis;
+		//chartPT.cursor.snapToSeries = seriesTotal;
+
+		// Enable export
+		chartPT.exporting.menu = new am4core.ExportMenu();
+
+		// Botão Toggle Log-Linear
+		var buttonYYPT = chartPT.plotContainer.createChild(am4core.Button);
+		buttonYYPT.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonYYPT.label.fontSize = 12;
+		buttonYYPT.padding(5, 5, 5, 5);
+		buttonYYPT.width =90;
+		buttonYYPT.align = "left";
+		buttonYYPT.marginLeft = 15;
+		buttonYYPT.events.on("hit", function() {
+		  toggle(chartPT, valueAxisTot, buttonYYPT);
+		});
+
+
+
+		// GRAFICO LOG LOG MUNDO
+		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
+
+		loglogAmcharts.dataSource.url = "./dadosMundo.json";
+
+
+		loglogAmcharts.colors.list = [
+			am4core.color("#EEE"), am4core.color("#EEE"),
+			am4core.color("#FFE119"),am4core.color("#FFE119"),
+
+			am4core.color("#F57D7D"), am4core.color("#F57D7D"),
+			am4core.color("#b4c0ff"), am4core.color("#b4c0ff"),
+
+			am4core.color("#4285f7"), am4core.color("#4285f7"),
+			am4core.color("#BD0101"), am4core.color("#BD0101"),
+
+			am4core.color("#00AA00"), am4core.color("#00AA00"),
+			am4core.color("#FF8832"), am4core.color("#FF8832"),
+			am4core.color("#a60e0e"), am4core.color("#a60e0e"),
+			am4core.color("#00CC00"), am4core.color("#00CC00"),
+			am4core.color("#008888"), am4core.color("#008888"),
+			am4core.color("#642dda"), am4core.color("#642dda"),
+			am4core.color("#CCC"), am4core.color("#CCC")
+		];
+
+
+		// Create axes
+		var opacidadeLinhas = 1;
+
+		// Create value axis XX
+		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
+		valueAxisX.title.text = '[font-size: 13]TOTAL CASOS CONFIRMADOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
+		//valueAxisX.renderer.minGridDistance = 10;
+		valueAxisX.renderer.labels.template.fontSize = 10;
+		valueAxisX.logarithmic = true;
+		var eixoXXTooltip = valueAxisX.tooltip;
+		eixoXXTooltip.background.fill = am4core.color("#13a889");
+		valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL CASOS: [/][bold font-size:11]" + texto + "[/b]";});
+
+		// Create value axis YY
+		var valueAxisY = loglogAmcharts.yAxes.push(new am4charts.ValueAxis());
+		valueAxisY.title.text = '[font-size: 13]CASOS CONFIRMADOS ÚLTIMOS 7 DIAS[/]';
+		valueAxisY.renderer.labels.template.fontSize = 10;
+		valueAxisY.logarithmic = true;
+		var eixoYYTooltip = valueAxisY.tooltip;
+		eixoYYTooltip.background.fill = am4core.color("#13a889");
+		eixoYYTooltip.rotation = 270;
+		valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]CASOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
+
+		valueAxisX.renderer.grid.template.disabled = true;
+		//valueAxisX.renderer.labels.template.disabled = true;
+		function createGrid(value) {
+			var range = valueAxisX.axisRanges.create();
+			range.value = value;
+			var range = valueAxisY.axisRanges.create();
+			range.value = value;
+
+			//range.label.text = "{value}";
+		}
+		var i;
+		var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000];
+		var m;
+		for (m of ms) {
+			for (i = 1; i < 10; i++) {
+				createGrid(i * m);
+			}
+		}
+		valueAxisX.renderer.grid.template.strokeOpacity = 0.2;
+		valueAxisX.renderer.grid.template.stroke = am4core.color("#aaa");
+		valueAxisX.renderer.grid.template.strokeWidth = 0.3;
+		valueAxisY.renderer.grid.template.strokeOpacity = 0.2;
+		valueAxisY.renderer.grid.template.stroke = am4core.color("#aaa");
+		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
+
+
+		var title = loglogAmcharts.titles.create();
+
+		//dia = dia.toString();
+		var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
+		title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+		//title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
+		title.textAlign = "middle";
+
+		// Pre-zoom
+		//loglogAmcharts.events.on("ready", function () {
+		//			valueAxisX.zoomToValues(110000, 1300000, false, true);
+		//		});
+
+
+		valueAxisX.min = 100;
+		valueAxisY.min = 40;
+
+
+		// Create series
+		var lineSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries.dataFields.valueY = "pty";
+		lineSeries.dataFields.valueX = "ptx";
+		lineSeries.strokeOpacity = opacidadeLinhas;
+		lineSeries.strokeWidth = 2;
+		lineSeries.name = "PT";
+		lineSeries.showOnInit = false;
+		// render data points as bullets
+
+		// lineSeries.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // // bullet.circle.fill = "#eee"; // desnecessario porque a bullet adquire a cor da series automaticamente
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		// //bullet.tooltipText = "[bold font-size: 12]Data: {data}[/]";
+
+		var lastPtSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries.dataFields.valueY = "ptby";
+		lastPtSeries.dataFields.valueX = "ptbx";
+		lastPtSeries.hiddenInLegend = true;
+
+		var bullet = lastPtSeries.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries.name;
+		bullet.circle.radius = 2;
+		bullet.circle.stroke = "#EEE";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries.events.on("hidden", function() {
+	  	lastPtSeries.hide();
+		});
+
+		lineSeries.events.on("shown", function() {
+	  	lastPtSeries.show();
+		});
+
+
+		//		var segment = lineSeries.segments.template;
+		//  segment.interactionsEnabled = true;
+		//
+		//  var hoverState = segment.states.create("hover");
+		//  hoverState.properties.strokeWidth = 5;
+		//
+		//  var dimmed = segment.states.create("dimmed");
+		//  dimmed.properties.stroke = am4core.color("#dadada");
+		//
+		//  segment.events.on("over", function(event) {
+		//    processOver(event.target.parent.parent.parent);
+		//  });
+		//
+		//  segment.events.on("out", function(event) {
+		//    processOut(event.target.parent.parent.parent);
+		//  });
+
+		var lineSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries2.dataFields.valueY = "dey";
+		lineSeries2.dataFields.valueX = "dex";
+		lineSeries2.strokeOpacity = opacidadeLinhas;
+		lineSeries2.name = "DE";
+		lineSeries2.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries2.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries2.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries2.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries2.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries2.dataFields.valueY = "deby";
+		lastPtSeries2.dataFields.valueX = "debx";
+		lastPtSeries2.hiddenInLegend = true;
+
+		var bullet = lastPtSeries2.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries2.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries2.name;
+		bullet.circle.radius = 2;
+	//	bullet.circle.stroke = "#EEE";
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries2.events.on("hidden", function() {
+	  	lastPtSeries2.hide();
+		});
+
+		lineSeries2.events.on("shown", function() {
+	  	lastPtSeries2.show();
+		});
+
+
+
+		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries3.dataFields.valueY = "esy";
+		lineSeries3.dataFields.valueX = "esx";
+		lineSeries3.strokeOpacity = opacidadeLinhas;
+		lineSeries3.name = "ES";
+		lineSeries3.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries3.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries3.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries3.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries3.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries3.dataFields.valueY = "esby";
+		lastPtSeries3.dataFields.valueX = "esbx";
+		lastPtSeries3.hiddenInLegend = true;
+
+		var bullet = lastPtSeries3.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries3.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries3.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries3.events.on("hidden", function() {
+	  	lastPtSeries3.hide();
+		});
+
+		lineSeries3.events.on("shown", function() {
+	  	lastPtSeries3.show();
+		});
+
+		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries12.dataFields.valueY = "fry";
+		lineSeries12.dataFields.valueX = "frx";
+		lineSeries12.strokeOpacity = opacidadeLinhas;
+		lineSeries12.name = "FR";
+		lineSeries12.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries12.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries12.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries12.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries12.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries12.dataFields.valueY = "frby";
+		lastPtSeries12.dataFields.valueX = "frbx";
+		lastPtSeries12.hiddenInLegend = true;
+
+		var bullet = lastPtSeries12.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries12.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries12.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries12.events.on("hidden", function() {
+	  	lastPtSeries12.hide();
+		});
+
+		lineSeries12.events.on("shown", function() {
+	  	lastPtSeries12.show();
+		});
+
+		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries6.dataFields.valueY = "gby";
+		lineSeries6.dataFields.valueX = "gbx";
+		lineSeries6.strokeOpacity = opacidadeLinhas;
+		lineSeries6.name = "GB";
+		lineSeries6.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries6.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries6.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries6.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries6.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries6.dataFields.valueY = "gbby";
+		lastPtSeries6.dataFields.valueX = "gbbx";
+		lastPtSeries6.hiddenInLegend = true;
+
+		var bullet = lastPtSeries6.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries6.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries6.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries6.events.on("hidden", function() {
+	  	lastPtSeries6.hide();
+		});
+
+		lineSeries6.events.on("shown", function() {
+	  	lastPtSeries6.show();
+		});
+
+		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries10.dataFields.valueY = "ity";
+		lineSeries10.dataFields.valueX = "itx";
+		lineSeries10.strokeOpacity = opacidadeLinhas;
+		lineSeries10.name = "IT";
+		lineSeries10.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries10.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries10.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries10.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries10.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+		// bullet.circle.propertyFields.opacity = "bullet";
+		// bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries10.dataFields.valueY = "itby";
+		lastPtSeries10.dataFields.valueX = "itbx";
+		lastPtSeries10.hiddenInLegend = true;
+
+		var bullet = lastPtSeries10.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries10.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries10.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries10.events.on("hidden", function() {
+	  	lastPtSeries10.hide();
+		});
+
+		lineSeries10.events.on("shown", function() {
+	  	lastPtSeries10.show();
+		});
+
+		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries11.dataFields.valueY = "luy";
+		lineSeries11.dataFields.valueX = "lux";
+		lineSeries11.strokeOpacity = opacidadeLinhas;
+		lineSeries11.name = "LU";
+		lineSeries11.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries11.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries11.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries11.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries11.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries11.dataFields.valueY = "luby";
+		lastPtSeries11.dataFields.valueX = "lubx";
+		lastPtSeries11.hiddenInLegend = true;
+
+		var bullet = lastPtSeries11.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries11.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries11.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries11.events.on("hidden", function() {
+	  	lastPtSeries11.hide();
+		});
+
+		lineSeries11.events.on("shown", function() {
+	  	lastPtSeries11.show();
+		});
+
+		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries9.dataFields.valueY = "nly";
+		lineSeries9.dataFields.valueX = "nlx";
+		lineSeries9.strokeOpacity = opacidadeLinhas;
+		lineSeries9.name = "NL";
+		lineSeries9.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries9.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries9.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries9.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries9.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries9.dataFields.valueY = "nlby";
+		lastPtSeries9.dataFields.valueX = "nlbx";
+		lastPtSeries9.hiddenInLegend = true;
+
+		var bullet = lastPtSeries9.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries9.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries9.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries9.events.on("hidden", function() {
+	  	lastPtSeries9.hide();
+		});
+
+		lineSeries9.events.on("shown", function() {
+	  	lastPtSeries9.show();
+		});
+
+		var lineSeries13 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries13.dataFields.valueY = "chy";
+		lineSeries13.dataFields.valueX = "chx";
+		lineSeries13.strokeOpacity = opacidadeLinhas;
+		lineSeries13.name = "CH";
+		lineSeries13.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries13.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries13.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries13.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries13.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries13 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries13.dataFields.valueY = "chby";
+		lastPtSeries13.dataFields.valueX = "chbx";
+		lastPtSeries13.hiddenInLegend = true;
+
+		var bullet = lastPtSeries13.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries13.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries13.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries13.events.on("hidden", function() {
+	  	lastPtSeries13.hide();
+		});
+
+		lineSeries13.events.on("shown", function() {
+	  	lastPtSeries13.show();
+		});
+
+		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries8.dataFields.valueY = "bry";
+		lineSeries8.dataFields.valueX = "brx";
+		lineSeries8.strokeOpacity = opacidadeLinhas;
+		lineSeries8.name = "BR";
+		lineSeries8.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries8.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries8.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries8.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries8.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries8.dataFields.valueY = "brby";
+		lastPtSeries8.dataFields.valueX = "brbx";
+		lastPtSeries8.hiddenInLegend = true;
+
+		var bullet = lastPtSeries8.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries8.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries8.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries8.events.on("hidden", function() {
+	  	lastPtSeries8.hide();
+		});
+
+		lineSeries8.events.on("shown", function() {
+	  	lastPtSeries8.show();
+		});
+
+		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries4.dataFields.valueY = "kry";
+		lineSeries4.dataFields.valueX = "krx";
+		lineSeries4.strokeOpacity = opacidadeLinhas;
+		lineSeries4.name = "KR";
+		lineSeries4.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries4.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries4.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries4.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries4.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries4.dataFields.valueY = "krby";
+		lastPtSeries4.dataFields.valueX = "krbx";
+		lastPtSeries4.hiddenInLegend = true;
+
+		var bullet = lastPtSeries4.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries4.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries4.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries4.events.on("hidden", function() {
+	  	lastPtSeries4.hide();
+		});
+
+		lineSeries4.events.on("shown", function() {
+	  	lastPtSeries4.show();
+		});
+
+		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries7.dataFields.valueY = "usy";
+		lineSeries7.dataFields.valueX = "usx";
+		lineSeries7.strokeOpacity = opacidadeLinhas;
+		lineSeries7.name = "US";
+		lineSeries7.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries7.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries7.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries7.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries7.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+    // bullet.circle.propertyFields.opacity = "bullet";
+    // bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries7.dataFields.valueY = "usby";
+		lastPtSeries7.dataFields.valueX = "usbx";
+		lastPtSeries7.hiddenInLegend = true;
+
+		var bullet = lastPtSeries7.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries7.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries7.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries7.events.on("hidden", function() {
+	  	lastPtSeries7.hide();
+		});
+
+		lineSeries7.events.on("shown", function() {
+	  	lastPtSeries7.show();
+		});
+
+		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries5.dataFields.valueY = "globaly";
+		lineSeries5.dataFields.valueX = "globalx";
+		lineSeries5.strokeOpacity = opacidadeLinhas;
+		lineSeries5.strokeWidth = 1.5;
+		lineSeries5.name = "GLOBAL";
+		lineSeries5.hidden = true;	// desligada no ínicio
+		lineSeries5.showOnInit = false;
+		// // render data points as bullets
+		// lineSeries5.minBulletDistance = BULLETDISTMIN;
+		// var bullet = lineSeries5.bullets.push(new am4charts.CircleBullet());
+		// var labelBullet = lineSeries5.bullets.push(new am4charts.LabelBullet());
+		// labelBullet.label.text = lineSeries5.name;
+		// bullet.circle.opacity = 0;
+		// labelBullet.label.opacity = 0;
+		// bullet.circle.propertyFields.opacity = "bullet";
+		// bullet.circle.radius = RADIUS;
+		// labelBullet.label.propertyFields.opacity = "bullet";
+		// labelBullet.label.dx = DESVIOLABEL;
+		// labelBullet.label.fontSize = TAMANHOLETRA;
+		var lastPtSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries5.dataFields.valueY = "globalby";
+		lastPtSeries5.dataFields.valueX = "globalbx";
+		lastPtSeries5.hiddenInLegend = true;
+		lastPtSeries5.hidden = true;
+
+		var bullet = lastPtSeries5.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries5.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries5.name;
+		bullet.circle.radius = 2;
+		labelBullet.label.dx = 21;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries5.events.on("hidden", function() {
+	  	lastPtSeries5.hide();
+		});
+
+		lineSeries5.events.on("shown", function() {
+	  	lastPtSeries5.show();
+		});
+
+
+		// Legenda
+		loglogAmcharts.legend = new am4charts.Legend();
+		loglogAmcharts.legend.useDefaultMarker = true; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+		var markerTemplate = loglogAmcharts.legend.markers.template; // vamos modificar o tamanho dos quadrados
+		markerTemplate.width = 18;
+		markerTemplate.height = 18;
+		loglogAmcharts.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
+
+		loglogAmcharts.legend.labels.template.textDecoration = "none";
+		loglogAmcharts.legend.valueLabels.template.textDecoration = "none";
+
+		var as = loglogAmcharts.legend.labels.template.states.getKey("active");
+		as.properties.textDecoration = "line-through";
+		as.properties.fill = am4core.color("#eee");
+
+
+		// CURSOR XY
+		loglogAmcharts.cursor = new am4charts.XYCursor();
+		loglogAmcharts.cursor.behavior = "zoomXY"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		loglogAmcharts.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		loglogAmcharts.cursor.lineY.strokeWidth = 0.5;
+
+		//scrollbars
+		//loglogAmcharts.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
+		loglogAmcharts.scrollbarY = new am4core.Scrollbar();
+		var scrollbarX = new am4charts.XYChartScrollbar();
+		scrollbarX.series.push(lineSeries);
+		scrollbarX.series.push(lineSeries2);
+		loglogAmcharts.scrollbarX = scrollbarX;
+		loglogAmcharts.scrollbarX.parent = loglogAmcharts.bottomAxesContainer;
+
+		// PRE ZOOM
+		//loglogAmcharts.events.on("ready", function () {
+		//			  yAxis.zoomToValues(4, 14, true);
+		//		});
+		loglogAmcharts.exporting.menu = new am4core.ExportMenu();
+
+		var buttonYY = loglogAmcharts.plotContainer.createChild(am4core.Button);
+		buttonYY.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonYY.label.fontSize = 12;
+		buttonYY.padding(5, 5, 5, 5);
+		buttonYY.width =90;
+		buttonYY.align = "left";
+		buttonYY.marginLeft = 15;
+		buttonYY.events.on("hit", function() {
+		  toggle(loglogAmcharts, valueAxisY, buttonYY);
+		});
+
+		var buttonXX = loglogAmcharts.plotContainer.createChild(am4core.Button);
+		buttonXX.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonXX.label.fontSize = 12;
+		buttonXX.padding(5, 5, 5, 5);
+		buttonXX.width = 90;
+		buttonXX.align = "right";
+		buttonXX.marginRight = 15;
+		buttonXX.dy = 500;
+		buttonXX.events.on("hit", function() {
+			toggle(loglogAmcharts, valueAxisX, buttonXX);
+		});
+
+
+
+		// GRAFICO LETALIDADE
+		// Create chart instance
+		var chart = am4core.create("letalidadediv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+
+
+		// // Add data
+		// chart.data = [{
+		// 	"name": "IT",
+		// 	"points": 12.97,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/IT.png",
+		// 	//"bullet": "https://www.amcharts.com/lib/images/faces/A04.png"
+		// 	"media": 6.19,
+		// 	"obitos": 21067
+		// }, {
+		// 	"name": "GB",
+		// 	"points": 12.79,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/GB.png",
+		// 	"media": 6.19,
+		// 	"obitos": 12125
+		// }, {
+		// 	"name": "NL",
+		// 	"points": 10.71,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/NL.png",
+		// 	"media": 6.19,
+		// 	"obitos": 2955
+		// }];
+
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Letalidade[/]\n(óbitos/casos confirmados)";
+		title.textAlign = "middle";
+
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+
+
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.numberFormatter = new am4core.NumberFormatter();
+		valueAxis.numberFormatter.numberFormat = "#'%'"
+		//valueAxis.renderer.labels.template.adapter.add("text", function(text) {
+		// return text ;});
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.extraTooltipPrecision = 1;
+
+		// Do not crop bullets
+		chart.maskBullets = false;
+
+		// Remove padding
+		//chart.paddingBottom = 0;
+
+		chart.numberFormatter.numberFormat = "#.00";
+
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "letalidade";
+		series.calculatePercent = true;
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = "color";
+		//series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
+		series.strokeWidth = 0;
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
+
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{valueY}%[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
+
+		//// series da media global (linha)
+		//		var lineSeries = chart.series.push(new am4charts.LineSeries());
+		//		lineSeries.name = "Global";
+		//		lineSeries.dataFields.valueY = "media";
+		//		lineSeries.dataFields.categoryX = "name";
+		//
+		//		lineSeries.stroke = am4core.color("#eee");
+		//		lineSeries.strokeWidth = 2;
+		//		lineSeries.tooltip.label.textAlign = "middle";
+		//
+		//		var bullet = lineSeries.bullets.push(new am4charts.Bullet());
+		//		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
+		//		bullet.tooltipText = "[#eee font-size: 12px]MÉDIA GLOBAL:[/][font-weight: bold] {media}%[/]"
+		//		var circle = bullet.createChild(am4core.Circle);
+		//		circle.radius = 1;
+		//		circle.fill = am4core.color("#eee");
+		//		circle.strokeWidth = 1;
+
+		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
+		var range = valueAxis.axisRanges.create();
+		range.calculatePercent = true;
+		range.value = 6.74; // VALOR DA MÉDIA GLOBAL
+		var media = range.value;
+		range.grid.stroke = am4core.color("#eee");
+		range.grid.strokeWidth = 1;
+		range.grid.strokeOpacity = 0.9;
+		range.label.inside = true;
+		var str1 = "[#eee font-size: 12px]MÉDIA GLOBAL: [/][font-weight: bold]";
+		range.label.text = str1.concat(media.toString(), "%[/]");
+		range.label.fill = range.grid.stroke;
+		range.label.align = "right";
+		range.label.verticalCenter = "bottom";
+		chart.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
+
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
+
+		chart.exporting.menu = new am4core.ExportMenu();
+
+
+		/////////////////////////////////////////////
+		// CASOS POR MILHAO
+		// Create chart instance
+		var chart = am4core.create("casospormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+
+
+		// // Add data
+		// chart.data = [{
+		// 	"pais": "IT",
+		// 	"points": 2689,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/IT.png"
+		// }, {
+		// 	"pais": "GB",
+		// 	"points": 1426,
+		// 	"color": chart.colors.next(),
+		// 	"bullet": "./flags/GB.png"
+		// }];
+
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Casos confirmados/milhão de habitantes[/]\n";
+		title.textAlign = "middle";
+
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.max = 6000;
+
+		// Do not crop bullets
+		chart.maskBullets = false;
+
+		// Remove padding
+		//chart.paddingBottom = 0;
+
+		chart.numberFormatter.numberFormat = "#.";
+
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "casosMilhao";
+		series.dataFields.categoryX = "country";
+		series.strokeWidth = 0;
+		// series.columns.template.propertyFields.fill = "color";
+		// series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
+
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{casosMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
+
+		// Enable export
+		chart.exporting.menu = new am4core.ExportMenu();
+
+
+
+
+		/////////////////////////////////////////////
+		// ÓBITOS POR MILHAO
+		// Create chart instance
+		var chart = am4core.create("obitospormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+
+
+		// Add data
+		//chart.data = [{
+		//			"pais": "IT",
+		//			"points": 2689,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/IT.png"
+		//		}, {
+		//			"pais": "GB",
+		//			"points": 1426,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/GB.png"
+		//		}, {
+		//			"pais": "NL",
+		//			"points": 1601,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/NL.png"
+		//		}, {
+		//			"pais": "FR",
+		//			"points": 2058,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/FR.png"
+		//		}, {
+		//			"pais": "ES",
+		//			"points": 3693,
+		//			"color": chart.colors.next(),
+		//			"bullet": "./flags/ES.png"
+		//
+		//		}];
+
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Óbitos/milhão de habitantes[/]\n";
+		title.textAlign = "middle";
+
+		//let colorSet = new am4core.ColorSet();
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.max = 500;
+
+
+		// Do not crop bullets
+		chart.maskBullets = false;
+
+		// Remove padding
+		//chart.paddingBottom = 0;
+
+		chart.numberFormatter.numberFormat = "#.";
+
+
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "obitosMilhao";
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = am4core.color("#000");
+		//series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		series.strokeWidth = 0;
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{obitosMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
+
+		// Enable export
+		chart.exporting.menu = new am4core.ExportMenu();
+
+
+
+
+		/////////////////////////////////////////////
+		//TESTES POR MILHAO
+		// Create chart instance
+		var chart = am4core.create("testespormilhaodiv", am4charts.XYChart);
+		chart.dataSource.url = "stats.json";
+
+
+		var title = chart.titles.create();
+		title.text = "[bold font-size: 18]Testes/milhão de habitantes[/]\n";
+		title.textAlign = "middle";
+
+		//let colorSet = new am4core.ColorSet();
+		// Create axes
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "country";
+		categoryAxis.renderer.grid.template.disabled = true;
+		categoryAxis.renderer.minGridDistance = 30;
+		categoryAxis.renderer.inside = true;
+		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
+		categoryAxis.renderer.labels.template.fontSize = 10;
+
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
+		valueAxis.renderer.labels.template.disabled = false;
+		//valueAxis.title.text = "%";
+		//valueAxis.title.fontSize = 12;
+		valueAxis.renderer.labels.template.fontSize = 10;
+		valueAxis.min = 0;
+		valueAxis.max = 90000;
+
+		// axis break
+		var axisBreak = valueAxis.axisBreaks.create();
+		axisBreak.startValue = 31000;
+		axisBreak.endValue = 77500;
+		// fixed axis break
+		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
+		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
+
+		//make break expand on hover
+		var hoverState = axisBreak.states.create("hover");
+		hoverState.properties.breakSize = 1;
+		hoverState.properties.opacity = 0.1;
+		hoverState.transitionDuration = 500;
+
+		axisBreak.defaultState.transitionDuration = 1000;
+
+
+		// Do not crop bullets
+		chart.maskBullets = false;
+
+		// Remove padding
+		//chart.paddingBottom = 0;
+
+		chart.numberFormatter.numberFormat = "#";
+
+
+		// Create series
+		var series = chart.series.push(new am4charts.ColumnSeries());
+		series.dataFields.valueY = "testesMilhao";
+		series.dataFields.categoryX = "country";
+		//series.columns.template.propertyFields.fill = am4core.color("#000");
+		//series.columns.template.propertyFields.stroke = "color";
+		series.columns.template.column.cornerRadiusTopLeft = 4;
+		series.columns.template.column.cornerRadiusTopRight = 4;
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/b]";
+		series.strokeWidth = 0;
+
+		series.heatRules.push({
+			"target": series.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#1b8a5a"),
+			"dataField": "valueY"
+		});
+		// Add bullets
+		var bullet = series.bullets.push(new am4charts.Bullet());
+		var image = bullet.createChild(am4core.Image);
+		image.horizontalCenter = "middle";
+		image.verticalCenter = "bottom";
+		image.dy = 8; // vertical offset. can be negative to move upwards
+		image.width = am4core.percent(60); // reducao do tamanho para 60%
+		image.y = am4core.percent(100);
+		image.propertyFields.href = "bullet";
+		image.tooltipText = series.columns.template.tooltipText;
+		image.propertyFields.fill = am4core.color("#eee");
+		image.filters.push(new am4core.DropShadowFilter());
+
+		// nova bullet para por valor na barra
+		var label = series.columns.template.createChild(am4core.Label);
+		label.text = "[#eee]{testesMilhao}[/]";
+		label.align = "center";
+		label.valign = "top";
+		label.zIndex = 2;
+		label.strokeWidth = 0; label.fontSize = 8; label.paddingTop = 10;
+
+		// CURSOR XY para ligar axis tooltips
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart.cursor.lineX.strokeWidth = 0.5;
+		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
+		chart.cursor.lineY.strokeWidth = 0.5;
+		chart.cursor.xAxis = categoryAxis;
+		chart.cursor.fullWidthLineX = true;
+		chart.cursor.lineX.strokeWidth = 0;
+		chart.cursor.lineX.fill = am4core.color("#8F3985");
+		chart.cursor.lineX.fillOpacity = 0.1;
+		categoryAxis.cursorTooltipEnabled = false;
+
+		var axisTooltip = valueAxis.tooltip;
+		//axisTooltip.background.fill = am4core.color("#333");
+		axisTooltip.background.strokeWidth = 1;
+		axisTooltip.background.cornerRadius = 3;
+		axisTooltip.dy = 5;
+		axisTooltip.fillOpacity = 0.8;
+		axisTooltip.fontSize = 12;
+
+		var dropShadow = new am4core.DropShadowFilter();
+		dropShadow.dy = 1;
+		dropShadow.dx = 1;
+		dropShadow.opacity = 0.5;
+		axisTooltip.filters.push(dropShadow);
+
+		// Enable export
+		chart.exporting.menu = new am4core.ExportMenu();
+
+
+		////////////////////////////////////////////////////////
+		// FUNÇÕES DE UTILIDADE GERAL
+		function toggle(chart, eixo, botao) {
+				eixo.logarithmic = eixo.logarithmic ? false : true;
+				chart.invalidateData();
+				// if (button.value == "Log -> Linear") {
+				// 	button.value = "Linear -> Log";
+				// }else{
+				// 	button.value = "Log -> Linear";
+				// }
+				if (botao.label.text == "[bold #eee]Log[/] - [#800]Linear[/]") {
+					botao.label.text = "[#800]Log[/] - [bold #eee]Linear[/]";
+				}else{
+					botao.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				}
+				//chart.invalidateRawData();
+		}
+
+	</script>
+</body>
+
+</html>
