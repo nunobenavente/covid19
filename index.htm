@@ -158,7 +158,7 @@
 
 		// Series
 		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
-		seriesTotal.name = "Total Casos";
+		seriesTotal.name = "TOTAL CASOS";
 		seriesTotal.dataFields.valueY = "total";
 		seriesTotal.dataFields.dateX = "data";
 		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
@@ -179,7 +179,7 @@
 		bulletHover.properties.scale = 2;
 
 		var seriesDia = chartPT.series.push(new am4charts.ColumnSeries());
-		seriesDia.name = "Casos diários";
+		seriesDia.name = "CASOS DIÁRIOS";
 		seriesDia.dataFields.valueY = "dia";
 		seriesDia.dataFields.dateX = "data";
 		seriesDia.yAxis = valueAxisDta;
@@ -201,7 +201,7 @@
 		seriesAvg7.dataFields.dateX = "data";
 		seriesAvg7.yAxis = valueAxisDta;
 		seriesAvg7.calculatePercent = true;
-		seriesAvg7.tooltipText = "[font-size: 10px]Média 7 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
+		//seriesAvg7.tooltipText = "[font-size: 10px]Média 7 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
 		seriesAvg7.strokeWidth = 1;
 		seriesAvg7.stroke = am4core.color("#ff0000");
 		var seriesAvg14 = chartPT.series.push(new am4charts.LineSeries());
@@ -210,7 +210,7 @@
 		seriesAvg14.dataFields.dateX = "data";
 		seriesAvg14.yAxis = valueAxisDta;
 		seriesAvg14.calculatePercent = true;
-		seriesAvg14.tooltipText = "[font-size: 10px]Média 14 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
+		//seriesAvg14.tooltipText = "[font-size: 10px]Média 14 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
 		seriesAvg14.strokeWidth = 1;
 		seriesAvg14.stroke = am4core.color("#f6980b");
 
