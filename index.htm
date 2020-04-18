@@ -122,11 +122,12 @@
 		var chartPT = am4core.create("chartPT", am4charts.XYChart);
 		chartPT.dataSource.url = "./statsPT.json";
 		//chartPT.dataSource.parser.options.dateFields = ["data"];
-		chartPT.dateFormatter.inputDateFormat = "dd-MM-yyyy";
+		chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
+		//chartPT.numberFormatter.numberFormat = "#.00";
 
 		// Titulo
 		var title = chartPT.titles.create();
-		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução dos casos[/]\n";
+		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução dos casos confirmados[/]\n";
 		title.text = titulo.concat("[font-size: 14 #EEE]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
 		title.textAlign = "middle";
 
@@ -143,9 +144,9 @@
 
 		// YY Casos Totais - eixo da esquerda
 		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
-		valueAxisTot.title.text = "[font-size:12 #FFE119]TOTAL DE CASOS[/]";
+		valueAxisTot.title.text = "[font-size:12 #a6a6a6]TOTAL DE CASOS CONFIRMADOS[/]";
 		valueAxisTot.renderer.labels.template.fontSize = 10;
-		valueAxisTot.renderer.labels.template.fill = am4core.color("#FFE119");
+		valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
 		valueAxisTot.logarithmic = true;
 
 		//YY Casos Diários - eixo da direita
@@ -163,14 +164,16 @@
 		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
 		seriesTotal.tooltip.pointerOrientation = "horizontal"; // up, down, left, right, vertical, horizontal
 		seriesTotal.tooltip.label.textAlign = "middle";
-		seriesTotal.stroke = am4core.color("#FFE119");
+		seriesTotal.stroke = am4core.color("#a6a6a6");
+		seriesTotal.fill = am4core.color("#a6a6a6");
 		seriesTotal.strokeWidth = 1.1;
-		seriesTotal.zIndex = 5;
+		//seriesTotal.zIndex = 5;
+		seriesTotal.fillOpacity = 0.03;
 
 		var bullet = seriesTotal.bullets.push(new am4charts.CircleBullet());
-		bullet.fill = am4core.color("#0d1285"); // tooltips grab fill from parent by default
+		//bullet.fill = am4core.color("#0d1285"); // tooltips grab fill from parent by default
 		bullet.circle.radius = RADIUS;
-		bullet.tooltipText = "[#eee font-size: 12px]{data}\nTOTAL CASOS: [/][bold font-size: 13px]{total}[/]";
+		bullet.tooltipText = "[font-size: 12px]{data}\nTotal Casos: [/][bold font-size: 13px]{total}[/] [font-size: 11px](+{valueY.previousChangePercent.formatNumber('##.0')}%)\n[/]";
 
 		var bulletHover = bullet.states.create("hover");
 		bulletHover.properties.scale = 2;
@@ -180,16 +183,37 @@
 		seriesDia.dataFields.valueY = "dia";
 		seriesDia.dataFields.dateX = "data";
 		seriesDia.yAxis = valueAxisDta;
+		seriesDia.calculatePercent = true;
 		seriesDia.columns.template.width = am4core.percent(60);
-		seriesDia.tooltipText = "[font-size: 12px]CASOS DIA: [/][bold  font-size: 13px]{dia}[/]";
+		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
 		seriesDia.strokeWidth = 0;
 		seriesDia.heatRules.push({
 			"target": seriesDia.columns.template,
 			"property": "fill",
-			"min": am4core.color("#2a4e75"),
+			"min": am4core.color("#0e437d"),
 			"max": am4core.color("#EE3E32"),
 			"dataField": "valueY"
 		});
+
+		var seriesAvg7 = chartPT.series.push(new am4charts.LineSeries());
+		seriesAvg7.name = "Média 7 dias";
+		seriesAvg7.dataFields.valueY = "med7";
+		seriesAvg7.dataFields.dateX = "data";
+		seriesAvg7.yAxis = valueAxisDta;
+		seriesAvg7.calculatePercent = true;
+		seriesAvg7.tooltipText = "[font-size: 10px]Média 7 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
+		seriesAvg7.strokeWidth = 1;
+		seriesAvg7.stroke = am4core.color("#ff0000");
+		var seriesAvg14 = chartPT.series.push(new am4charts.LineSeries());
+		seriesAvg14.name = "Média 14 dias";
+		seriesAvg14.dataFields.valueY = "med14";
+		seriesAvg14.dataFields.dateX = "data";
+		seriesAvg14.yAxis = valueAxisDta;
+		seriesAvg14.calculatePercent = true;
+		seriesAvg14.tooltipText = "[font-size: 10px]Média 14 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
+		seriesAvg14.strokeWidth = 1;
+		seriesAvg14.stroke = am4core.color("#f6980b");
+
 
 		// Legenda
 		chartPT.legend = new am4charts.Legend();
