@@ -29,47 +29,50 @@
 			border-radius: 6px;
 		}
 
+		#topo {width:100%; height:20px; float:left; clear:both; background-color: "#b92b2b"; z-index: 20;}
+
 		#loglogAmchartsDiv {
-			width: 60%;
+			width: 70%;
 			height: 800px;
-			float: left;
+			float:none;
+			/*	border: 1px solid #aaa;*/
+		}
+
+		#chartPT {
+			width: 70%;
+			height: 600px;
+			float:none;
 			/*	border: 1px solid #aaa;*/
 		}
 
 		#letalidadediv {
 			width: 35%;
 			height: 395px;
-			float: left;
+			float: none;
 			/*clear:both;*/
 		}
 
 		#casospormilhaodiv {
 			width: 35%;
 			height: 395px;
-			float: left;
+			float: none;
 			/*clear:both;*/
 		}
 
 		#obitospormilhaodiv {
 			width: 35%;
 			height: 395px;
-			float: left;
+			float: none;
 			/*clear:both;*/
 		}
 
 		#testespormilhaodiv {
 			width: 35%;
 			height: 395px;
-			float: left;
+			float: none;
 			/*clear:both;*/
 		}
 
-		#botaodiv {
-			float: left;
-			width: 60%;
-			height: 50px;
-			clear: both;
-		}
 		#button {
 		  /*padding: 10px;*/
 		  font-size: 12px;
@@ -85,25 +88,16 @@
 <body style="background-color:#151515">
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
+	<!-- <div id="topo"></div> -->
+
 	<div id="loglogAmchartsDiv"></div>
+	<div id="chartPT"></div>
+	<div id="testespormilhaodiv" style="align:center;"></div>
+	<div id="casospormilhaodiv"></div>
 	<div id="letalidadediv"></div>
 	<div id="obitospormilhaodiv"></div>
-	<div id="testespormilhaodiv"></div>
-	<div id="casospormilhaodiv"></div>
-
 
 	<script>
-		/**
-		 * ---------------------------------------
-		 * This demo was created using amCharts 4.
-		 *
-		 * For more information visit:
-		 * https://www.amcharts.com/
-		 *
-		 * Documentation is available at:
-		 * https://www.amcharts.com/docs/v4/
-		 * ---------------------------------------
-		 */
 
 		// Themes begin
 		am4core.useTheme(am4themes_animated);
@@ -121,8 +115,113 @@
 		var TAMANHOLETRA = 10;
 		var DIMMED = am4core.color("#0a0");
 
+		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+		var dia = new Date();
 
-		// Create chart instance
+		// GRAFICO PORTUGAL
+		var chartPT = am4core.create("chartPT", am4charts.XYChart);
+		chartPT.dataSource.url = "./statsPT.json";
+		//chartPT.dataSource.parser.options.dateFields = ["data"];
+		chartPT.dateFormatter.inputDateFormat = "dd-MM-yyyy";
+
+		// Titulo
+		var title = chartPT.titles.create();
+		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução dos casos[/]\n";
+		title.text = titulo.concat("[font-size: 14 #EEE]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+		title.textAlign = "middle";
+
+		// Eixos
+		var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
+		//dateAxis.title.text = "DATA";
+		dateAxis.renderer.minGridDistance = 40;
+		dateAxis.renderer.grid.template.location = 0;
+		dateAxis.renderer.labels.template.fontSize = 10;
+		dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
+		dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
+		dateAxis.renderer.ticks.template.length = 2;
+
+		// YY Casos Totais - eixo da esquerda
+		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
+		valueAxisTot.title.text = "[font-size:12 #FFE119]TOTAL DE CASOS[/]";
+		valueAxisTot.renderer.labels.template.fontSize = 10;
+		valueAxisTot.renderer.labels.template.fill = am4core.color("#FFE119");
+		valueAxisTot.logarithmic = true;
+
+		//YY Casos Diários - eixo da direita
+		var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
+		valueAxisDta.title.text = "[font-size:12]CASOS DIÁRIOS[/]";
+		valueAxisDta.renderer.labels.template.fontSize = 10;
+		valueAxisDta.renderer.opposite = true;
+		valueAxisDta.max = 2000;
+
+		// Series
+		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
+		seriesTotal.name = "Total Casos";
+		seriesTotal.dataFields.valueY = "total";
+		seriesTotal.dataFields.dateX = "data";
+		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
+		seriesTotal.tooltip.pointerOrientation = "vertical";
+		seriesTotal.tooltip.label.textAlign = "middle";
+		seriesTotal.stroke = am4core.color("#FFE119");
+		seriesTotal.strokeWidth = 2;
+		seriesTotal.zIndex = 5;
+
+		var bullet = seriesTotal.bullets.push(new am4charts.CircleBullet());
+		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
+		bullet.circle.radius = RADIUS + 1;
+		bullet.tooltipText = "[#eee font-size: 12px]{data}\nTOTAL DE CASOS:[/][font-weight: bold] {total}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
+
+		var seriesDia = chartPT.series.push(new am4charts.ColumnSeries());
+		seriesDia.name = "Casos diários";
+		seriesDia.dataFields.valueY = "dia";
+		seriesDia.dataFields.dateX = "data";
+		seriesDia.yAxis = valueAxisDta;
+		seriesDia.columns.template.width = am4core.percent(60);
+		seriesDia.tooltipText = "[font-size: 12px]CASOS DIA: [/][font-weight: bold]{dia}[/]";
+		seriesDia.strokeWidth = 0;
+		seriesDia.heatRules.push({
+			"target": seriesDia.columns.template,
+			"property": "fill",
+			"min": am4core.color("#2a4e75"),
+			"max": am4core.color("#EE3E32"),
+			"dataField": "valueY"
+		});
+
+		// Legenda
+		chartPT.legend = new am4charts.Legend();
+		chartPT.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+		var markerTemplate = chartPT.legend.markers.template; // vamos modificar o tamanho dos quadrados
+		markerTemplate.width = 18;
+		markerTemplate.height = 18;
+		chartPT.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
+
+		// chart cursor
+		chartPT.cursor = new am4charts.XYCursor();
+		chartPT.cursor.behavior = "none";
+		chartPT.cursor.xAxis = dateAxis;
+		//chartPT.cursor.snapToSeries = seriesTotal;
+
+		// Enable export
+		chartPT.exporting.menu = new am4core.ExportMenu();
+
+		// Botão Toggle Log-Linear
+		var buttonYYPT = chartPT.plotContainer.createChild(am4core.Button);
+		buttonYYPT.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+		buttonYYPT.label.fontSize = 12;
+		buttonYYPT.padding(5, 5, 5, 5);
+		buttonYYPT.width =90;
+		buttonYYPT.align = "left";
+		buttonYYPT.marginLeft = 15;
+		buttonYYPT.events.on("hit", function() {
+		  toggle(chartPT, valueAxisTot, buttonYYPT);
+		});
+
+
+
+		// GRAFICO LOG LOG MUNDO
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
 
 		loglogAmcharts.dataSource.url = "./dadosMundo.json";
@@ -140,7 +239,7 @@
 
 			am4core.color("#00AA00"), am4core.color("#00AA00"),
 			am4core.color("#FF8832"), am4core.color("#FF8832"),
-			am4core.color("#e43232"), am4core.color("#e43232"),
+			am4core.color("#a60e0e"), am4core.color("#a60e0e"),
 			am4core.color("#00CC00"), am4core.color("#00CC00"),
 			am4core.color("#008888"), am4core.color("#008888"),
 			am4core.color("#642dda"), am4core.color("#642dda"),
@@ -148,23 +247,28 @@
 		];
 
 
-
-
-
 		// Create axes
 		var opacidadeLinhas = 1;
 
+		// Create value axis XX
 		var valueAxisX = loglogAmcharts.xAxes.push(new am4charts.ValueAxis());
 		valueAxisX.title.text = '[font-size: 13]TOTAL CASOS CONFIRMADOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
 		//valueAxisX.renderer.minGridDistance = 10;
 		valueAxisX.renderer.labels.template.fontSize = 10;
 		valueAxisX.logarithmic = true;
+		var eixoXXTooltip = valueAxisX.tooltip;
+		eixoXXTooltip.background.fill = am4core.color("#13a889");
+		valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL CASOS: [/][bold font-size:11]" + texto + "[/b]";});
 
-		// Create value axis
+		// Create value axis YY
 		var valueAxisY = loglogAmcharts.yAxes.push(new am4charts.ValueAxis());
 		valueAxisY.title.text = '[font-size: 13]CASOS CONFIRMADOS ÚLTIMOS 7 DIAS[/]';
 		valueAxisY.renderer.labels.template.fontSize = 10;
 		valueAxisY.logarithmic = true;
+		var eixoYYTooltip = valueAxisY.tooltip;
+		eixoYYTooltip.background.fill = am4core.color("#13a889");
+		eixoYYTooltip.rotation = 270;
+		valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]CASOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
 
 		valueAxisX.renderer.grid.template.disabled = true;
 		//valueAxisX.renderer.labels.template.disabled = true;
@@ -193,8 +297,7 @@
 
 
 		var title = loglogAmcharts.titles.create();
-		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-		var dia = new Date();
+
 		//dia = dia.toString();
 		var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
 		title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
@@ -844,6 +947,7 @@
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
 
+
 		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
@@ -852,9 +956,10 @@
 		valueAxis.numberFormatter = new am4core.NumberFormatter();
 		valueAxis.numberFormatter.numberFormat = "#'%'"
 		//valueAxis.renderer.labels.template.adapter.add("text", function(text) {
-		// return text + "%";});
+		// return text ;});
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
+		valueAxis.extraTooltipPrecision = 1;
 
 		// Do not crop bullets
 		chart.maskBullets = false;
@@ -873,7 +978,7 @@
 		//series.columns.template.propertyFields.stroke = "color";
 		series.columns.template.column.cornerRadiusTopLeft = 4;
 		series.columns.template.column.cornerRadiusTopRight = 4;
-		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY.percent}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
+		series.columns.template.tooltipText = "{categoryX}: [bold]{valueY}%[/b] (Óbitos: [bold]{obitos.formatNumber('#')})[/b]";
 		series.strokeWidth = 0;
 
 		series.heatRules.push({
@@ -899,7 +1004,7 @@
 
 		// nova bullet para por valor na barra
 		var label = series.columns.template.createChild(am4core.Label);
-		label.text = "[#eee]{valueY.percent}%[/]";
+		label.text = "[#eee]{valueY}%[/]";
 		label.align = "center";
 		label.valign = "top";
 		label.zIndex = 2;
@@ -927,8 +1032,8 @@
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 0.0674; // VALOR DA MÉDIA GLOBAL
-		var media = range.value*100;
+		range.value = 6.74; // VALOR DA MÉDIA GLOBAL
+		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
 		range.grid.strokeOpacity = 0.9;
@@ -1268,12 +1373,12 @@
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 55000;
+		valueAxis.max = 90000;
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 30000;
-		axisBreak.endValue = 45500;
+		axisBreak.startValue = 31000;
+		axisBreak.endValue = 77500;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
@@ -1365,6 +1470,9 @@
 		// Enable export
 		chart.exporting.menu = new am4core.ExportMenu();
 
+
+		////////////////////////////////////////////////////////
+		// FUNÇÕES DE UTILIDADE GERAL
 		function toggle(chart, eixo, botao) {
 				eixo.logarithmic = eixo.logarithmic ? false : true;
 				chart.invalidateData();
