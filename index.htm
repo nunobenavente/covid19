@@ -139,6 +139,7 @@
 		dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
 		dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
 		dateAxis.renderer.ticks.template.length = 2;
+		dateAxis.extraMax = 0.01;
 
 		// YY Casos Totais - eixo da esquerda
 		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
@@ -160,16 +161,16 @@
 		seriesTotal.dataFields.valueY = "total";
 		seriesTotal.dataFields.dateX = "data";
 		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
-		seriesTotal.tooltip.pointerOrientation = "vertical";
+		seriesTotal.tooltip.pointerOrientation = "horizontal"; // up, down, left, right, vertical, horizontal
 		seriesTotal.tooltip.label.textAlign = "middle";
 		seriesTotal.stroke = am4core.color("#FFE119");
-		seriesTotal.strokeWidth = 2;
+		seriesTotal.strokeWidth = 1.1;
 		seriesTotal.zIndex = 5;
 
 		var bullet = seriesTotal.bullets.push(new am4charts.CircleBullet());
-		bullet.fill = am4core.color("#333"); // tooltips grab fill from parent by default
-		bullet.circle.radius = RADIUS + 1;
-		bullet.tooltipText = "[#eee font-size: 12px]{data}\nTOTAL DE CASOS:[/][font-weight: bold] {total}[/]";
+		bullet.fill = am4core.color("#0d1285"); // tooltips grab fill from parent by default
+		bullet.circle.radius = RADIUS;
+		bullet.tooltipText = "[#eee font-size: 12px]{data}\nTOTAL CASOS: [/][bold font-size: 13px]{total}[/]";
 
 		var bulletHover = bullet.states.create("hover");
 		bulletHover.properties.scale = 2;
@@ -180,7 +181,7 @@
 		seriesDia.dataFields.dateX = "data";
 		seriesDia.yAxis = valueAxisDta;
 		seriesDia.columns.template.width = am4core.percent(60);
-		seriesDia.tooltipText = "[font-size: 12px]CASOS DIA: [/][font-weight: bold]{dia}[/]";
+		seriesDia.tooltipText = "[font-size: 12px]CASOS DIA: [/][bold  font-size: 13px]{dia}[/]";
 		seriesDia.strokeWidth = 0;
 		seriesDia.heatRules.push({
 			"target": seriesDia.columns.template,
@@ -1032,7 +1033,7 @@
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.74; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.85; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
@@ -1373,12 +1374,12 @@
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 90000;
+		valueAxis.max = 60000;
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 31000;
-		axisBreak.endValue = 77500;
+		axisBreak.startValue = 31100;
+		axisBreak.endValue = 47300;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
