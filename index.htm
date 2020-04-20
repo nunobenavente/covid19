@@ -120,10 +120,36 @@
 
 		// GRAFICO PORTUGAL
 		var chartPT = am4core.create("chartPT", am4charts.XYChart);
-		chartPT.dataSource.url = "./statsPT.json";
+		chartPT.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
 		//chartPT.dataSource.parser.options.dateFields = ["data"];
-		chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
+		//chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
 		//chartPT.numberFormatter.numberFormat = "#.00";
+chartPT.dataSource.events.on("parseended", function(ev){
+	// parsed data is assigned to data source's `data` property
+  var data = ev.target.data;
+	var Dia = [];
+  for (var i = 1; i < data.length; i++) {
+			data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
+
+			if (i >= 6) {		// Média dos últimos 7 dias
+				if (i == 6) {
+					data[i]["avg7"] = data[i]["Confirmed"] / 7;
+				} else {
+					data[i]["avg7"] = (data[i]["Confirmed"] - data[i-7]["Confirmed"]) / 7;
+				}
+			}
+			if (i >= 13) {		// Média dos últimos 14 dias
+				if (i == 13) {
+					data[i]["avg14"] = data[i]["Confirmed"] / 14;
+				} else {
+					data[i]["avg14"] = (data[i]["Confirmed"] - data[i-14]["Confirmed"]) / 14;
+				}
+			}
+	}
+
+});
+		chartPT.dataSource.reloadFrequency = 1000*60*5; // faz o reload dos dados a cada x milisegundos (5 minutos escolhidos)
+
 
 		// Titulo
 		var title = chartPT.titles.create();
@@ -158,9 +184,12 @@
 
 		// Series
 		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
+
+
 		seriesTotal.name = "TOTAL CASOS";
-		seriesTotal.dataFields.valueY = "total";
-		seriesTotal.dataFields.dateX = "data";
+		seriesTotal.dataFields.valueY = "Confirmed";
+		seriesTotal.dataFields.dateX = "Date";
+
 		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
 		seriesTotal.tooltip.pointerOrientation = "horizontal"; // up, down, left, right, vertical, horizontal
 		seriesTotal.tooltip.label.textAlign = "middle";
@@ -173,7 +202,7 @@
 		var bullet = seriesTotal.bullets.push(new am4charts.CircleBullet());
 		//bullet.fill = am4core.color("#0d1285"); // tooltips grab fill from parent by default
 		bullet.circle.radius = RADIUS;
-		bullet.tooltipText = "[font-size: 12px]{data}\nTotal Casos: [/][bold font-size: 13px]{total}[/] [font-size: 11px](+{valueY.previousChangePercent.formatNumber('##.0')}%)\n[/]";
+		bullet.tooltipText = "[font-size: 12px]{Date}\nTotal Casos: [/][bold font-size: 13px]{Confirmed}[/] [font-size: 11px](+{valueY.previousChangePercent.formatNumber('##.0')}%)\n[/]";
 
 		var bulletHover = bullet.states.create("hover");
 		bulletHover.properties.scale = 2;
@@ -181,7 +210,7 @@
 		var seriesDia = chartPT.series.push(new am4charts.ColumnSeries());
 		seriesDia.name = "CASOS DIÁRIOS";
 		seriesDia.dataFields.valueY = "dia";
-		seriesDia.dataFields.dateX = "data";
+		seriesDia.dataFields.dateX = "Date";
 		seriesDia.yAxis = valueAxisDta;
 		seriesDia.calculatePercent = true;
 		seriesDia.columns.template.width = am4core.percent(60);
@@ -197,17 +226,18 @@
 
 		var seriesAvg7 = chartPT.series.push(new am4charts.LineSeries());
 		seriesAvg7.name = "Média 7 dias";
-		seriesAvg7.dataFields.valueY = "med7";
-		seriesAvg7.dataFields.dateX = "data";
+		seriesAvg7.dataFields.valueY = "avg7";
+		seriesAvg7.dataFields.dateX = "Date";
 		seriesAvg7.yAxis = valueAxisDta;
 		seriesAvg7.calculatePercent = true;
 		//seriesAvg7.tooltipText = "[font-size: 10px]Média 7 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
 		seriesAvg7.strokeWidth = 1;
 		seriesAvg7.stroke = am4core.color("#ff0000");
+
 		var seriesAvg14 = chartPT.series.push(new am4charts.LineSeries());
 		seriesAvg14.name = "Média 14 dias";
-		seriesAvg14.dataFields.valueY = "med14";
-		seriesAvg14.dataFields.dateX = "data";
+		seriesAvg14.dataFields.valueY = "avg14";
+		seriesAvg14.dataFields.dateX = "Date";
 		seriesAvg14.yAxis = valueAxisDta;
 		seriesAvg14.calculatePercent = true;
 		//seriesAvg14.tooltipText = "[font-size: 10px]Média 14 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
@@ -245,11 +275,50 @@
 		});
 
 
-
+//////////////////////////////////////////
 		// GRAFICO LOG LOG MUNDO
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
 
-		loglogAmcharts.dataSource.url = "./dadosMundo.json";
+		loglogAmcharts.dataSource.url = "./dadosMundoAccess.json";
+		//loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
+		//loglogAmcharts.dataSource.incremental = true;
+	// 	loglogAmcharts.dataSource.events.on("parseended", function(ev){
+	// 		// parsed data is assigned to data source's `data` property
+	// 	  var data = ev.target.data;
+	//
+	// 	for (var i = 0; i < data.length; i++) {
+	// 		//	data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
+	// 			if (i == 0) { data[i]["ptx"] = data[i]["PT"]; }
+	// 			if (i > 0) { data[i]["ptx"] = data[i]["PT"] + data[i-1]["ptx"]; }
+	// 				if (i == 6) {
+	// 					data[i]["pty"] = data[i]["Confirmed"] / 7;
+	// 				} else {
+	// 					data[i]["pty"] = Math.max(1, (data[i]["Confirmed"] - data[i-7]["Confirmed"]) / 7);
+	// 				}
+	// 			}
+	// 	}
+	//
+	// });
+
+	// loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/spain";
+	// //loglogAmcharts.dataSource.incremental = true;
+	// loglogAmcharts.dataSource.events.on("parseended", function(ev){
+	// var data2 = ev.target.data;
+	// for (var i = 1; i < data2.length; i++) {
+	// 	//	data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
+	// 		if (i < 6) { data2[i]["dey"] = data2[i]["Confirmed"]; }
+	// 		if (i >= 6) {		// Média dos últimos 7 dias
+	// 			if (i == 6) {
+	// 				data2[i]["dey"] = data2[i]["Confirmed"] / 7;
+	// 			} else {
+	// 				data2[i]["dey"] = Math.max(1, (data2[i]["Confirmed"] - data2[i-7]["Confirmed"]) / 7);
+	// 			}
+	// 		}
+	// }
+	// 	});
+	//
+//	loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/germany";
+	//loglogAmcharts.dataSource.load();
 
 
 		loglogAmcharts.colors.list = [
@@ -305,12 +374,12 @@
 
 			//range.label.text = "{value}";
 		}
-		var i;
+		var j;
 		var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000];
 		var m;
 		for (m of ms) {
-			for (i = 1; i < 10; i++) {
-				createGrid(i * m);
+			for (j = 1; j < 10; j++) {
+				createGrid(j * m);
 			}
 		}
 		valueAxisX.renderer.grid.template.strokeOpacity = 0.2;
@@ -341,28 +410,13 @@
 
 		// Create series
 		var lineSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries.dataFields.valueY = "pty";
-		lineSeries.dataFields.valueX = "ptx";
+		lineSeries.dataFields.valueY = "PT7";
+		lineSeries.dataFields.valueX = "PTT";
 		lineSeries.strokeOpacity = opacidadeLinhas;
 		lineSeries.strokeWidth = 2;
 		lineSeries.name = "PT";
 		lineSeries.showOnInit = false;
 		// render data points as bullets
-
-		// lineSeries.minBulletDistance = BULLETDISTMIN;
-		// var bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
-		// var labelBullet = lineSeries.bullets.push(new am4charts.LabelBullet());
-		// labelBullet.label.text = lineSeries.name;
-		// bullet.circle.opacity = 0;
-		// labelBullet.label.opacity = 0;
-    // // bullet.circle.fill = "#eee"; // desnecessario porque a bullet adquire a cor da series automaticamente
-    // bullet.circle.propertyFields.opacity = "bullet";
-    // bullet.circle.radius = RADIUS;
-		// labelBullet.label.propertyFields.opacity = "bullet";
-		// labelBullet.label.dx = DESVIOLABEL;
-		// labelBullet.label.fontSize = TAMANHOLETRA;
-		// //bullet.tooltipText = "[bold font-size: 12]Data: {data}[/]";
-
 		var lastPtSeries = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lastPtSeries.dataFields.valueY = "ptby";
 		lastPtSeries.dataFields.valueX = "ptbx";
@@ -385,26 +439,10 @@
 		});
 
 
-		//		var segment = lineSeries.segments.template;
-		//  segment.interactionsEnabled = true;
-		//
-		//  var hoverState = segment.states.create("hover");
-		//  hoverState.properties.strokeWidth = 5;
-		//
-		//  var dimmed = segment.states.create("dimmed");
-		//  dimmed.properties.stroke = am4core.color("#dadada");
-		//
-		//  segment.events.on("over", function(event) {
-		//    processOver(event.target.parent.parent.parent);
-		//  });
-		//
-		//  segment.events.on("out", function(event) {
-		//    processOut(event.target.parent.parent.parent);
-		//  });
 
 		var lineSeries2 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries2.dataFields.valueY = "dey";
-		lineSeries2.dataFields.valueX = "dex";
+		lineSeries2.dataFields.valueY = "DE7";
+		lineSeries2.dataFields.valueX = "DET";
 		lineSeries2.strokeOpacity = opacidadeLinhas;
 		lineSeries2.name = "DE";
 		lineSeries2.showOnInit = false;
@@ -444,8 +482,8 @@
 
 
 		var lineSeries3 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries3.dataFields.valueY = "esy";
-		lineSeries3.dataFields.valueX = "esx";
+		lineSeries3.dataFields.valueY = "ES7";
+		lineSeries3.dataFields.valueX = "EST";
 		lineSeries3.strokeOpacity = opacidadeLinhas;
 		lineSeries3.name = "ES";
 		lineSeries3.showOnInit = false;
@@ -482,8 +520,8 @@
 		});
 
 		var lineSeries12 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries12.dataFields.valueY = "fry";
-		lineSeries12.dataFields.valueX = "frx";
+		lineSeries12.dataFields.valueY = "FR7";
+		lineSeries12.dataFields.valueX = "FRT";
 		lineSeries12.strokeOpacity = opacidadeLinhas;
 		lineSeries12.name = "FR";
 		lineSeries12.showOnInit = false;
@@ -520,8 +558,8 @@
 		});
 
 		var lineSeries6 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries6.dataFields.valueY = "gby";
-		lineSeries6.dataFields.valueX = "gbx";
+		lineSeries6.dataFields.valueY = "GB7";
+		lineSeries6.dataFields.valueX = "GBT";
 		lineSeries6.strokeOpacity = opacidadeLinhas;
 		lineSeries6.name = "GB";
 		lineSeries6.showOnInit = false;
@@ -558,8 +596,8 @@
 		});
 
 		var lineSeries10 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries10.dataFields.valueY = "ity";
-		lineSeries10.dataFields.valueX = "itx";
+		lineSeries10.dataFields.valueY = "IT7";
+		lineSeries10.dataFields.valueX = "ITT";
 		lineSeries10.strokeOpacity = opacidadeLinhas;
 		lineSeries10.name = "IT";
 		lineSeries10.showOnInit = false;
@@ -596,8 +634,8 @@
 		});
 
 		var lineSeries11 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries11.dataFields.valueY = "luy";
-		lineSeries11.dataFields.valueX = "lux";
+		lineSeries11.dataFields.valueY = "LU7";
+		lineSeries11.dataFields.valueX = "LUT";
 		lineSeries11.strokeOpacity = opacidadeLinhas;
 		lineSeries11.name = "LU";
 		lineSeries11.showOnInit = false;
@@ -634,8 +672,8 @@
 		});
 
 		var lineSeries9 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries9.dataFields.valueY = "nly";
-		lineSeries9.dataFields.valueX = "nlx";
+		lineSeries9.dataFields.valueY = "NL7";
+		lineSeries9.dataFields.valueX = "NLT";
 		lineSeries9.strokeOpacity = opacidadeLinhas;
 		lineSeries9.name = "NL";
 		lineSeries9.showOnInit = false;
@@ -672,8 +710,8 @@
 		});
 
 		var lineSeries13 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries13.dataFields.valueY = "chy";
-		lineSeries13.dataFields.valueX = "chx";
+		lineSeries13.dataFields.valueY = "CH7";
+		lineSeries13.dataFields.valueX = "CHT";
 		lineSeries13.strokeOpacity = opacidadeLinhas;
 		lineSeries13.name = "CH";
 		lineSeries13.showOnInit = false;
@@ -710,8 +748,8 @@
 		});
 
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries8.dataFields.valueY = "bry";
-		lineSeries8.dataFields.valueX = "brx";
+		lineSeries8.dataFields.valueY = "BR7";
+		lineSeries8.dataFields.valueX = "BRT";
 		lineSeries8.strokeOpacity = opacidadeLinhas;
 		lineSeries8.name = "BR";
 		lineSeries8.showOnInit = false;
@@ -748,8 +786,8 @@
 		});
 
 		var lineSeries4 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries4.dataFields.valueY = "kry";
-		lineSeries4.dataFields.valueX = "krx";
+		lineSeries4.dataFields.valueY = "KR7";
+		lineSeries4.dataFields.valueX = "KRT";
 		lineSeries4.strokeOpacity = opacidadeLinhas;
 		lineSeries4.name = "KR";
 		lineSeries4.showOnInit = false;
@@ -786,8 +824,8 @@
 		});
 
 		var lineSeries7 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries7.dataFields.valueY = "usy";
-		lineSeries7.dataFields.valueX = "usx";
+		lineSeries7.dataFields.valueY = "US7";
+		lineSeries7.dataFields.valueX = "UST";
 		lineSeries7.strokeOpacity = opacidadeLinhas;
 		lineSeries7.name = "US";
 		lineSeries7.showOnInit = false;
@@ -824,8 +862,8 @@
 		});
 
 		var lineSeries5 = loglogAmcharts.series.push(new am4charts.LineSeries());
-		lineSeries5.dataFields.valueY = "globaly";
-		lineSeries5.dataFields.valueX = "globalx";
+		lineSeries5.dataFields.valueY = "GLOBAL7";
+		lineSeries5.dataFields.valueX = "GLOBALT";
 		lineSeries5.strokeOpacity = opacidadeLinhas;
 		lineSeries5.strokeWidth = 1.5;
 		lineSeries5.name = "GLOBAL";
