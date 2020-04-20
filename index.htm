@@ -970,7 +970,7 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
-
+//
 
 		// // Add data
 		// chart.data = [{
@@ -1095,7 +1095,7 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.85; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.88; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
