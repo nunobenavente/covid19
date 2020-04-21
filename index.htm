@@ -114,10 +114,12 @@
 		var DESVIOLABEL = 10; // distancia do label para a bullet
 		var TAMANHOLETRA = 10;
 		var DIMMED = am4core.color("#0a0");
+		var POPPT = 10330000;
 
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 		var dia = new Date();
 
+////////////////////////////////////////////
 		// GRAFICO PORTUGAL
 		var chartPT = am4core.create("chartPT", am4charts.XYChart);
 		chartPT.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
@@ -130,6 +132,8 @@
 		var Dia = [];
 	  for (var i = 1; i < data.length; i++) {
 				data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
+				data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
+				data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
 
 			if (i >= 6) {		// Média dos últimos 7 dias
 				if (i == 6) {
@@ -177,7 +181,7 @@
 
 		//YY Casos Diários - eixo da direita
 		var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
-		valueAxisDta.title.text = "[font-size:12]CASOS DIÁRIOS[/]";
+		valueAxisDta.title.text = "[font-size:12]CASOS DIÁRIOS e TOTAL MORTES[/]";
 		valueAxisDta.renderer.labels.template.fontSize = 10;
 		valueAxisDta.renderer.opposite = true;
 		valueAxisDta.max = 2000;
@@ -212,16 +216,17 @@
 		seriesDia.dataFields.dateX = "Date";
 		seriesDia.yAxis = valueAxisDta;
 		seriesDia.calculatePercent = true;
-		seriesDia.columns.template.width = am4core.percent(60);
+		seriesDia.columns.template.width = am4core.percent(100);
 		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
 		seriesDia.strokeWidth = 0;
-		seriesDia.heatRules.push({
-			"target": seriesDia.columns.template,
-			"property": "fill",
-			"min": am4core.color("#0e437d"),
-			"max": am4core.color("#EE3E32"),
-			"dataField": "valueY"
-		});
+		seriesDia.columns.template.fill = am4core.color("#e4bb28");
+		// seriesDia.heatRules.push({
+		// 	"target": seriesDia.columns.template,
+		// 	"property": "fill",
+		// 	"min": am4core.color("#0e437d"),
+		// 	"max": am4core.color("#EE3E32"),
+		// 	"dataField": "valueY"
+		// });
 
 		var seriesAvg7 = chartPT.series.push(new am4charts.LineSeries());
 		seriesAvg7.name = "Média 7 dias";
@@ -231,7 +236,7 @@
 		seriesAvg7.calculatePercent = true;
 		//seriesAvg7.tooltipText = "[font-size: 10px]Média 7 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
 		seriesAvg7.strokeWidth = 1;
-		seriesAvg7.stroke = am4core.color("#ff0000");
+		seriesAvg7.stroke = am4core.color("#00ff75");
 
 		var seriesAvg14 = chartPT.series.push(new am4charts.LineSeries());
 		seriesAvg14.name = "Média 14 dias";
@@ -243,6 +248,17 @@
 		seriesAvg14.strokeWidth = 1;
 		seriesAvg14.stroke = am4core.color("#f6980b");
 
+		var seriesMortes = chartPT.series.push(new am4charts.ColumnSeries());
+		seriesMortes.name = "MORTES";
+		seriesMortes.dataFields.valueY = "Deaths";
+		seriesMortes.dataFields.dateX = "Date";
+		seriesMortes.yAxis = valueAxisDta;
+		seriesMortes.calculatePercent = true;
+		seriesMortes.columns.template.width = am4core.percent(20);
+		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+		seriesMortes.strokeWidth = 0;
+		seriesMortes.columns.template.fill = am4core.color("#bd1616");
+
 
 		// Legenda
 		chartPT.legend = new am4charts.Legend();
@@ -250,7 +266,11 @@
 		var markerTemplate = chartPT.legend.markers.template; // vamos modificar o tamanho dos quadrados
 		markerTemplate.width = 18;
 		markerTemplate.height = 18;
-		chartPT.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
+		chartPT.legend.labels.template.text = "[bold font-size: 12]{name}[/]";
+		chartPT.legend.labels.template.textDecoration = "none";
+		var as = chartPT.legend.labels.template.states.getKey("active");
+		as.properties.textDecoration = "line-through";
+		as.properties.fill = am4core.color("#eee");
 
 		// chart cursor
 		chartPT.cursor = new am4charts.XYCursor();
@@ -289,6 +309,22 @@
 		range.label.rotation = 90;
 		range.label.horizontalCenter = "right";
 		range.label.verticalCenter = "bottom";
+
+		// var rangeStats = valueAxisTot.axisRanges.create();
+		// rangeStats.value = 1000;
+		// rangeStats.endValue = 1000;
+		// //rangeStats.axisFill.fill = am4core.color("#eee");
+		// rangeStats.axisFill.fillOpacity = 0.05;
+		// //rangeStats.grid.stroke = am4core.color("#eee");
+		// //rangeStats.grid.strokeWidth = 1;
+		// rangeStats.grid.strokeOpacity = 0.01;
+		//
+		// rangeStats.label.text = "Início do estado de emergência\n";
+		// rangeStats.label.fontSize = 12;
+		// rangeStats.label.inside = true;
+		// rangeStats.label.rotation = 0;
+		// rangeStats.label.horizontalCenter = "right";
+		// rangeStats.label.verticalCenter = "bottom";
 
 
 //////////////////////////////////////////
