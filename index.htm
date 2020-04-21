@@ -387,6 +387,8 @@
 			am4core.color("#00AA00"), am4core.color("#00AA00"),
 			am4core.color("#FF8832"), am4core.color("#FF8832"),
 			am4core.color("#a60e0e"), am4core.color("#a60e0e"),
+			am4core.color("#0040ff"), am4core.color("#0040FF"),
+
 			am4core.color("#00CC00"), am4core.color("#00CC00"),
 			am4core.color("#008888"), am4core.color("#008888"),
 			am4core.color("#642dda"), am4core.color("#642dda"),
@@ -837,6 +839,38 @@
 	  	lastPtSeries13.show();
 		});
 
+
+		var lineSeries14 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lineSeries14.dataFields.valueY = "SE7";
+		lineSeries14.dataFields.valueX = "SET";
+		lineSeries14.strokeOpacity = opacidadeLinhas;
+		lineSeries14.name = "SE";
+		lineSeries14.showOnInit = false;
+
+		var lastPtSeries14 = loglogAmcharts.series.push(new am4charts.LineSeries());
+		lastPtSeries14.dataFields.valueY = "seby";
+		lastPtSeries14.dataFields.valueX = "sebx";
+		lastPtSeries14.hiddenInLegend = true;
+
+		var bullet = lastPtSeries14.bullets.push(new am4charts.CircleBullet());
+		var labelBullet = lastPtSeries14.bullets.push(new am4charts.LabelBullet());
+		labelBullet.label.text = lineSeries14.name;
+		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
+		labelBullet.label.dx = DESVIOLABEL;
+		labelBullet.label.fontSize = TAMANHOLETRA;
+
+		lineSeries14.events.on("hidden", function() {
+	  	lastPtSeries14.hide();
+		});
+
+		lineSeries14.events.on("shown", function() {
+	  	lastPtSeries14.show();
+		});
+
 		var lineSeries8 = loglogAmcharts.series.push(new am4charts.LineSeries());
 		lineSeries8.dataFields.valueY = "BR7";
 		lineSeries8.dataFields.valueX = "BRT";
@@ -1007,6 +1041,8 @@
 		lineSeries5.events.on("shown", function() {
 	  	lastPtSeries5.show();
 		});
+
+
 
 
 		// Legenda
@@ -1663,6 +1699,7 @@
 				}
 				//chart.invalidateRawData();
 		}
+
 	</script>
 </body>
 
