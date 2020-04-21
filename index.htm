@@ -122,14 +122,14 @@
 		var chartPT = am4core.create("chartPT", am4charts.XYChart);
 		chartPT.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
 		//chartPT.dataSource.parser.options.dateFields = ["data"];
-		//chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
+		chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
 		//chartPT.numberFormatter.numberFormat = "#.00";
-chartPT.dataSource.events.on("parseended", function(ev){
-	// parsed data is assigned to data source's `data` property
-  var data = ev.target.data;
-	var Dia = [];
-  for (var i = 1; i < data.length; i++) {
-			data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
+		chartPT.dataSource.events.on("parseended", function(ev){
+		// parsed data is assigned to data source's `data` property
+	  var data = ev.target.data;
+		var Dia = [];
+	  for (var i = 1; i < data.length; i++) {
+				data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
 
 			if (i >= 6) {		// Média dos últimos 7 dias
 				if (i == 6) {
@@ -145,9 +145,9 @@ chartPT.dataSource.events.on("parseended", function(ev){
 					data[i]["avg14"] = (data[i]["Confirmed"] - data[i-14]["Confirmed"]) / 14;
 				}
 			}
-	}
+		}
 
-});
+		});
 		chartPT.dataSource.reloadFrequency = 1000*60*5; // faz o reload dos dados a cada x milisegundos (5 minutos escolhidos)
 
 
@@ -184,7 +184,6 @@ chartPT.dataSource.events.on("parseended", function(ev){
 
 		// Series
 		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
-
 
 		seriesTotal.name = "TOTAL CASOS";
 		seriesTotal.dataFields.valueY = "Confirmed";
@@ -274,12 +273,30 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		  toggle(chartPT, valueAxisTot, buttonYYPT);
 		});
 
+		// axis ranges - Texto que aparece no gráfico
+		var range = dateAxis.axisRanges.create();
+		range.date = new Date(2020, 2, 18);
+		//range.endDate = new Date(2020, 3, 30);
+		range.axisFill.fill = am4core.color("#eee");
+		range.axisFill.fillOpacity = 0.05;
+		range.grid.stroke = am4core.color("#eee");
+		range.grid.strokeWidth = 1;
+		range.grid.strokeOpacity = 0.3;
+
+		range.label.text = "Início do estado de emergência";
+		range.label.fontSize = 12;
+		range.label.inside = true;
+		range.label.rotation = 90;
+		range.label.horizontalCenter = "right";
+		range.label.verticalCenter = "bottom";
+
 
 //////////////////////////////////////////
 		// GRAFICO LOG LOG MUNDO
 		var loglogAmcharts = am4core.create("loglogAmchartsDiv", am4charts.XYChart);
 
 		loglogAmcharts.dataSource.url = "dadosMundoAccess.json";
+		loglogAmcharts.dataSource.reloadFrequency = 1000*60*30; // faz o reload dos dados a cada x milisegundos (30 minutos escolhidos)
 		//loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
 		//loglogAmcharts.dataSource.incremental = true;
 	// 	loglogAmcharts.dataSource.events.on("parseended", function(ev){
@@ -426,7 +443,11 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries.name;
 		bullet.circle.radius = 2;
-		bullet.circle.stroke = "#EEE";
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
+		//bullet.circle.stroke = "#EEE";
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -462,11 +483,16 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		lastPtSeries2.dataFields.valueY = "deby";
 		lastPtSeries2.dataFields.valueX = "debx";
 		lastPtSeries2.hiddenInLegend = true;
+		//lastPtSeries2.tooltipText = "[font-size: 12px]Casos 7 dias: [/][bold  font-size: 13px]{deby}[/]";
 
 		var bullet = lastPtSeries2.bullets.push(new am4charts.CircleBullet());
 		var labelBullet = lastPtSeries2.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries2.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{deby}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{debx}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 	//	bullet.circle.stroke = "#EEE";
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
@@ -508,6 +534,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries3.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries3.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -546,6 +576,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries12.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries12.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -584,6 +618,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries6.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries6.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -622,6 +660,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries10.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries10.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -660,6 +702,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries11.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries11.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -698,6 +744,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries9.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries9.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -736,6 +786,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries13.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries13.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -774,6 +828,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries8.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries8.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -812,6 +870,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries4.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries4.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -850,6 +912,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries7.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries7.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -891,6 +957,10 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		var labelBullet = lastPtSeries5.bullets.push(new am4charts.LabelBullet());
 		labelBullet.label.text = lineSeries5.name;
 		bullet.circle.radius = 2;
+		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+
+		var bulletHover = bullet.states.create("hover");
+		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = 21;
 		labelBullet.label.fontSize = TAMANHOLETRA;
 
@@ -1095,7 +1165,7 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.88; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.87; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
@@ -1413,6 +1483,12 @@ chartPT.dataSource.events.on("parseended", function(ev){
 		// Create chart instance
 		var chart = am4core.create("testespormilhaodiv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
+
+		chart.events.on("beforedatavalidated", function(ev) {
+  chart.data.sort(function(a, b) {
+    return (b.testesMilhao - a.testesMilhao);
+  });
+});
 
 
 		var title = chart.titles.create();
