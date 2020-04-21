@@ -181,7 +181,7 @@
 
 		//YY Casos Diários - eixo da direita
 		var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
-		valueAxisDta.title.text = "[font-size:12]CASOS DIÁRIOS e TOTAL MORTES[/]";
+		valueAxisDta.title.text = "[font-size:12 #ffc800]CASOS DIÁRIOS [/]/ [font-size:12 #a71616]MORTES[/] / [font-size:12 #166db4]RECUPERADOS[/]";
 		valueAxisDta.renderer.labels.template.fontSize = 10;
 		valueAxisDta.renderer.opposite = true;
 		valueAxisDta.max = 2000;
@@ -216,10 +216,10 @@
 		seriesDia.dataFields.dateX = "Date";
 		seriesDia.yAxis = valueAxisDta;
 		seriesDia.calculatePercent = true;
-		seriesDia.columns.template.width = am4core.percent(100);
+		seriesDia.columns.template.width = am4core.percent(110);
 		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
 		seriesDia.strokeWidth = 0;
-		seriesDia.columns.template.fill = am4core.color("#e4bb28");
+		seriesDia.columns.template.fill = am4core.color("#ffc800");
 		// seriesDia.heatRules.push({
 		// 	"target": seriesDia.columns.template,
 		// 	"property": "fill",
@@ -254,10 +254,21 @@
 		seriesMortes.dataFields.dateX = "Date";
 		seriesMortes.yAxis = valueAxisDta;
 		seriesMortes.calculatePercent = true;
-		seriesMortes.columns.template.width = am4core.percent(20);
-		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+		seriesMortes.columns.template.width = am4core.percent(25);
+		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
 		seriesMortes.strokeWidth = 0;
-		seriesMortes.columns.template.fill = am4core.color("#bd1616");
+		seriesMortes.columns.template.fill = am4core.color("#a71616");
+
+		var seriesRecuperados = chartPT.series.push(new am4charts.ColumnSeries());
+		seriesRecuperados.name = "RECUPERADOS";
+		seriesRecuperados.dataFields.valueY = "Recovered";
+		seriesRecuperados.dataFields.dateX = "Date";
+		seriesRecuperados.yAxis = valueAxisDta;
+		seriesRecuperados.calculatePercent = true;
+		seriesRecuperados.columns.template.width = am4core.percent(30);
+		seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
+		seriesRecuperados.strokeWidth = 0;
+		seriesRecuperados.columns.template.fill = am4core.color("#166db4");
 
 
 		// Legenda
@@ -277,6 +288,8 @@
 		chartPT.cursor.behavior = "none";
 		chartPT.cursor.xAxis = dateAxis;
 		//chartPT.cursor.snapToSeries = seriesTotal;
+		valueAxisTot.cursorTooltipEnabled = false;
+		valueAxisDta.cursorTooltipEnabled = false;
 
 		// Enable export
 		chartPT.exporting.menu = new am4core.ExportMenu();
@@ -1072,8 +1085,9 @@
 		//loglogAmcharts.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
 		loglogAmcharts.scrollbarY = new am4core.Scrollbar();
 		var scrollbarX = new am4charts.XYChartScrollbar();
-		scrollbarX.series.push(lineSeries);
-		scrollbarX.series.push(lineSeries2);
+		// scrollbarX.series.push(lineSeries); scrollbarX.series.push(lastPtSeries);
+		// scrollbarX.series.push(lineSeries2); scrollbarX.series.push(lastPtSeries2);
+		// scrollbarX.series.push(lineSeries7); scrollbarX.series.push(lastPtSeries7);
 		loglogAmcharts.scrollbarX = scrollbarX;
 		loglogAmcharts.scrollbarX.parent = loglogAmcharts.bottomAxesContainer;
 
@@ -1108,6 +1122,7 @@
 
 
 
+//////////////////////////////////////////////////////
 		// GRAFICO LETALIDADE
 		// Create chart instance
 		var chart = am4core.create("letalidadediv", am4charts.XYChart);
