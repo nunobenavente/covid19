@@ -20,7 +20,7 @@
 	<style>
 		div {
 			margin-top: 8px;
-			background-color: #191919;
+			background-color: #1b1d24;
 			margin-bottom: 8px;
 			margin-left: 8px;
 			margin-right: 8px;
@@ -32,42 +32,42 @@
 		#topo {width:100%; height:20px; float:left; clear:both; background-color: "#b92b2b"; z-index: 20;}
 
 		#loglogAmchartsDiv {
-			width: 70%;
+			width: 80%;
 			height: 800px;
 			float:none;
 			/*	border: 1px solid #aaa;*/
 		}
 
 		#chartPT {
-			width: 70%;
+			width: 80%;
 			height: 600px;
 			float:none;
 			/*	border: 1px solid #aaa;*/
 		}
 
 		#letalidadediv {
-			width: 35%;
+			width: 40%;
 			height: 395px;
 			float: none;
 			/*clear:both;*/
 		}
 
 		#casospormilhaodiv {
-			width: 35%;
+			width: 40%;
 			height: 395px;
 			float: none;
 			/*clear:both;*/
 		}
 
 		#obitospormilhaodiv {
-			width: 35%;
+			width: 40%;
 			height: 395px;
 			float: none;
 			/*clear:both;*/
 		}
 
 		#testespormilhaodiv {
-			width: 35%;
+			width: 40%;
 			height: 395px;
 			float: none;
 			/*clear:both;*/
@@ -162,21 +162,25 @@
 		title.textAlign = "middle";
 
 		// Eixos
+		//	XX Datas
 		var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
 		//dateAxis.title.text = "DATA";
 		dateAxis.renderer.minGridDistance = 40;
-		dateAxis.renderer.grid.template.location = 0;
+		dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color("#121212");
 		dateAxis.renderer.labels.template.fontSize = 10;
 		dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
 		dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
 		dateAxis.renderer.ticks.template.length = 2;
 		dateAxis.extraMax = 0.01;
+		dateAxis.tooltip.background.fill = am4core.color("#ee7d07");
+		dateAxis.tooltip.fontSize = 12; dateAxis.tooltip.fontWeight = "bold";
 
 		// YY Casos Totais - eixo da esquerda
 		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
 		valueAxisTot.title.text = "[font-size:12 #a6a6a6]TOTAL DE CASOS CONFIRMADOS[/]";
 		valueAxisTot.renderer.labels.template.fontSize = 10;
 		valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
+		valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color("#121212");
 		valueAxisTot.logarithmic = true;
 
 		//YY Casos Diários - eixo da direita
@@ -184,9 +188,11 @@
 		valueAxisDta.title.text = "[font-size:12 #ffc800]CASOS DIÁRIOS [/]/ [font-size:12 #a71616]MORTES[/] / [font-size:12 #166db4]RECUPERADOS[/]";
 		valueAxisDta.renderer.labels.template.fontSize = 10;
 		valueAxisDta.renderer.opposite = true;
-		valueAxisDta.max = 2000;
+		//valueAxisDta.max = 2000;
+		valueAxisDta.renderer.grid.template.strokeOpacity = 1; valueAxisDta.renderer.grid.template.stroke = am4core.color("#101010");
 
-		// Series
+		// SERIES
+		// Series Casos Totais
 		var seriesTotal = chartPT.series.push(new am4charts.LineSeries());
 
 		seriesTotal.name = "TOTAL CASOS";
@@ -194,10 +200,10 @@
 		seriesTotal.dataFields.dateX = "Date";
 
 		//seriesTotal.tooltipText = "[#eee font-size: 12px]TOTAL CASOS: [/][font-weight: bold]{total}[/]";
-		seriesTotal.tooltip.pointerOrientation = "horizontal"; // up, down, left, right, vertical, horizontal
-		seriesTotal.tooltip.label.textAlign = "middle";
-		seriesTotal.stroke = am4core.color("#a6a6a6");
-		seriesTotal.fill = am4core.color("#a6a6a6");
+		seriesTotal.tooltip.pointerOrientation = "down"; // up, down, left, right, vertical, horizontal
+		seriesTotal.tooltip.label.textAlign = "middle"; seriesTotal.tooltip.background.stroke = am4core.color("#ee7d07");
+		seriesTotal.stroke = am4core.color("#ee7d07");
+		seriesTotal.fill = am4core.color("#2d2d2d");
 		seriesTotal.strokeWidth = 1.1;
 		//seriesTotal.zIndex = 5;
 		seriesTotal.fillOpacity = 0.03;
@@ -206,6 +212,7 @@
 		//bullet.fill = am4core.color("#0d1285"); // tooltips grab fill from parent by default
 		bullet.circle.radius = RADIUS;
 		bullet.tooltipText = "[font-size: 12px]{Date}\nTotal Casos: [/][bold font-size: 13px]{Confirmed}[/] [font-size: 11px](+{valueY.previousChangePercent.formatNumber('##.0')}%)\n[/]";
+		bullet.fillOpacity = 1;
 
 		var bulletHover = bullet.states.create("hover");
 		bulletHover.properties.scale = 2;
@@ -216,10 +223,11 @@
 		seriesDia.dataFields.dateX = "Date";
 		seriesDia.yAxis = valueAxisDta;
 		seriesDia.calculatePercent = true;
-		seriesDia.columns.template.width = am4core.percent(110);
+		seriesDia.columns.template.width = am4core.percent(80);
 		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
 		seriesDia.strokeWidth = 0;
-		seriesDia.columns.template.fill = am4core.color("#ffc800");
+		//seriesDia.columns.template.fill = am4core.color("#ffc800");
+		seriesDia.columns.template.fill = am4core.color("#f68838");
 		// seriesDia.heatRules.push({
 		// 	"target": seriesDia.columns.template,
 		// 	"property": "fill",
@@ -246,7 +254,7 @@
 		seriesAvg14.calculatePercent = true;
 		//seriesAvg14.tooltipText = "[font-size: 10px]Média 14 Dias:[/][bold  font-size: 10px]{valueY.formatNumber('#.')}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#.|[#0F0 font-size:11]#.')}";
 		seriesAvg14.strokeWidth = 1;
-		seriesAvg14.stroke = am4core.color("#f6980b");
+		seriesAvg14.stroke = am4core.color("#1b8a5a");
 
 		var seriesMortes = chartPT.series.push(new am4charts.ColumnSeries());
 		seriesMortes.name = "MORTES";
@@ -255,7 +263,7 @@
 		seriesMortes.yAxis = valueAxisDta;
 		seriesMortes.calculatePercent = true;
 		seriesMortes.columns.template.width = am4core.percent(25);
-		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
 		seriesMortes.strokeWidth = 0;
 		seriesMortes.columns.template.fill = am4core.color("#a71616");
 
@@ -266,9 +274,9 @@
 		seriesRecuperados.yAxis = valueAxisDta;
 		seriesRecuperados.calculatePercent = true;
 		seriesRecuperados.columns.template.width = am4core.percent(30);
-		seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
+		seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
 		seriesRecuperados.strokeWidth = 0;
-		seriesRecuperados.columns.template.fill = am4core.color("#166db4");
+		seriesRecuperados.columns.template.fill = am4core.color("#6497b1");
 
 
 		// Legenda
@@ -317,7 +325,7 @@
 		range.grid.strokeOpacity = 0.3;
 
 		range.label.text = "Início do estado de emergência";
-		range.label.fontSize = 12;
+		range.label.fontSize = 12; range.label.fill = am4core.color("#949090");
 		range.label.inside = true;
 		range.label.rotation = 90;
 		range.label.horizontalCenter = "right";
@@ -365,30 +373,12 @@
 	// 	}
 	//
 	// });
-
-	// loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/spain";
-	// //loglogAmcharts.dataSource.incremental = true;
-	// loglogAmcharts.dataSource.events.on("parseended", function(ev){
-	// var data2 = ev.target.data;
-	// for (var i = 1; i < data2.length; i++) {
-	// 	//	data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
-	// 		if (i < 6) { data2[i]["dey"] = data2[i]["Confirmed"]; }
-	// 		if (i >= 6) {		// Média dos últimos 7 dias
-	// 			if (i == 6) {
-	// 				data2[i]["dey"] = data2[i]["Confirmed"] / 7;
-	// 			} else {
-	// 				data2[i]["dey"] = Math.max(1, (data2[i]["Confirmed"] - data2[i-7]["Confirmed"]) / 7);
-	// 			}
-	// 		}
-	// }
-	// 	});
 	//
-//	loglogAmcharts.dataSource.url = "https://api.covid19api.com/dayone/country/germany";
-	//loglogAmcharts.dataSource.load();
+
 
 
 		loglogAmcharts.colors.list = [
-			am4core.color("#EEE"), am4core.color("#EEE"),
+			am4core.color("#EEE"), am4core.color("#EEE"),				// PT
 			am4core.color("#FFE119"),am4core.color("#FFE119"),
 
 			am4core.color("#F57D7D"), am4core.color("#F57D7D"),
@@ -400,12 +390,12 @@
 			am4core.color("#00AA00"), am4core.color("#00AA00"),
 			am4core.color("#FF8832"), am4core.color("#FF8832"),
 			am4core.color("#a60e0e"), am4core.color("#a60e0e"),
-			am4core.color("#0040ff"), am4core.color("#0040FF"),
+			am4core.color("#0040ff"), am4core.color("#0040FF"),	// SE
 
-			am4core.color("#00CC00"), am4core.color("#00CC00"),
-			am4core.color("#008888"), am4core.color("#008888"),
-			am4core.color("#642dda"), am4core.color("#642dda"),
-			am4core.color("#CCC"), am4core.color("#CCC")
+			am4core.color("#00CC00"), am4core.color("#00CC00"), // BR
+			am4core.color("#008888"), am4core.color("#008888"), // KR
+			am4core.color("#642dda"), am4core.color("#642dda"), // US
+			am4core.color("#CCC"), am4core.color("#CCC")				// Global
 		];
 
 
