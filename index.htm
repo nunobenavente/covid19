@@ -20,7 +20,7 @@
 	<style>
 		div {
 			margin-top: 8px;
-			background-color: #1b1d24;
+			background-color: #15181d;
 			margin-bottom: 8px;
 			margin-left: 8px;
 			margin-right: 8px;
@@ -85,7 +85,7 @@
 
 </head>
 
-<body style="background-color:#151515">
+<body style="background-color:#0f1216">
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
 	<!-- <div id="topo"></div> -->
@@ -115,6 +115,8 @@
 		var TAMANHOLETRA = 10;
 		var DIMMED = am4core.color("#0a0");
 		var POPPT = 10330000;
+
+		var CORGRID = "#121212"
 
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 		var dia = new Date();
@@ -166,13 +168,13 @@
 		var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
 		//dateAxis.title.text = "DATA";
 		dateAxis.renderer.minGridDistance = 40;
-		dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color("#121212");
+		dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color(CORGRID);
 		dateAxis.renderer.labels.template.fontSize = 10;
 		dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
 		dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
 		dateAxis.renderer.ticks.template.length = 2;
 		dateAxis.extraMax = 0.01;
-		dateAxis.tooltip.background.fill = am4core.color("#ee7d07");
+		dateAxis.tooltip.background.fill = am4core.color("#ee7d07"); dateAxis.tooltip.background.stroke = am4core.color("#171717");
 		dateAxis.tooltip.fontSize = 12; dateAxis.tooltip.fontWeight = "bold";
 
 		// YY Casos Totais - eixo da esquerda
@@ -180,7 +182,7 @@
 		valueAxisTot.title.text = "[font-size:12 #a6a6a6]TOTAL DE CASOS CONFIRMADOS[/]";
 		valueAxisTot.renderer.labels.template.fontSize = 10;
 		valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
-		valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color("#121212");
+		valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color(CORGRID);
 		valueAxisTot.logarithmic = true;
 
 		//YY Casos Diários - eixo da direita
@@ -189,7 +191,7 @@
 		valueAxisDta.renderer.labels.template.fontSize = 10;
 		valueAxisDta.renderer.opposite = true;
 		//valueAxisDta.max = 2000;
-		valueAxisDta.renderer.grid.template.strokeOpacity = 1; valueAxisDta.renderer.grid.template.stroke = am4core.color("#101010");
+		valueAxisDta.renderer.grid.template.strokeOpacity = 1; valueAxisDta.renderer.grid.template.stroke = am4core.color("CORGRID");
 
 		// SERIES
 		// Series Casos Totais
@@ -203,7 +205,7 @@
 		seriesTotal.tooltip.pointerOrientation = "down"; // up, down, left, right, vertical, horizontal
 		seriesTotal.tooltip.label.textAlign = "middle"; seriesTotal.tooltip.background.stroke = am4core.color("#ee7d07");
 		seriesTotal.stroke = am4core.color("#ee7d07");
-		seriesTotal.fill = am4core.color("#2d2d2d");
+		seriesTotal.fill = am4core.color("#171717");
 		seriesTotal.strokeWidth = 1.1;
 		//seriesTotal.zIndex = 5;
 		seriesTotal.fillOpacity = 0.03;
@@ -225,9 +227,10 @@
 		seriesDia.calculatePercent = true;
 		seriesDia.columns.template.width = am4core.percent(80);
 		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
+		seriesDia.tooltip.background.stroke = am4core.color("#000");
 		seriesDia.strokeWidth = 0;
 		//seriesDia.columns.template.fill = am4core.color("#ffc800");
-		seriesDia.columns.template.fill = am4core.color("#f68838");
+		seriesDia.columns.template.fill = am4core.color("#f69b00");
 		// seriesDia.heatRules.push({
 		// 	"target": seriesDia.columns.template,
 		// 	"property": "fill",
@@ -264,6 +267,7 @@
 		seriesMortes.calculatePercent = true;
 		seriesMortes.columns.template.width = am4core.percent(25);
 		seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+		seriesMortes.tooltip.background.stroke = am4core.color("#000");
 		seriesMortes.strokeWidth = 0;
 		seriesMortes.columns.template.fill = am4core.color("#a71616");
 
@@ -275,6 +279,7 @@
 		seriesRecuperados.calculatePercent = true;
 		seriesRecuperados.columns.template.width = am4core.percent(30);
 		seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
+		seriesRecuperados.tooltip.background.stroke = am4core.color("#000");
 		seriesRecuperados.strokeWidth = 0;
 		seriesRecuperados.columns.template.fill = am4core.color("#6497b1");
 
@@ -440,12 +445,12 @@
 				createGrid(j * m);
 			}
 		}
-		valueAxisX.renderer.grid.template.strokeOpacity = 0.2;
-		valueAxisX.renderer.grid.template.stroke = am4core.color("#aaa");
-		valueAxisX.renderer.grid.template.strokeWidth = 0.3;
-		valueAxisY.renderer.grid.template.strokeOpacity = 0.2;
-		valueAxisY.renderer.grid.template.stroke = am4core.color("#aaa");
-		valueAxisY.renderer.grid.template.strokeWidth = 0.3;
+		valueAxisX.renderer.grid.template.strokeOpacity = 1;
+		valueAxisX.renderer.grid.template.stroke = am4core.color("#121212");
+		valueAxisX.renderer.grid.template.strokeWidth = 1;
+		valueAxisY.renderer.grid.template.strokeOpacity = 1;
+		valueAxisY.renderer.grid.template.stroke = am4core.color("#121212");
+		valueAxisY.renderer.grid.template.strokeWidth = 1;
 
 
 		var title = loglogAmcharts.titles.create();
@@ -1593,8 +1598,8 @@
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 31100;
-		axisBreak.endValue = 47300;
+		axisBreak.startValue = 34800;
+		axisBreak.endValue = 53000;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
