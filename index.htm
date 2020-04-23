@@ -38,7 +38,7 @@
 			/*	border: 1px solid #aaa;*/
 		}
 
-		#chartPT {
+		#chartPT, #chartPTstacked {
 			width: 80%;
 			height: 600px;
 			float:none;
@@ -91,7 +91,7 @@
 	<!-- <div id="topo"></div> -->
 
 	<div id="loglogAmchartsDiv"></div>
-	<div id="chartPT"></div>
+	<div id="chartPT"></div><div id="chartPTstacked"></div>
 	<div id="testespormilhaodiv" style="align:center;"></div>
 	<div id="casospormilhaodiv"></div>
 	<div id="letalidadediv"></div>
@@ -130,9 +130,12 @@
 		//chartPT.numberFormatter.numberFormat = "#.00";
 		chartPT.dataSource.events.on("parseended", function(ev){
 		// parsed data is assigned to data source's `data` property
-	  var data = ev.target.data;
+		ev.target.data = ev.target.data.slice(1, ev.target.data.length -1);
+		var data = ev.target.data;
+		//data = data.slice(1, data.length);
+
 		var Dia = [];
-	  for (var i = 1; i < data.length; i++) {
+	  for (var i = 1; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
 				data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
 				data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
 				data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
@@ -159,8 +162,8 @@
 
 		// Titulo
 		var title = chartPT.titles.create();
-		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução dos casos confirmados[/]\n";
-		title.text = titulo.concat("[font-size: 14 #EEE]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia[/]\n";
+		title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
 		title.textAlign = "middle";
 
 		// Eixos
@@ -176,6 +179,7 @@
 		dateAxis.extraMax = 0.01;
 		dateAxis.tooltip.background.fill = am4core.color("#ee7d07"); dateAxis.tooltip.background.stroke = am4core.color("#171717");
 		dateAxis.tooltip.fontSize = 12; dateAxis.tooltip.fontWeight = "bold";
+
 
 		// YY Casos Totais - eixo da esquerda
 		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
@@ -231,6 +235,7 @@
 		seriesDia.strokeWidth = 0;
 		//seriesDia.columns.template.fill = am4core.color("#ffc800");
 		seriesDia.columns.template.fill = am4core.color("#f69b00");
+		seriesDia.stacked = true;
 		// seriesDia.heatRules.push({
 		// 	"target": seriesDia.columns.template,
 		// 	"property": "fill",
@@ -351,6 +356,154 @@
 		// rangeStats.label.rotation = 0;
 		// rangeStats.label.horizontalCenter = "right";
 		// rangeStats.label.verticalCenter = "bottom";
+
+
+
+		////////////////////////////////////////////
+				// GRAFICO PORTUGAL STACKED
+				var chartPT = am4core.create("chartPTstacked", am4charts.XYChart);
+				chartPT.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
+				//chartPT.dataSource.parser.options.dateFields = ["data"];
+				chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
+				//chartPT.numberFormatter.numberFormat = "#.00";
+				chartPT.dataSource.events.on("parseended", function(ev){
+				// parsed data is assigned to data source's `data` property
+				ev.target.data = ev.target.data.slice(1, ev.target.data.length -1);	// retirei o último dia porque os dados são iguais aos do dia anterior (desactualizados)
+				var data = ev.target.data;
+				//data = data.slice(1, data.length);
+
+				var Dia = [];
+			  for (var i = 1; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
+						data[i]["Activos"] = data[i]["Confirmed"] - data[i]["Deaths"] - data[i]["Recovered"];
+						data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
+						data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
+				}
+
+				});
+				chartPT.dataSource.reloadFrequency = 1000*60*5; // faz o reload dos dados a cada x milisegundos (5 minutos escolhidos)
+
+
+				// Titulo
+				var title = chartPT.titles.create();
+				var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia - Casos com e sem desfecho[/]\n";
+				title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
+				title.textAlign = "middle";
+
+				// Eixos
+				//	XX Datas
+				var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
+				//dateAxis.title.text = "DATA";
+				dateAxis.renderer.minGridDistance = 40;
+				dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color(CORGRID);
+				dateAxis.renderer.labels.template.fontSize = 10;
+				dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
+				dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
+				dateAxis.renderer.ticks.template.length = 2;
+				dateAxis.extraMax = 0.01;
+				dateAxis.tooltip.background.fill = am4core.color("#ee7d07"); dateAxis.tooltip.background.stroke = am4core.color("#171717");
+				dateAxis.tooltip.fontSize = 12; dateAxis.tooltip.fontWeight = "bold";
+
+
+				// YY - eixo da esquerda
+				var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
+				valueAxisTot.title.text = "[font-size:12 #a6a6a6]CASOS[/]";
+				valueAxisTot.renderer.labels.template.fontSize = 10;
+				valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
+				valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color(CORGRID);
+				//valueAxisTot.logarithmic = true;
+
+				// //YY Casos Diários - eixo da direita
+				// var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
+				// valueAxisDta.title.text = "[font-size:12 #ffc800]CASOS DIÁRIOS [/]/ [font-size:12 #a71616]MORTES[/] / [font-size:12 #166db4]RECUPERADOS[/]";
+				// valueAxisDta.renderer.labels.template.fontSize = 10;
+				// valueAxisDta.renderer.opposite = true;
+				// //valueAxisDta.max = 2000;
+				// valueAxisDta.renderer.grid.template.strokeOpacity = 1; valueAxisDta.renderer.grid.template.stroke = am4core.color("CORGRID");
+
+				// SERIES
+
+				var seriesMortes = chartPT.series.push(new am4charts.ColumnSeries());
+				seriesMortes.name = "MORTES";
+				seriesMortes.dataFields.valueY = "Deaths";
+				seriesMortes.dataFields.dateX = "Date";
+				//seriesMortes.yAxis = valueAxisDta;
+				seriesMortes.calculatePercent = true;
+				seriesMortes.columns.template.width = am4core.percent(70);
+				seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+				seriesMortes.tooltip.background.stroke = am4core.color("#000");
+				seriesMortes.strokeWidth = 0;
+				seriesMortes.columns.template.fill = am4core.color("#a71616");
+				seriesMortes.stacked = true;
+
+				var seriesRecuperados = chartPT.series.push(new am4charts.ColumnSeries());
+				seriesRecuperados.name = "RECUPERADOS";
+				seriesRecuperados.dataFields.valueY = "Recovered";
+				seriesRecuperados.dataFields.dateX = "Date";
+				//seriesRecuperados.yAxis = valueAxisDta;
+				seriesRecuperados.calculatePercent = true;
+				seriesRecuperados.columns.template.width = am4core.percent(70);
+				seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
+				seriesRecuperados.tooltip.background.stroke = am4core.color("#000");
+				seriesRecuperados.strokeWidth = 0;
+				seriesRecuperados.columns.template.fill = am4core.color("#6497b1");
+				seriesRecuperados.stacked = true;
+
+				var seriesActivos = chartPT.series.push(new am4charts.ColumnSeries());
+				seriesActivos.name = "ACTIVOS (ainda sem desfecho)";
+				seriesActivos.dataFields.valueY = "Activos";
+				seriesActivos.dataFields.dateX = "Date";
+				//seriesActivos.yAxis = valueAxisDta;
+				seriesActivos.calculatePercent = true;
+				seriesActivos.columns.template.width = am4core.percent(70);
+				seriesActivos.tooltipText = "[font-size: 12px]Activos: [/][bold  font-size: 13px]{Activos}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
+				seriesActivos.tooltip.background.stroke = am4core.color("#000");
+				seriesActivos.strokeWidth = 0;
+				//seriesDia.columns.template.fill = am4core.color("#ffc800");
+				seriesActivos.columns.template.fill = am4core.color("#f69b00");
+				seriesActivos.stacked = true;
+
+
+
+				// Legenda
+				chartPT.legend = new am4charts.Legend();
+				chartPT.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+				var markerTemplate = chartPT.legend.markers.template; // vamos modificar o tamanho dos quadrados
+				markerTemplate.width = 18;
+				markerTemplate.height = 18;
+				chartPT.legend.labels.template.text = "[bold font-size: 12]{name}[/]";
+				chartPT.legend.labels.template.textDecoration = "none";
+				var as = chartPT.legend.labels.template.states.getKey("active");
+				as.properties.textDecoration = "line-through";
+				as.properties.fill = am4core.color("#eee");
+
+				// chart cursor
+				chartPT.cursor = new am4charts.XYCursor();
+				chartPT.cursor.behavior = "none";
+				chartPT.cursor.xAxis = dateAxis;
+				//chartPT.cursor.snapToSeries = seriesTotal;
+				valueAxisTot.cursorTooltipEnabled = false;
+				valueAxisDta.cursorTooltipEnabled = false;
+
+				// Enable export
+				chartPT.exporting.menu = new am4core.ExportMenu();
+
+
+				// axis ranges - Texto que aparece no gráfico
+				var range = dateAxis.axisRanges.create();
+				range.date = new Date(2020, 2, 18);
+				//range.endDate = new Date(2020, 3, 30);
+				range.axisFill.fill = am4core.color("#eee");
+				range.axisFill.fillOpacity = 0.05;
+				range.grid.stroke = am4core.color("#eee");
+				range.grid.strokeWidth = 1;
+				range.grid.strokeOpacity = 0.3;
+
+				range.label.text = "Início do estado de emergência";
+				range.label.fontSize = 12; range.label.fill = am4core.color("#949090");
+				range.label.inside = true;
+				range.label.rotation = 90;
+				range.label.horizontalCenter = "right";
+				range.label.verticalCenter = "bottom";
 
 
 //////////////////////////////////////////
@@ -865,7 +1018,7 @@
 		labelBullet.label.text = lineSeries14.name;
 		bullet.circle.radius = 2;
 		bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
-
+		//bullet.tooltipHTML = "<img src='flags/SE16.png' style='vertical-align:top; margin-left: 10px; width:16px; height:16px;'>";
 		var bulletHover = bullet.states.create("hover");
 		bulletHover.properties.scale = 2;
 		labelBullet.label.dx = DESVIOLABEL;
@@ -1247,7 +1400,7 @@
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.93; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.97; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
