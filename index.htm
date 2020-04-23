@@ -361,12 +361,12 @@
 
 		////////////////////////////////////////////
 				// GRAFICO PORTUGAL STACKED
-				var chartPT = am4core.create("chartPTstacked", am4charts.XYChart);
-				chartPT.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
-				//chartPT.dataSource.parser.options.dateFields = ["data"];
-				chartPT.dateFormatter.inputDateFormat = "dd/MM/yyyy";
-				//chartPT.numberFormatter.numberFormat = "#.00";
-				chartPT.dataSource.events.on("parseended", function(ev){
+				var chartPTstacked = am4core.create("chartPTstacked", am4charts.XYChart);
+				chartPTstacked.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
+				//chartPTstacked.dataSource.parser.options.dateFields = ["data"];
+				chartPTstacked.dateFormatter.inputDateFormat = "dd/MM/yyyy";
+				//chartPTstacked.numberFormatter.numberFormat = "#.00";
+				chartPTstacked.dataSource.events.on("parseended", function(ev){
 				// parsed data is assigned to data source's `data` property
 				ev.target.data = ev.target.data.slice(1, ev.target.data.length -1);	// retirei o último dia porque os dados são iguais aos do dia anterior (desactualizados)
 				var data = ev.target.data;
@@ -380,18 +380,18 @@
 				}
 
 				});
-				chartPT.dataSource.reloadFrequency = 1000*60*5; // faz o reload dos dados a cada x milisegundos (5 minutos escolhidos)
+				chartPTstacked.dataSource.reloadFrequency = 1000*60*60; // faz o reload dos dados a cada x milisegundos (60 minutos escolhidos)
 
 
 				// Titulo
-				var title = chartPT.titles.create();
+				var title = chartPTstacked.titles.create();
 				var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia - Casos com e sem desfecho[/]\n";
 				title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
 				title.textAlign = "middle";
 
 				// Eixos
 				//	XX Datas
-				var dateAxis = chartPT.xAxes.push(new am4charts.DateAxis());
+				var dateAxis = chartPTstacked.xAxes.push(new am4charts.DateAxis());
 				//dateAxis.title.text = "DATA";
 				dateAxis.renderer.minGridDistance = 40;
 				dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color(CORGRID);
@@ -405,7 +405,7 @@
 
 
 				// YY - eixo da esquerda
-				var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
+				var valueAxisTot = chartPTstacked.yAxes.push(new am4charts.ValueAxis());
 				valueAxisTot.title.text = "[font-size:12 #a6a6a6]CASOS[/]";
 				valueAxisTot.renderer.labels.template.fontSize = 10;
 				valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
@@ -422,7 +422,7 @@
 
 				// SERIES
 
-				var seriesMortes = chartPT.series.push(new am4charts.ColumnSeries());
+				var seriesMortes = chartPTstacked.series.push(new am4charts.ColumnSeries());
 				seriesMortes.name = "MORTES";
 				seriesMortes.dataFields.valueY = "Deaths";
 				seriesMortes.dataFields.dateX = "Date";
@@ -435,7 +435,7 @@
 				seriesMortes.columns.template.fill = am4core.color("#a71616");
 				seriesMortes.stacked = true;
 
-				var seriesRecuperados = chartPT.series.push(new am4charts.ColumnSeries());
+				var seriesRecuperados = chartPTstacked.series.push(new am4charts.ColumnSeries());
 				seriesRecuperados.name = "RECUPERADOS";
 				seriesRecuperados.dataFields.valueY = "Recovered";
 				seriesRecuperados.dataFields.dateX = "Date";
@@ -448,7 +448,7 @@
 				seriesRecuperados.columns.template.fill = am4core.color("#6497b1");
 				seriesRecuperados.stacked = true;
 
-				var seriesActivos = chartPT.series.push(new am4charts.ColumnSeries());
+				var seriesActivos = chartPTstacked.series.push(new am4charts.ColumnSeries());
 				seriesActivos.name = "ACTIVOS (ainda sem desfecho)";
 				seriesActivos.dataFields.valueY = "Activos";
 				seriesActivos.dataFields.dateX = "Date";
@@ -465,27 +465,27 @@
 
 
 				// Legenda
-				chartPT.legend = new am4charts.Legend();
-				chartPT.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
-				var markerTemplate = chartPT.legend.markers.template; // vamos modificar o tamanho dos quadrados
+				chartPTstacked.legend = new am4charts.Legend();
+				chartPTstacked.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+				var markerTemplate = chartPTstacked.legend.markers.template; // vamos modificar o tamanho dos quadrados
 				markerTemplate.width = 18;
 				markerTemplate.height = 18;
-				chartPT.legend.labels.template.text = "[bold font-size: 12]{name}[/]";
-				chartPT.legend.labels.template.textDecoration = "none";
-				var as = chartPT.legend.labels.template.states.getKey("active");
+				chartPTstacked.legend.labels.template.text = "[bold font-size: 12]{name}[/]";
+				chartPTstacked.legend.labels.template.textDecoration = "none";
+				var as = chartPTstacked.legend.labels.template.states.getKey("active");
 				as.properties.textDecoration = "line-through";
 				as.properties.fill = am4core.color("#eee");
 
 				// chart cursor
-				chartPT.cursor = new am4charts.XYCursor();
-				chartPT.cursor.behavior = "none";
-				chartPT.cursor.xAxis = dateAxis;
-				//chartPT.cursor.snapToSeries = seriesTotal;
+				chartPTstacked.cursor = new am4charts.XYCursor();
+				chartPTstacked.cursor.behavior = "none";
+				chartPTstacked.cursor.xAxis = dateAxis;
+				//chartPTstacked.cursor.snapToSeries = seriesTotal;
 				valueAxisTot.cursorTooltipEnabled = false;
 				valueAxisDta.cursorTooltipEnabled = false;
 
 				// Enable export
-				chartPT.exporting.menu = new am4core.ExportMenu();
+				chartPTstacked.exporting.menu = new am4core.ExportMenu();
 
 
 				// axis ranges - Texto que aparece no gráfico
