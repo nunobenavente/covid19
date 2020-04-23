@@ -405,12 +405,12 @@
 
 
 				// YY - eixo da esquerda
-				var valueAxisTot = chartPTstacked.yAxes.push(new am4charts.ValueAxis());
-				valueAxisTot.title.text = "[font-size:12 #a6a6a6]CASOS[/]";
-				valueAxisTot.renderer.labels.template.fontSize = 10;
-				valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
-				valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color(CORGRID);
-				//valueAxisTot.logarithmic = true;
+				var valueAxisStacked = chartPTstacked.yAxes.push(new am4charts.ValueAxis());
+				valueAxisStacked.title.text = "[font-size:12 #a6a6a6]CASOS[/]";
+				valueAxisStacked.renderer.labels.template.fontSize = 10;
+				valueAxisStacked.renderer.labels.template.fill = am4core.color("#a6a6a6");
+				valueAxisStacked.renderer.grid.template.strokeOpacity = 0.1; valueAxisStacked.renderer.grid.template.stroke = am4core.color(CORGRID);
+				//valueAxisStacked.logarithmic = true;
 
 				// //YY Casos Diários - eixo da direita
 				// var valueAxisDta = chartPT.yAxes.push(new am4charts.ValueAxis());
@@ -481,8 +481,8 @@
 				chartPTstacked.cursor.behavior = "none";
 				chartPTstacked.cursor.xAxis = dateAxis;
 				//chartPTstacked.cursor.snapToSeries = seriesTotal;
-				valueAxisTot.cursorTooltipEnabled = false;
-				valueAxisDta.cursorTooltipEnabled = false;
+				valueAxisStacked.cursorTooltipEnabled = false;
+				//valueAxisDta.cursorTooltipEnabled = false;
 
 				// Enable export
 				chartPTstacked.exporting.menu = new am4core.ExportMenu();
