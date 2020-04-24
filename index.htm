@@ -100,13 +100,13 @@
 	<script>
 
 		// Themes begin
-		am4core.useTheme(am4themes_animated);
+		// am4core.useTheme(am4themes_animated);
 		am4core.useTheme(am4themes_dark);
 		// Themes end
 		// Optimizacao CPU
 		am4core.options.minPolylineStep = 5; // só plota pontos que estejam a uma distancia de pelo menos x px para poupar cpu
 		//am4core.options.queue = true; // piorou
-		am4core.options.onlyShowOnViewport = true; // grafico so inicia quando aparece no ecrã
+		am4core.options.onlyShowOnViewport = false; // grafico so inicia quando aparece no ecrã
 		var BULLETDISTMIN = 5; // distancia minima entre bullets consecutivas - melhora bastante a performance quanto maior o numero
 
 		// CONSTANTES
@@ -361,6 +361,8 @@
 
 		////////////////////////////////////////////
 				// GRAFICO PORTUGAL STACKED
+am4core.useTheme(am4themes_animated);
+
 				var chartPTstacked = am4core.create("chartPTstacked", am4charts.XYChart);
 				chartPTstacked.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
 				//chartPTstacked.dataSource.parser.options.dateFields = ["data"];
@@ -369,39 +371,38 @@
 				chartPTstacked.dataSource.events.on("parseended", function(ev){
 				// parsed data is assigned to data source's `data` property
 				ev.target.data = ev.target.data.slice(1, ev.target.data.length -1);	// retirei o último dia porque os dados são iguais aos do dia anterior (desactualizados)
-				var data = ev.target.data;
+				var data1 = ev.target.data;
 				//data = data.slice(1, data.length);
 
-				var Dia = [];
-			  for (var i = 1; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
-						data[i]["Activos"] = data[i]["Confirmed"] - data[i]["Deaths"] - data[i]["Recovered"];
-						data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
-						data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
+			  for (var i = 1; i < data1.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
+						data1[i]["Activos"] = data1[i]["Confirmed"] - data1[i]["Deaths"] - data1[i]["Recovered"];
+						data1[i]["letalidade"] = data1[i]["Deaths"]/data1[i]["Confirmed"]*100;
+						data1[i]["casosMilhao"] = data1[i]["Confirmed"]/(POPPT/1000000);
 				}
 
 				});
-				chartPTstacked.dataSource.reloadFrequency = 1000*60*60; // faz o reload dos dados a cada x milisegundos (60 minutos escolhidos)
+				//chartPTstacked.dataSource.reloadFrequency = 1000*60*10; // faz o reload dos dados a cada x milisegundos (10 minutos escolhidos)
 
 
 				// Titulo
-				var title = chartPTstacked.titles.create();
-				var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia - Casos com e sem desfecho[/]\n";
-				title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
-				title.textAlign = "middle";
+				var title1 = chartPTstacked.titles.create();
+				var titulo1 = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia - Casos com e sem desfecho[/]\n";
+				title1.text = titulo1.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
+				title1.textAlign = "middle";
 
 				// Eixos
 				//	XX Datas
-				var dateAxis = chartPTstacked.xAxes.push(new am4charts.DateAxis());
-				//dateAxis.title.text = "DATA";
-				dateAxis.renderer.minGridDistance = 40;
-				dateAxis.renderer.grid.template.location = 0; dateAxis.renderer.grid.template.strokeOpacity = 1; dateAxis.renderer.grid.template.stroke = am4core.color(CORGRID);
-				dateAxis.renderer.labels.template.fontSize = 10;
-				dateAxis.renderer.labels.template.fill = am4core.color("#EEE");
-				dateAxis.renderer.ticks.template.disabled = false; dateAxis.renderer.ticks.template.strokeOpacity = 1;
-				dateAxis.renderer.ticks.template.length = 2;
-				dateAxis.extraMax = 0.01;
-				dateAxis.tooltip.background.fill = am4core.color("#ee7d07"); dateAxis.tooltip.background.stroke = am4core.color("#171717");
-				dateAxis.tooltip.fontSize = 12; dateAxis.tooltip.fontWeight = "bold";
+				var dateAxisStacked = chartPTstacked.xAxes.push(new am4charts.DateAxis());
+				//dateAxisStacked.title.text = "DATA";
+				dateAxisStacked.renderer.minGridDistance = 40;
+				dateAxisStacked.renderer.grid.template.location = 0; dateAxisStacked.renderer.grid.template.strokeOpacity = 1; dateAxisStacked.renderer.grid.template.stroke = am4core.color(CORGRID);
+				dateAxisStacked.renderer.labels.template.fontSize = 10;
+				dateAxisStacked.renderer.labels.template.fill = am4core.color("#EEE");
+				dateAxisStacked.renderer.ticks.template.disabled = false; dateAxisStacked.renderer.ticks.template.strokeOpacity = 1;
+				dateAxisStacked.renderer.ticks.template.length = 2;
+				dateAxisStacked.extraMax = 0.01;
+				dateAxisStacked.tooltip.background.fill = am4core.color("#ee7d07"); dateAxisStacked.tooltip.background.stroke = am4core.color("#171717");
+				dateAxisStacked.tooltip.fontSize = 12; dateAxisStacked.tooltip.fontWeight = "bold";
 
 
 				// YY - eixo da esquerda
@@ -422,31 +423,31 @@
 
 				// SERIES
 
-				var seriesMortes = chartPTstacked.series.push(new am4charts.ColumnSeries());
-				seriesMortes.name = "MORTES";
-				seriesMortes.dataFields.valueY = "Deaths";
-				seriesMortes.dataFields.dateX = "Date";
-				//seriesMortes.yAxis = valueAxisDta;
-				seriesMortes.calculatePercent = true;
-				seriesMortes.columns.template.width = am4core.percent(70);
-				seriesMortes.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
-				seriesMortes.tooltip.background.stroke = am4core.color("#000");
-				seriesMortes.strokeWidth = 0;
-				seriesMortes.columns.template.fill = am4core.color("#a71616");
-				seriesMortes.stacked = true;
+				var seriesMortesStacked = chartPTstacked.series.push(new am4charts.ColumnSeries());
+				seriesMortesStacked.name = "MORTES";
+				seriesMortesStacked.dataFields.valueY = "Deaths";
+				seriesMortesStacked.dataFields.dateX = "Date";
+				//seriesMortesStacked.yAxis = valueAxisDta;
+				seriesMortesStacked.calculatePercent = true;
+				seriesMortesStacked.columns.template.width = am4core.percent(70);
+				seriesMortesStacked.tooltipText = "[font-size: 12px]Mortes: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.00')}%[/]";
+				seriesMortesStacked.tooltip.background.stroke = am4core.color("#000");
+				seriesMortesStacked.strokeWidth = 0;
+				seriesMortesStacked.columns.template.fill = am4core.color("#a71616");
+				seriesMortesStacked.stacked = true;
 
-				var seriesRecuperados = chartPTstacked.series.push(new am4charts.ColumnSeries());
-				seriesRecuperados.name = "RECUPERADOS";
-				seriesRecuperados.dataFields.valueY = "Recovered";
-				seriesRecuperados.dataFields.dateX = "Date";
-				//seriesRecuperados.yAxis = valueAxisDta;
-				seriesRecuperados.calculatePercent = true;
-				seriesRecuperados.columns.template.width = am4core.percent(70);
-				seriesRecuperados.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
-				seriesRecuperados.tooltip.background.stroke = am4core.color("#000");
-				seriesRecuperados.strokeWidth = 0;
-				seriesRecuperados.columns.template.fill = am4core.color("#6497b1");
-				seriesRecuperados.stacked = true;
+				var seriesRecuperadosStacked = chartPTstacked.series.push(new am4charts.ColumnSeries());
+				seriesRecuperadosStacked.name = "RECUPERADOS";
+				seriesRecuperadosStacked.dataFields.valueY = "Recovered";
+				seriesRecuperadosStacked.dataFields.dateX = "Date";
+				//seriesRecuperadosStacked.yAxis = valueAxisDta;
+				seriesRecuperadosStacked.calculatePercent = true;
+				seriesRecuperadosStacked.columns.template.width = am4core.percent(70);
+				seriesRecuperadosStacked.tooltipText = "[font-size: 12px]Recuperados: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n";
+				seriesRecuperadosStacked.tooltip.background.stroke = am4core.color("#000");
+				seriesRecuperadosStacked.strokeWidth = 0;
+				seriesRecuperadosStacked.columns.template.fill = am4core.color("#6497b1");
+				seriesRecuperadosStacked.stacked = true;
 
 				var seriesActivos = chartPTstacked.series.push(new am4charts.ColumnSeries());
 				seriesActivos.name = "ACTIVOS (ainda sem desfecho)";
@@ -467,19 +468,19 @@
 				// Legenda
 				chartPTstacked.legend = new am4charts.Legend();
 				chartPTstacked.legend.useDefaultMarker = false; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
-				var markerTemplate = chartPTstacked.legend.markers.template; // vamos modificar o tamanho dos quadrados
-				markerTemplate.width = 18;
-				markerTemplate.height = 18;
+				var markerTemplate1 = chartPTstacked.legend.markers.template; // vamos modificar o tamanho dos quadrados
+				markerTemplate1.width = 18;
+				markerTemplate1.height = 18;
 				chartPTstacked.legend.labels.template.text = "[bold font-size: 12]{name}[/]";
 				chartPTstacked.legend.labels.template.textDecoration = "none";
-				var as = chartPTstacked.legend.labels.template.states.getKey("active");
-				as.properties.textDecoration = "line-through";
-				as.properties.fill = am4core.color("#eee");
+				var as1 = chartPTstacked.legend.labels.template.states.getKey("active");
+				as1.properties.textDecoration = "line-through";
+				as1.properties.fill = am4core.color("#eee");
 
 				// chart cursor
 				chartPTstacked.cursor = new am4charts.XYCursor();
 				chartPTstacked.cursor.behavior = "none";
-				chartPTstacked.cursor.xAxis = dateAxis;
+				chartPTstacked.cursor.xAxis = dateAxisStacked;
 				//chartPTstacked.cursor.snapToSeries = seriesTotal;
 				valueAxisStacked.cursorTooltipEnabled = false;
 				//valueAxisDta.cursorTooltipEnabled = false;
@@ -489,21 +490,21 @@
 
 
 				// axis ranges - Texto que aparece no gráfico
-				var range = dateAxis.axisRanges.create();
-				range.date = new Date(2020, 2, 18);
-				//range.endDate = new Date(2020, 3, 30);
-				range.axisFill.fill = am4core.color("#eee");
-				range.axisFill.fillOpacity = 0.05;
-				range.grid.stroke = am4core.color("#eee");
-				range.grid.strokeWidth = 1;
-				range.grid.strokeOpacity = 0.3;
+				var range1 = dateAxisStacked.axisRanges.create();
+				range1.date = new Date(2020, 2, 18);
+				//range1.endDate = new Date(2020, 3, 30);
+				range1.axisFill.fill = am4core.color("#eee");
+				range1.axisFill.fillOpacity = 0.05;
+				range1.grid.stroke = am4core.color("#eee");
+				range1.grid.strokeWidth = 1;
+				range1.grid.strokeOpacity = 0.3;
 
-				range.label.text = "Início do estado de emergência";
-				range.label.fontSize = 12; range.label.fill = am4core.color("#949090");
-				range.label.inside = true;
-				range.label.rotation = 90;
-				range.label.horizontalCenter = "right";
-				range.label.verticalCenter = "bottom";
+				range1.label.text = "Início do estado de emergênciaa";
+				range1.label.fontSize = 12; range1.label.fill = am4core.color("#949090");
+				range1.label.inside = true;
+				range1.label.rotation = 90;
+				range1.label.horizontalCenter = "right";
+				range1.label.verticalCenter = "bottom";
 
 
 //////////////////////////////////////////
@@ -1400,7 +1401,7 @@
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.97; // VALOR DA MÉDIA GLOBAL
+		range.value = 7.02; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
@@ -1747,7 +1748,7 @@
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 60000;
+		valueAxis.max = 65000;
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
