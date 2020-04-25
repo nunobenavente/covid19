@@ -119,7 +119,7 @@
 		var CORGRID = "#121212"
 
 		var paisExtenso = {PT:"Portugal", DE:"Alemanha", ES:"Espanha", FR:"França", GB:"Reino Unido", IT:"Itália", LU:"Luxemburgo",
-											NL:"Holanda", SE:"Suécia", CH:"Suiça", BR:"Brasil", US:"Estados Unidos", GLOBAL:"Mundo"};
+											NL:"Holanda", SE:"Suécia", CH:"Suiça", BR:"Brasil", KR:"Coreia do Sul", US:"Estados Unidos", GLOBAL:"Mundo"};
 
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 		var dia = new Date();
@@ -635,23 +635,23 @@ am4core.useTheme(am4themes_animated);
 		valueAxisY.min = 40;
 
 	//	for (var i = 0; i < 1; i++) {
-  		createSeries("PT", opacidadeLinhas, 2, 10, false);
-			createSeries("DE", opacidadeLinhas, 1, 10, false);
-			createSeries("ES", opacidadeLinhas, 1, 10);
-			createSeries("FR", opacidadeLinhas, 1, 10);
-			createSeries("GB", opacidadeLinhas, 1, 10);
-			createSeries("IT", opacidadeLinhas, 1, 10);
-			createSeries("LU", opacidadeLinhas, 1, 10);
-			createSeries("NL", opacidadeLinhas, 1, 10);
-			createSeries("CH", opacidadeLinhas, 1, 10);
-			createSeries("SE", opacidadeLinhas, 1, 10);
-			createSeries("BR", opacidadeLinhas, 1, 10);
-			createSeries("KR", opacidadeLinhas, 1, 10);
-			createSeries("US", opacidadeLinhas, 1, 10);
-			createSeries("GLOBAL", opacidadeLinhas, 1.5, 22, true);
+  		createSeries("PT", opacidadeLinhas, 2, 10, false, paisExtenso);
+			createSeries("DE", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("ES", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("FR", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("GB", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("IT", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("LU", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("NL", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("CH", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("SE", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("BR", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("KR", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("US", opacidadeLinhas, 1, 10, false, paisExtenso);
+			createSeries("GLOBAL", opacidadeLinhas, 1.5, 22, true, paisExtenso);
 	//	}
 		// Create series
-		function createSeries(ISO2pais, opacidadeLinhas, espessura, offset, visivelInicio) {
+		function createSeries(ISO2pais, opacidadeLinhas, espessura, offset, visivelInicio, paisExtenso) {
 		  var series = loglogAmcharts.series.push(new am4charts.LineSeries());
 		  series.dataFields.valueY = ISO2pais.concat("7");
 		  series.dataFields.valueX = ISO2pais.concat("T");
@@ -672,7 +672,7 @@ am4core.useTheme(am4themes_animated);
 			var labelBullet = lastPtSeries.bullets.push(new am4charts.LabelBullet());
 			labelBullet.label.text = series.name;
 			bullet.circle.radius = 2;
-			bullet.tooltipText = "[font-size: 12px]\nCasos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]";
+			bullet.tooltipText = "[font-size: 12px bold]".concat(paisExtenso[ISO2pais].toUpperCase(),"\n[font-size: 12px]Casos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]");
 
 			var bulletHover = bullet.states.create("hover");
 			bulletHover.properties.scale = 2;
