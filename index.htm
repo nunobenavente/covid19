@@ -541,6 +541,22 @@ am4core.useTheme(am4themes_animated);
 				range1.label.horizontalCenter = "right";
 				range1.label.verticalCenter = "bottom";
 
+				var range2 = dateAxisStacked.axisRanges.create();
+				range2.date = new Date(2020, 3, 21);
+				//range1.endDate = new Date(2020, 3, 30);
+				range2.axisFill.fill = am4core.color("#eee");
+				range2.axisFill.fillOpacity = 0.05;
+				range2.grid.stroke = am4core.color("#eee");
+				range2.grid.strokeWidth = 1;
+				range2.grid.strokeOpacity = 0.3;
+
+				range2.label.text = "Recuperados ultrapassam Óbitos";
+				range2.label.fontSize = 12; range2.label.fill = am4core.color("#000");
+				range2.label.inside = true;
+				range2.label.rotation = 90;
+				range2.label.horizontalCenter = "right";
+				range2.label.verticalCenter = "bottom";
+
 
 //////////////////////////////////////////
 		// GRAFICO LOG LOG MUNDO
@@ -908,7 +924,7 @@ am4core.useTheme(am4themes_animated);
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.98; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.93; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
