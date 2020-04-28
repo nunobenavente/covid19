@@ -1017,7 +1017,7 @@ am4core.useTheme(am4themes_animated);
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 6000;
+		valueAxis.max = 7000;
 
 		// Do not crop bullets
 		chart.maskBullets = false;
@@ -1159,7 +1159,7 @@ am4core.useTheme(am4themes_animated);
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 500;
+		valueAxis.max = 600;
 
 
 		// Do not crop bullets
@@ -1283,8 +1283,8 @@ am4core.useTheme(am4themes_animated);
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 37000;
-		axisBreak.endValue = 57000;
+		axisBreak.startValue = 42700;
+		axisBreak.endValue = 60000;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
