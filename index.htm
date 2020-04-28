@@ -435,19 +435,24 @@ am4core.useTheme(am4themes_animated);
 
 				// SERIES
 
-				var seriesMortesStacked = chartPTstacked.series.push(new am4charts.ColumnSeries());
+				var seriesMortesStacked = chartPTstacked.series.push(new am4charts.LineSeries());
 				seriesMortesStacked.name = "MORTES";
 				seriesMortesStacked.dataFields.valueY = "Deaths";
 				seriesMortesStacked.dataFields.dateX = "Date";
 				//seriesMortesStacked.yAxis = valueAxisDta;
 				seriesMortesStacked.calculatePercent = true;
-				seriesMortesStacked.columns.template.width = am4core.percent(70);
-				seriesMortesStacked.tooltipText = "[font-size: 12px]MORTES: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.0')}%[/]\n[font-size: 12px]% da barra: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
+				//seriesMortesStacked.columns.template.width = am4core.percent(70);
+				seriesMortesStacked.tooltipText = "[font-size: 12px]MORTES: [/][bold  font-size: 13px]{Deaths}[/] {valueY.previousChange.formatNumber('[#ec4242 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]Letalidade: [/][bold font-size: 13]{letalidade.formatNumber('#.0')}%[/]\n[font-size: 12px]% mostrados: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
 				seriesMortesStacked.tooltip.background.stroke = am4core.color("#000");
 				seriesMortesStacked.strokeWidth = 0;
-				seriesMortesStacked.columns.template.fill = am4core.color("#a71616");
+				//seriesMortesStacked.columns.template.fill = am4core.color("#a71616");
 				seriesMortesStacked.stacked = true;
 				seriesMortesStacked.legendSettings.itemValueText = "{valueY.totalPercent.formatNumber('#.0')}%";
+				// LineSeries settings
+				seriesMortesStacked.stroke = am4core.color("#a71616");
+				seriesMortesStacked.fill = am4core.color("#a71616");
+				seriesMortesStacked.strokeWidth = 2;
+				seriesMortesStacked.fillOpacity = 0.3;
 
 				// // Add label
 			  // var labelBulletMortes = seriesMortesStacked.bullets.push(new am4charts.LabelBullet());
@@ -456,19 +461,24 @@ am4core.useTheme(am4themes_animated);
 				// labelBulletMortes.label.fill = am4core.color("#000");
 
 
-				var seriesRecuperadosStacked = chartPTstacked.series.push(new am4charts.ColumnSeries());
+				var seriesRecuperadosStacked = chartPTstacked.series.push(new am4charts.LineSeries());
 				seriesRecuperadosStacked.name = "RECUPERADOS";
 				seriesRecuperadosStacked.dataFields.valueY = "Recovered";
 				seriesRecuperadosStacked.dataFields.dateX = "Date";
 				//seriesRecuperadosStacked.yAxis = valueAxisDta;
 				seriesRecuperadosStacked.calculatePercent = true;
-				seriesRecuperadosStacked.columns.template.width = am4core.percent(70);
-				seriesRecuperadosStacked.tooltipText = "[font-size: 12px]RECUPERADOS: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n[font-size: 12px]% da barra: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
+				// seriesRecuperadosStacked.columns.template.width = am4core.percent(70);
+				seriesRecuperadosStacked.tooltipText = "[font-size: 12px]RECUPERADOS: [/][bold  font-size: 13px]{Recovered}[/] {valueY.previousChange.formatNumber('[#0F0 font-size:11]#|[#F11 font-size:11]#')}\n[font-size: 12px]% mostrados: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
 				seriesRecuperadosStacked.tooltip.background.stroke = am4core.color("#000");
 				seriesRecuperadosStacked.strokeWidth = 0;
-				seriesRecuperadosStacked.columns.template.fill = am4core.color("#6497b1");
+				// seriesRecuperadosStacked.columns.template.fill = am4core.color("#6497b1");
 				seriesRecuperadosStacked.stacked = true;
 				seriesRecuperadosStacked.legendSettings.itemValueText = "{valueY.totalPercent.formatNumber('#.0')}%";
+				// LineSeries settings
+				seriesRecuperadosStacked.stroke = am4core.color("#6497b1");
+				seriesRecuperadosStacked.fill = am4core.color("#6497b1");
+				seriesRecuperadosStacked.strokeWidth = 2;
+				seriesRecuperadosStacked.fillOpacity = 0.3;
 
 				// // Add label
 			  // var labelBulletRecuperados = seriesRecuperadosStacked.bullets.push(new am4charts.LabelBullet());
@@ -477,20 +487,24 @@ am4core.useTheme(am4themes_animated);
 				// labelBulletRecuperados.label.fill = am4core.color("#000");
 
 
-				var seriesActivos = chartPTstacked.series.push(new am4charts.ColumnSeries());
+				var seriesActivos = chartPTstacked.series.push(new am4charts.LineSeries());
 				seriesActivos.name = "ACTIVOS (ainda sem desfecho)";
 				seriesActivos.dataFields.valueY = "Activos";
 				seriesActivos.dataFields.dateX = "Date";
 				//seriesActivos.yAxis = valueAxisDta;
 				seriesActivos.calculatePercent = true;
-				seriesActivos.columns.template.width = am4core.percent(70);
-				seriesActivos.tooltipText = "[font-size: 12px]ACTIVOS: [/][bold  font-size: 13px]{Activos}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]% da barra: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
+				// seriesActivos.columns.template.width = am4core.percent(70);
+				seriesActivos.tooltipText = "[font-size: 12px]ACTIVOS: [/][bold  font-size: 13px]{Activos}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}\n[font-size: 12px]% mostrados: [/][bold font-size: 12px]{valueY.totalPercent.formatNumber('#.0')}%[/]";
 				seriesActivos.tooltip.background.stroke = am4core.color("#000");
 				seriesActivos.strokeWidth = 0;
-				//seriesDia.columns.template.fill = am4core.color("#ffc800");
-				seriesActivos.columns.template.fill = am4core.color("#f69b00");
+				// seriesActivos.columns.template.fill = am4core.color("#f69b00");
 				seriesActivos.stacked = true;
 				seriesActivos.legendSettings.itemValueText = "{valueY.totalPercent.formatNumber('#.0')}%";
+				// LineSeries settings
+				seriesActivos.stroke = am4core.color("#f69b00");
+				seriesActivos.fill = am4core.color("#f69b00");
+				seriesActivos.strokeWidth = 2;
+				seriesActivos.fillOpacity = 0.2;
 
 				// // Add label
 			  // var labelBulletActivos = seriesActivos.bullets.push(new am4charts.LabelBullet());
@@ -559,7 +573,7 @@ am4core.useTheme(am4themes_animated);
 				range2.grid.strokeOpacity = 0.3;
 
 				range2.label.text = "Recuperados ultrapassam Óbitos";
-				range2.label.fontSize = 12; range2.label.fill = am4core.color("#fff");
+				range2.label.fontSize = 12; range2.label.fill = am4core.color("#949090");
 				range2.label.inside = true;
 				range2.label.rotation = 90;
 				range2.label.horizontalCenter = "right";
