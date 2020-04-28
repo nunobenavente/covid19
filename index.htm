@@ -5,6 +5,13 @@
 	<meta charset="utf-8">
 
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display">
+    <!-- <style>
+      body {
+        font-family: 'Tangerine', serif;
+        font-size: 48px;
+      }
+    </style> -->
 
 	<script src="https://www.amcharts.com/lib/4/core.js"></script>
 	<script src="https://www.amcharts.com/lib/4/charts.js"></script>
@@ -18,16 +25,27 @@
 	<meta property="og:image" content="http://nunobenavente.github.io/covid19/covid19.PNG" />
 
 	<style>
+
+		h1 {
+			font-family: 'Plaifair Display', serif;
+			color: #eee;
+			margin-left: 25px; margin-top: 25px; margin-bottom: 25px;
+			font-weight: 400 ;
+		}
+
 		p {
+			margin-left: 50px;
 			padding: 8px;
 			color: #eee;
+			/* font-family: 'Playfair Display'; */
 			font-size: 11px;
 		}
+
 		div {
 			margin-top: 8px;
-			background-color: #15181d;
+			background-color: #12151a;
 			margin-bottom: 8px;
-			margin-left: 8px;
+			margin-left: 50px;
 			margin-right: 8px;
 			border-style: hidden;
 			border-width: thin;
@@ -91,6 +109,7 @@
 </head>
 
 <body style="background-color:#0f1216">
+	<h1>SARS-CoV-2 em Portugal e no Mundo</h1>
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
 	<!-- <div id="topo"></div> -->
@@ -506,6 +525,8 @@ am4core.useTheme(am4themes_animated);
 				seriesActivos.strokeWidth = 2;
 				seriesActivos.fillOpacity = 0.2;
 
+				// var bullet = seriesActivos.bullets.push(new am4charts.CircleBullet());
+				// bullet.circle.radius = 2;
 				// // Add label
 			  // var labelBulletActivos = seriesActivos.bullets.push(new am4charts.LabelBullet());
 			  // labelBulletActivos.label.text = "[font-size: 10px]{valueY.totalPercent.formatNumber('#.0')}%";
