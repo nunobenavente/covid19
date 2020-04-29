@@ -17,8 +17,8 @@
 	<script src="https://www.amcharts.com/lib/4/charts.js"></script>
 	<script src="https://www.amcharts.com/lib/4/themes/dark.js"></script>
 	<script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
-	<title>Dados COVID-19</title>
-	<meta property="og:title" content="Dados COVID-19" />
+	<title>SARS-CoV-2 em Portugal e no Mundo</title>
+	<meta property="og:title" content="SARS-CoV-2 em Portugal e no Mundo" />
 	<meta property="og:type" content="website" />
 	<meta property="og:description" content="Alguma infografia sobre a pandemia COVID-19" />
 	<meta property="og:url" content="http://nunobenavente.github.io/covid19/" />
@@ -31,16 +31,19 @@
 
 	<style>
 
+		body{margin: 0px !important;
+    padding: 0px !important;}
+
 		h1 {
 			font-family: 'Plaifair Display', serif;
-			color: #eee;
-			margin-left: 25px; margin-top: 25px; margin-bottom: 25px;
+			color: #000;
+			margin-left: 50px; padding-top: 10px;
 			font-weight: 400 ;
 		}
 
 		p {
 			margin-left: 50px;
-			padding: 8px;
+			padding-top: : 8px;
 			color: #eee;
 			/* font-family: 'Playfair Display'; */
 			font-size: 12px;
@@ -56,8 +59,6 @@
 			border-width: thin;
 			border-radius: 6px;
 		}
-
-		#topo {width:100%; height:20px; float:left; clear:both; background-color: "#b92b2b"; z-index: 20;}
 
 		#loglogAmchartsDiv {
 			width: 80%;
@@ -114,7 +115,11 @@
 </head>
 
 <body style="background-color:#0f1216">
-	<h1>SARS-CoV-2 em Portugal e no Mundo</h1>
+	<section style="background-color: rgb(255, 138, 0); height:120px; width:100%; top:0px">
+		<h1>SARS-CoV-2 em Portugal e no Mundo</h1>
+		<p style="color: #111">Página actualizada diariamente. Os gráficos podem reflectir, em alguns casos, os dados do dia anterior.<br>
+		<strong>29 Abril 2020 - </strong>Dados da Bélgica incluídos.</p>
+	</section>
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
 	<!-- <div id="topo"></div> -->
@@ -122,7 +127,7 @@
 	<div id="loglogAmchartsDiv"></div>
 	<div id="chartPT"></div><div id="chartPTstacked"></div>
 	<div id="testespormilhaodiv"></div>
-	<section style="width: 50%; margin-bottom: 10px">
+	<section style="width: 55%; margin-bottom: 15px">
 		<p><b>Nota importante:</b> Os números apresentados (recolhidos de worldometers.info) podem não corresponder exactamente ao número de indivíduos testados, dadas as diferentes formas como cada país reporta os testes, devendo assim ser interpretados como aproximações.<br>Dois exemplos: o número de testes apresentado para Portugal, interpretando os dados da DGS, inclui os indivíduos que foram testados mais que uma vez, sendo o número efectivo de indivíduos testados consideravelmente inferior. O número mais próximo da realidade corresponderá à soma dos 'Casos Confirmados (positivos)' + 'Casos Não Confirmados (negativos)'. Já a Suécia, por outro lado, reporta o número de indivíduos testados e não o total de testes.</p>
 	</section>
 	<div id="casospormilhaodiv"></div>
@@ -150,7 +155,7 @@
 
 		var CORGRID = "#121212"
 
-		var paisExtenso = {PT:"Portugal", DE:"Alemanha", ES:"Espanha", FR:"França", GB:"Reino Unido", IT:"Itália", LU:"Luxemburgo",
+		var paisExtenso = {PT:"Portugal", BE:"Bélgica", DE:"Alemanha", ES:"Espanha", FR:"França", GB:"Reino Unido", IT:"Itália", LU:"Luxemburgo",
 											NL:"Holanda", SE:"Suécia", CH:"Suiça", BR:"Brasil", KR:"Coreia do Sul", US:"Estados Unidos", GLOBAL:"Mundo"};
 
 		var meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -218,9 +223,9 @@
 
 		// YY Casos Totais - eixo da esquerda
 		var valueAxisTot = chartPT.yAxes.push(new am4charts.ValueAxis());
-		valueAxisTot.title.text = "[font-size:12 #a6a6a6]TOTAL DE CASOS CONFIRMADOS[/]";
+		valueAxisTot.title.text = "[font-size:12 #eee]TOTAL DE CASOS CONFIRMADOS[/]";
 		valueAxisTot.renderer.labels.template.fontSize = 10;
-		valueAxisTot.renderer.labels.template.fill = am4core.color("#a6a6a6");
+		valueAxisTot.renderer.labels.template.fill = am4core.color("#eee");
 		valueAxisTot.renderer.grid.template.strokeOpacity = 0.1; valueAxisTot.renderer.grid.template.stroke = am4core.color(CORGRID);
 		valueAxisTot.logarithmic = true;
 
@@ -442,9 +447,9 @@ am4core.useTheme(am4themes_animated);
 
 				// YY - eixo da esquerda
 				var valueAxisStacked = chartPTstacked.yAxes.push(new am4charts.ValueAxis());
-				valueAxisStacked.title.text = "[font-size:12 #a6a6a6]CASOS[/]";
+				valueAxisStacked.title.text = "[font-size:12 #eee]CASOS[/]";
 				valueAxisStacked.renderer.labels.template.fontSize = 10;
-				valueAxisStacked.renderer.labels.template.fill = am4core.color("#a6a6a6");
+				valueAxisStacked.renderer.labels.template.fill = am4core.color("#eee");
 				valueAxisStacked.renderer.grid.template.strokeOpacity = 0.1; valueAxisStacked.renderer.grid.template.stroke = am4core.color(CORGRID);
 				valueAxisStacked.calculateTotals = true;
 				//valueAxisStacked.logarithmic = true;
@@ -635,6 +640,7 @@ am4core.useTheme(am4themes_animated);
 
 		loglogAmcharts.colors.list = [
 			am4core.color("#EEE"), am4core.color("#EEE"),				// PT
+			am4core.color("#ffda19"),am4core.color("#FFDA19"),	// BE
 			am4core.color("#FFE119"),am4core.color("#FFE119"),	// DE
 
 			am4core.color("#F57D7D"), am4core.color("#F57D7D"),	// ES
@@ -707,7 +713,7 @@ am4core.useTheme(am4themes_animated);
 		var title = loglogAmcharts.titles.create();
 
 		//dia = dia.toString();
-		var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução da pandemia (a partir do 100º caso)[/]\n";
+		var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução das epidemias, a partir do 100º caso[/]\n";
 		title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
 		//title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
 		title.textAlign = "middle";
@@ -723,6 +729,7 @@ am4core.useTheme(am4themes_animated);
 
 	//	for (var i = 0; i < 1; i++) {
   		createSeries("PT", opacidadeLinhas, 2, 10, false, paisExtenso);
+			createSeries("BE", opacidadeLinhas, 1, 10, false, paisExtenso);
 			createSeries("DE", opacidadeLinhas, 1, 10, false, paisExtenso);
 			createSeries("ES", opacidadeLinhas, 1, 10, false, paisExtenso);
 			createSeries("FR", opacidadeLinhas, 1, 10, false, paisExtenso);
@@ -760,6 +767,7 @@ am4core.useTheme(am4themes_animated);
 			labelBullet.label.text = series.name;
 			bullet.circle.radius = 2;
 			bullet.tooltipText = "[font-size: 12px bold]".concat(paisExtenso[ISO2pais].toUpperCase(),"\n[font-size: 12px]Casos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]");
+		 	lastPtSeries.tooltip.background.stroke = am4core.color("#000");
 
 			var bulletHover = bullet.states.create("hover");
 			bulletHover.properties.scale = 2;
@@ -972,7 +980,7 @@ am4core.useTheme(am4themes_animated);
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 6.92; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.95; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
