@@ -119,7 +119,7 @@
 	<section style="background-color: rgb(255, 138, 0); height:140px; width:100%; top:0px">
 		<h1>SARS-CoV-2 em Portugal e no Mundo</h1>
 		<p style="color: #111">Página actualizada diariamente. Em alguns casos os gráficos podem reflectir os dados do dia anterior.<br><strong>CTRL+F5</strong> para actualizar.<br>
-		<strong>29 Abril 2020 - </strong>Dados da Bélgica incluídos.</p>
+		<strong>30 Abril 2020 - </strong>Novo gráfico 'COVID-19 no Mundo - evolução dos óbitos'.</p>
 	</section>
 
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
@@ -369,7 +369,7 @@
 
 		// axis ranges - Texto que aparece no gráfico
 		var range = dateAxis.axisRanges.create();
-		range.date = new Date(2020, 2, 18);
+		range.date = new Date(2020, 2, 22);
 		//range.endDate = new Date(2020, 3, 30);
 		range.axisFill.fill = am4core.color("#eee");
 		range.axisFill.fillOpacity = 0.05;
@@ -378,7 +378,7 @@
 		range.grid.strokeOpacity = 0.3;
 
 		range.label.text = "Início do estado de emergência";
-		range.label.fontSize = 12; range.label.fill = am4core.color("#949090");
+		range.label.fontSize = 12; range.label.fill = am4core.color("#db2e2e");
 		range.label.inside = true;
 		range.label.rotation = 90;
 		range.label.horizontalCenter = "right";
@@ -582,7 +582,7 @@ am4core.useTheme(am4themes_animated);
 
 				// axis ranges - Texto que aparece no gráfico
 				var range1 = dateAxisStacked.axisRanges.create();
-				range1.date = new Date(2020, 2, 18);
+				range1.date = new Date(2020, 2, 22);
 				//range1.endDate = new Date(2020, 3, 30);
 				range1.axisFill.fill = am4core.color("#eee");
 				range1.axisFill.fillOpacity = 0.05;
@@ -591,7 +591,7 @@ am4core.useTheme(am4themes_animated);
 				range1.grid.strokeOpacity = 0.3;
 
 				range1.label.text = "Início do estado de emergência";
-				range1.label.fontSize = 12; range1.label.fill = am4core.color("#949090");
+				range1.label.fontSize = 12; range1.label.fill = am4core.color("#db2e2e");
 				range1.label.inside = true;
 				range1.label.rotation = 90;
 				range1.label.horizontalCenter = "right";
@@ -607,11 +607,26 @@ am4core.useTheme(am4themes_animated);
 				range2.grid.strokeOpacity = 0.3;
 
 				range2.label.text = "Recuperados ultrapassam Óbitos";
-				range2.label.fontSize = 12; range2.label.fill = am4core.color("#949090");
+				range2.label.fontSize = 12; range2.label.fill = am4core.color("#26a600");
 				range2.label.inside = true;
 				range2.label.rotation = 90;
 				range2.label.horizontalCenter = "right";
 				range2.label.verticalCenter = "bottom";
+
+				var range3 = dateAxisStacked.axisRanges.create();
+				range3.date = new Date(2020, 3, 30);	// 30 Abril
+				range3.axisFill.fill = am4core.color("#eee");
+				range3.axisFill.fillOpacity = 0.05;
+				range3.grid.stroke = am4core.color("#eee");
+				range3.grid.strokeWidth = 1;
+				range3.grid.strokeOpacity = 0.3;
+
+				range3.label.text = "Forte acréscimo de actividade nas ruas; atmosfera de relaxamento social";
+				range3.label.fontSize = 12; range3.label.fill = am4core.color("#cfd734");
+				range3.label.inside = true;
+				range3.label.rotation = 90;
+				range3.label.horizontalCenter = "right";
+				range3.label.verticalCenter = "bottom";
 
 
 //////////////////////////////////////////
