@@ -61,7 +61,7 @@
 			border-radius: 6px;
 		}
 
-		#loglogAmchartsDiv {
+		#loglogAmchartsDiv, #mortesMundoDiv {
 			width: 80%;
 			height: 800px;
 			float:none;
@@ -126,6 +126,7 @@
 	<!-- <div id="topo"></div> -->
 
 	<div id="loglogAmchartsDiv"></div>
+	<div id="mortesMundoDiv"></div>
 	<div id="chartPT"></div><div id="chartPTstacked"></div>
 	<div id="testespormilhaodiv"></div>
 	<section style="width: 50%;">
@@ -849,6 +850,219 @@ am4core.useTheme(am4themes_animated);
 		buttonXX.events.on("hit", function() {
 			toggle(loglogAmcharts, valueAxisX, buttonXX);
 		});
+
+
+		//////////////////////////////////////////
+				// GRAFICO MORTES MUNDO
+				var chartMortesMundo = am4core.create("mortesMundoDiv", am4charts.XYChart);
+
+				chartMortesMundo.dataSource.url = "dadosMortesAccess.json";
+				chartMortesMundo.dataSource.reloadFrequency = 1000*60*30; // faz o reload dos dados a cada x milisegundos (30 minutos escolhidos)
+
+
+				chartMortesMundo.colors.list = [
+					am4core.color("#EEE"), am4core.color("#EEE"),				// PT
+					am4core.color("#ffda19"),am4core.color("#FFDA19"),	// BE
+					am4core.color("#FFE119"),am4core.color("#FFE119"),	// DE
+
+					am4core.color("#F57D7D"), am4core.color("#F57D7D"),	// ES
+					am4core.color("#b4c0ff"), am4core.color("#b4c0ff"),	// FR
+
+					am4core.color("#4285f7"), am4core.color("#4285f7"),	// GB
+					am4core.color("#BD0101"), am4core.color("#BD0101"),	// IT
+
+					am4core.color("#00AA00"), am4core.color("#00AA00"),	// LU
+					am4core.color("#FF8832"), am4core.color("#FF8832"),	// NE
+					am4core.color("#a60e0e"), am4core.color("#a60e0e"),	// CH
+					am4core.color("#0040ff"), am4core.color("#0040FF"),	// SE
+
+					am4core.color("#00CC00"), am4core.color("#00CC00"), // BR
+					am4core.color("#008888"), am4core.color("#008888"), // KR
+					am4core.color("#642dda"), am4core.color("#642dda"), // US
+					am4core.color("#CCC"), am4core.color("#CCC")				// Global
+				];
+
+
+				// Create axes
+				var opacidadeLinhas = 1;
+
+				// Create value axis XX
+				var valueAxisX = chartMortesMundo.xAxes.push(new am4charts.ValueAxis());
+				valueAxisX.title.text = '[font-size: 13]TOTAL ÓBITOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
+				//valueAxisX.renderer.minGridDistance = 10;
+				valueAxisX.renderer.labels.template.fontSize = 10;
+				valueAxisX.logarithmic = true;
+				var eixoXXTooltip = valueAxisX.tooltip;
+				eixoXXTooltip.background.fill = am4core.color("#13a889");
+				valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL ÓBITOS: [/][bold font-size:11]" + texto + "[/b]";});
+
+				// Create value axis YY
+				var valueAxisY = chartMortesMundo.yAxes.push(new am4charts.ValueAxis());
+				valueAxisY.title.text = '[font-size: 13]ÓBITOS ÚLTIMOS 7 DIAS[/]';
+				valueAxisY.renderer.labels.template.fontSize = 10;
+				valueAxisY.logarithmic = true;
+				var eixoYYTooltip = valueAxisY.tooltip;
+				eixoYYTooltip.background.fill = am4core.color("#13a889");
+				eixoYYTooltip.rotation = 270;
+				valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]ÓBITOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
+
+				valueAxisX.renderer.grid.template.disabled = true;
+				//valueAxisX.renderer.labels.template.disabled = true;
+				function createGrid(value) {
+					var range = valueAxisX.axisRanges.create();
+					range.value = value;
+					var range = valueAxisY.axisRanges.create();
+					range.value = value;
+
+					//range.label.text = "{value}";
+				}
+				var j;
+				var ms = [10, 100, 1000, 10000, 100000, 1000000, 10000000];
+				var m;
+				for (m of ms) {
+					for (j = 1; j < 10; j++) {
+						createGrid(j * m);
+					}
+				}
+				valueAxisX.renderer.grid.template.strokeOpacity = 1;
+				valueAxisX.renderer.grid.template.stroke = am4core.color("#121212");
+				valueAxisX.renderer.grid.template.strokeWidth = 1;
+				valueAxisY.renderer.grid.template.strokeOpacity = 1;
+				valueAxisY.renderer.grid.template.stroke = am4core.color("#121212");
+				valueAxisY.renderer.grid.template.strokeWidth = 1;
+
+
+				var title = chartMortesMundo.titles.create();
+
+				//dia = dia.toString();
+				var titulo = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos óbitos[/]\n";
+				title.text = titulo.concat("[font-size: 14]", dia.getDate(), " de ", meses[dia.getMonth()], "[/]");
+				//title.text = "[bold font-size: 18]COVID-19 no Mundo - Evolução dos casos (a partir do 100º caso)[/]\n";
+				title.textAlign = "middle";
+
+
+				//valueAxisX.min = 100;
+				// valueAxisY.min = 40;
+
+		  		createSeries2("PT", opacidadeLinhas, 2, 10, false, paisExtenso);
+					createSeries2("BE", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("DE", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("ES", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("FR", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("GB", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("IT", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("LU", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("NL", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("CH", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("SE", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("BR", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("KR", opacidadeLinhas, 1, 10, false, paisExtenso);
+					createSeries2("US", opacidadeLinhas, 1, 10, false, paisExtenso);
+
+				// Create series
+				function createSeries2(ISO2pais, opacidadeLinhas, espessura, offset, visivelInicio, paisExtenso) {
+				  var series = chartMortesMundo.series.push(new am4charts.LineSeries());
+				  series.dataFields.valueY = ISO2pais.concat("7");
+				  series.dataFields.valueX = ISO2pais.concat("T");
+				  series.name = ISO2pais;
+					series.strokeOpacity = opacidadeLinhas;
+					series.strokeWidth = espessura;
+					series.showOnInit = false;
+					series.hidden = visivelInicio;	// desligada no ínicio
+
+					// render data points as bullets
+					var lastPtSeries = chartMortesMundo.series.push(new am4charts.LineSeries());
+					lastPtSeries.dataFields.valueY = ISO2pais.toLowerCase().concat("by");
+					lastPtSeries.dataFields.valueX = ISO2pais.toLowerCase().concat("bx");
+					lastPtSeries.hiddenInLegend = true;
+					lastPtSeries.hidden = visivelInicio;
+
+					var bullet = lastPtSeries.bullets.push(new am4charts.CircleBullet());
+					var labelBullet = lastPtSeries.bullets.push(new am4charts.LabelBullet());
+					labelBullet.label.text = series.name;
+					bullet.circle.radius = 2;
+					bullet.tooltipText = "[font-size: 12px bold]".concat(paisExtenso[ISO2pais].toUpperCase(),"\n[font-size: 12px]Óbitos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal óbitos: [/][bold font-size: 13px]{valueX}[/]");
+				 	lastPtSeries.tooltip.background.stroke = am4core.color("#000");
+
+					var bulletHover = bullet.states.create("hover");
+					bulletHover.properties.scale = 2;
+					//bullet.circle.stroke = "#EEE";
+					labelBullet.label.dx = offset;
+					labelBullet.label.fontSize = 10;
+
+					series.events.on("hidden", function() {
+				  	lastPtSeries.hide();
+					});
+
+					series.events.on("shown", function() {
+				  	lastPtSeries.show();
+					});
+
+				}
+
+
+				// Legenda
+				chartMortesMundo.legend = new am4charts.Legend();
+				chartMortesMundo.legend.useDefaultMarker = true; // Legenda em vez de imitar linhas reverte para o quadrado colorido (default)
+				var markerTemplate = chartMortesMundo.legend.markers.template; // vamos modificar o tamanho dos quadrados
+				markerTemplate.width = 18;
+				markerTemplate.height = 18;
+				chartMortesMundo.legend.labels.template.text = "[bold font-size: 12 {color}]{name}[/]";
+
+				chartMortesMundo.legend.labels.template.textDecoration = "none";
+				chartMortesMundo.legend.valueLabels.template.textDecoration = "none";
+
+				var as = chartMortesMundo.legend.labels.template.states.getKey("active");
+				as.properties.textDecoration = "line-through";
+				as.properties.fill = am4core.color("#eee");
+
+
+				// CURSOR XY
+				chartMortesMundo.cursor = new am4charts.XYCursor();
+				chartMortesMundo.cursor.behavior = "zoomXY"; // zoomX, zoomY, panX, panY, panXY, none, etc
+				chartMortesMundo.cursor.lineX.strokeWidth = 0.5;
+				//chartMortesMundo.cursor.lineX.strokeDasharray = "";
+				chartMortesMundo.cursor.lineY.strokeWidth = 0.5;
+
+				//scrollbars
+				//chartMortesMundo.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
+				chartMortesMundo.scrollbarY = new am4core.Scrollbar();
+				var scrollbarX = new am4charts.XYChartScrollbar();
+				// scrollbarX.series.push(lineSeries); scrollbarX.series.push(lastPtSeries);
+				// scrollbarX.series.push(lineSeries2); scrollbarX.series.push(lastPtSeries2);
+				// scrollbarX.series.push(lineSeries7); scrollbarX.series.push(lastPtSeries7);
+				chartMortesMundo.scrollbarX = scrollbarX;
+				chartMortesMundo.scrollbarX.parent = chartMortesMundo.bottomAxesContainer;
+
+				// PRE ZOOM
+				//chartMortesMundo.events.on("ready", function () {
+				//			  yAxis.zoomToValues(4, 14, true);
+				//		});
+				chartMortesMundo.exporting.menu = new am4core.ExportMenu();
+
+				var buttonYY = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonYY.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonYY.label.fontSize = 12;
+				buttonYY.padding(5, 5, 5, 5);
+				buttonYY.width =90;
+				buttonYY.align = "left";
+				buttonYY.marginLeft = 15;
+				buttonYY.events.on("hit", function() {
+				  toggle(chartMortesMundo, valueAxisY, buttonYY);
+				});
+
+				var buttonXX = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonXX.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonXX.label.fontSize = 12;
+				buttonXX.padding(5, 5, 5, 5);
+				buttonXX.width = 90;
+				buttonXX.align = "right";
+				buttonXX.marginRight = 15;
+				buttonXX.dy = 500;
+				buttonXX.events.on("hit", function() {
+					toggle(chartMortesMundo, valueAxisX, buttonXX);
+				});
+
 
 
 
