@@ -52,7 +52,7 @@
 
 		div {
 			margin-top: 8px;
-			background-color: #12151a;
+			background-color: #15191f;
 			margin-bottom: 8px;
 			/* margin-left: 8px */
 			margin-right: 8px;
@@ -206,7 +206,7 @@
 		// Titulo
 		var title = chartPT.titles.create();
 		var titulo = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia[/]\n";
-		title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
+		title.text = titulo.concat("[font-size: 14 #EEE]Dados até ", Math.max(dia.getDate()-1, 1), " de ", meses[dia.getMonth()], "[/]");
 		title.textAlign = "middle";
 
 		// Eixos
@@ -431,7 +431,7 @@ am4core.useTheme(am4themes_animated);
 				// Titulo
 				var title1 = chartPTstacked.titles.create();
 				var titulo1 = "[bold font-size: 18 #EEE]COVID-19 em Portugal - Evolução da epidemia - Casos com e sem desfecho[/]\n";
-				title1.text = titulo1.concat("[font-size: 14 #EEE]Dados até ", dia.getDate() -1, " de ", meses[dia.getMonth()], "[/]");
+				title1.text = titulo1.concat("[font-size: 14 #EEE]Dados até ", Math.max(dia.getDate()-1, 1), " de ", meses[dia.getMonth()], "[/]");
 				title1.textAlign = "middle";
 
 				// Eixos
