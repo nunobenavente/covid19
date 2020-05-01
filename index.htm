@@ -125,12 +125,13 @@
 	<!-- <div id="botaodiv"><input type="button" value="Log -> Linear" onclick="toggle(loglogAmcharts, valueAxisY);" id="button" /></div> -->
 	<!-- <div id="topo"></div> -->
 
-	<div id="loglogAmchartsDiv"></div>
-	<div id="mortesMundoDiv"></div>
-	<div id="chartPT"></div><div id="chartPTstacked"></div>
+	<div id="loglogAmchartsDiv"></div><section><p><b>Dados: </b>EU Open Data Portal e Johns Hopkins University</p><section>
+	<div id="mortesMundoDiv"></div><section><p><b>Dados: </b>EU Open Data Portal e Johns Hopkins University</p></section>
+	<div id="chartPT"></div><section><p><b>Dados: </b>DGS</p></section>
+	<div id="chartPTstacked"></div>
 	<div id="testespormilhaodiv"></div>
 	<section style="width: 50%;">
-		<p><b>Nota importante:</b> Os números apresentados (recolhidos de worldometers.info) podem não corresponder exactamente ao número de indivíduos testados, dadas as diferentes formas como cada país reporta os testes, devendo assim ser interpretados como aproximações.<br>Dois exemplos: o número de testes apresentado para Portugal, interpretando os dados da DGS, inclui os indivíduos que foram testados mais que uma vez, sendo o número efectivo de indivíduos testados consideravelmente inferior. O número mais próximo da realidade corresponderá à soma dos 'Casos Confirmados (positivos)' + 'Casos Não Confirmados (negativos)'. Já a Suécia, por outro lado, reporta o número de indivíduos testados e não o total de testes.</p>
+		<p><b>Dados: </b>WorldOMeter<b><br>Nota importante:</b> Os números apresentados (recolhidos de worldometers.info) podem não corresponder exactamente ao número de indivíduos testados, dadas as diferentes formas como cada país reporta os testes, devendo assim ser interpretados como aproximações.<br>Dois exemplos: o número de testes apresentado para Portugal, interpretando os dados da DGS, inclui os indivíduos que foram testados mais que uma vez, sendo o número efectivo de indivíduos testados consideravelmente inferior. O número mais próximo da realidade corresponderá à soma dos 'Casos Confirmados (positivos)' + 'Casos Não Confirmados (negativos)'. Já a Suécia, por outro lado, reporta o número de indivíduos testados e não o total de testes.</p>
 	</section>
 	<div id="casospormilhaodiv"></div>
 	<div id="letalidadediv"></div>
@@ -1043,39 +1044,33 @@ am4core.useTheme(am4themes_animated);
 				//chartMortesMundo.scrollbarX = new am4core.Scrollbar(); // funciona mal com o Cursor por isso desliguei
 				chartMortesMundo.scrollbarY = new am4core.Scrollbar();
 				var scrollbarX = new am4charts.XYChartScrollbar();
-				// scrollbarX.series.push(lineSeries); scrollbarX.series.push(lastPtSeries);
-				// scrollbarX.series.push(lineSeries2); scrollbarX.series.push(lastPtSeries2);
-				// scrollbarX.series.push(lineSeries7); scrollbarX.series.push(lastPtSeries7);
+
 				chartMortesMundo.scrollbarX = scrollbarX;
 				chartMortesMundo.scrollbarX.parent = chartMortesMundo.bottomAxesContainer;
 
-				// PRE ZOOM
-				//chartMortesMundo.events.on("ready", function () {
-				//			  yAxis.zoomToValues(4, 14, true);
-				//		});
 				chartMortesMundo.exporting.menu = new am4core.ExportMenu();
 
-				var buttonYY = chartMortesMundo.plotContainer.createChild(am4core.Button);
-				buttonYY.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
-				buttonYY.label.fontSize = 12;
-				buttonYY.padding(5, 5, 5, 5);
-				buttonYY.width =90;
-				buttonYY.align = "left";
-				buttonYY.marginLeft = 15;
-				buttonYY.events.on("hit", function() {
-				  toggle(chartMortesMundo, valueAxisY, buttonYY);
+				var buttonYY2 = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonYY2.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonYY2.label.fontSize = 12;
+				buttonYY2.padding(5, 5, 5, 5);
+				buttonYY2.width =90;
+				buttonYY2.align = "left";
+				buttonYY2.marginLeft = 15;
+				buttonYY2.events.on("hit", function() {
+				  toggle(chartMortesMundo, valueAxisY, buttonYY2);
 				});
 
-				var buttonXX = chartMortesMundo.plotContainer.createChild(am4core.Button);
-				buttonXX.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
-				buttonXX.label.fontSize = 12;
-				buttonXX.padding(5, 5, 5, 5);
-				buttonXX.width = 90;
-				buttonXX.align = "right";
-				buttonXX.marginRight = 15;
-				buttonXX.dy = 500;
-				buttonXX.events.on("hit", function() {
-					toggle(chartMortesMundo, valueAxisX, buttonXX);
+				var buttonXX2 = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonXX2.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonXX2.label.fontSize = 12;
+				buttonXX2.padding(5, 5, 5, 5);
+				buttonXX2.width = 90;
+				buttonXX2.align = "right";
+				buttonXX2.marginRight = 15;
+				buttonXX2.dy = 500;
+				buttonXX2.events.on("hit", function() {
+					toggle(chartMortesMundo, valueAxisX, buttonXX2);
 				});
 
 
@@ -1211,7 +1206,7 @@ am4core.useTheme(am4themes_animated);
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 7.11; // VALOR DA MÉDIA GLOBAL
+		range.value = 7.14; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
