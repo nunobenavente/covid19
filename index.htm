@@ -917,31 +917,31 @@ am4core.useTheme(am4themes_animated);
 				var opacidadeLinhas = 1;
 
 				// Create value axis XX
-				var valueAxisX = chartMortesMundo.xAxes.push(new am4charts.ValueAxis());
-				valueAxisX.title.text = '[font-size: 13]TOTAL ÓBITOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
+				var valueAxisX1 = chartMortesMundo.xAxes.push(new am4charts.ValueAxis());
+				valueAxisX1.title.text = '[font-size: 13]TOTAL ÓBITOS - [/][font-size: 12]clique na legenda para ligar/desligar países[/]';
 				//valueAxisX.renderer.minGridDistance = 10;
-				valueAxisX.renderer.labels.template.fontSize = 10;
-				valueAxisX.logarithmic = true;
-				var eixoXXTooltip = valueAxisX.tooltip;
+				valueAxisX1.renderer.labels.template.fontSize = 10;
+				valueAxisX1.logarithmic = true;
+				var eixoXXTooltip = valueAxisX1.tooltip;
 				eixoXXTooltip.background.fill = am4core.color("#EE7D07"); eixoXXTooltip.background.stroke = am4core.color("#171717");
-				valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL ÓBITOS: [/][bold font-size:11]" + texto + "[/b]";});
+				valueAxisX1.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL ÓBITOS: [/][bold font-size:11]" + texto + "[/b]";});
 
 				// Create value axis YY
-				var valueAxisY = chartMortesMundo.yAxes.push(new am4charts.ValueAxis());
-				valueAxisY.title.text = '[font-size: 13]ÓBITOS ÚLTIMOS 7 DIAS[/]';
-				valueAxisY.renderer.labels.template.fontSize = 10;
-				valueAxisY.logarithmic = true;
-				var eixoYYTooltip = valueAxisY.tooltip;
+				var valueAxisY1 = chartMortesMundo.yAxes.push(new am4charts.ValueAxis());
+				valueAxisY1.title.text = '[font-size: 13]ÓBITOS ÚLTIMOS 7 DIAS[/]';
+				valueAxisY1.renderer.labels.template.fontSize = 10;
+				valueAxisY1.logarithmic = true;
+				var eixoYYTooltip = valueAxisY1.tooltip;
 				eixoYYTooltip.background.fill = am4core.color("#EE7D07"); eixoYYTooltip.background.stroke = am4core.color("#171717");
 				eixoYYTooltip.rotation = 270;
-				valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]ÓBITOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
+				valueAxisY1.adapter.add("getTooltipText", function(texto){return "[font-size:11]ÓBITOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
 
-				valueAxisX.renderer.grid.template.disabled = true;
+				valueAxisX1.renderer.grid.template.disabled = true;
 				//valueAxisX.renderer.labels.template.disabled = true;
-				function createGrid(value) {
-					var range = valueAxisX.axisRanges.create();
+				function createGrid1(value) {
+					var range = valueAxisX1.axisRanges.create();
 					range.value = value;
-					var range = valueAxisY.axisRanges.create();
+					var range = valueAxisY1.axisRanges.create();
 					range.value = value;
 
 					//range.label.text = "{value}";
@@ -951,15 +951,15 @@ am4core.useTheme(am4themes_animated);
 				var m;
 				for (m of ms) {
 					for (j = 1; j < 10; j++) {
-						createGrid(j * m);
+						createGrid1(j * m);
 					}
 				}
-				valueAxisX.renderer.grid.template.strokeOpacity = 1;
-				valueAxisX.renderer.grid.template.stroke = am4core.color("#121212");
-				valueAxisX.renderer.grid.template.strokeWidth = 1;
-				valueAxisY.renderer.grid.template.strokeOpacity = 1;
-				valueAxisY.renderer.grid.template.stroke = am4core.color("#121212");
-				valueAxisY.renderer.grid.template.strokeWidth = 1;
+				valueAxisX1.renderer.grid.template.strokeOpacity = 1;
+				valueAxisX1.renderer.grid.template.stroke = am4core.color("#121212");
+				valueAxisX1.renderer.grid.template.strokeWidth = 1;
+				valueAxisY1.renderer.grid.template.strokeOpacity = 1;
+				valueAxisY1.renderer.grid.template.stroke = am4core.color("#121212");
+				valueAxisY1.renderer.grid.template.strokeWidth = 1;
 
 
 				var title = chartMortesMundo.titles.create();
@@ -1064,27 +1064,27 @@ am4core.useTheme(am4themes_animated);
 
 				chartMortesMundo.exporting.menu = new am4core.ExportMenu();
 
-				var buttonYY2 = chartMortesMundo.plotContainer.createChild(am4core.Button);
-				buttonYY2.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
-				buttonYY2.label.fontSize = 12;
-				buttonYY2.padding(5, 5, 5, 5);
-				buttonYY2.width =90;
-				buttonYY2.align = "left";
-				buttonYY2.marginLeft = 15;
-				buttonYY2.events.on("hit", function() {
-				  toggle(chartMortesMundo, valueAxisY, buttonYY2);
+				var buttonYY1 = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonYY1.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonYY1.label.fontSize = 12;
+				buttonYY1.padding(5, 5, 5, 5);
+				buttonYY1.width =90;
+				buttonYY1.align = "left";
+				buttonYY1.marginLeft = 15;
+				buttonYY1.events.on("hit", function() {
+				  toggle(chartMortesMundo, valueAxisY1, buttonYY1);
 				});
 
-				var buttonXX2 = chartMortesMundo.plotContainer.createChild(am4core.Button);
-				buttonXX2.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
-				buttonXX2.label.fontSize = 12;
-				buttonXX2.padding(5, 5, 5, 5);
-				buttonXX2.width = 90;
-				buttonXX2.align = "right";
-				buttonXX2.marginRight = 15;
-				buttonXX2.dy = 500;
-				buttonXX2.events.on("hit", function() {
-					toggle(chartMortesMundo, valueAxisX, buttonXX2);
+				var buttonXX1 = chartMortesMundo.plotContainer.createChild(am4core.Button);
+				buttonXX1.label.text = "[bold #eee]Log[/] - [#800]Linear[/]";
+				buttonXX1.label.fontSize = 12;
+				buttonXX1.padding(5, 5, 5, 5);
+				buttonXX1.width = 90;
+				buttonXX1.align = "right";
+				buttonXX1.marginRight = 15;
+				buttonXX1.dy = 500;
+				buttonXX1.events.on("hit", function() {
+					toggle(chartMortesMundo, valueAxisX1, buttonXX1);
 				});
 
 
