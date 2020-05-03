@@ -1567,12 +1567,12 @@ am4core.useTheme(am4themes_animated);
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 65000;
+		valueAxis.max = 80000;
 
 		// axis break
 		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 42700;
-		axisBreak.endValue = 60000;
+		axisBreak.startValue = 50000;
+		axisBreak.endValue = 76500;
 		// fixed axis break
 		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
 		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
