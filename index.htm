@@ -52,7 +52,7 @@
 
 		div {
 			margin-top: 8px;
-			background-color: #1C212A;
+			background-color: #191e26;
 			margin-bottom: 8px;
 			/* margin-left: 8px */
 			margin-right: 8px;
@@ -371,7 +371,7 @@
 		// axis ranges - Texto que aparece no gráfico
 		var range = dateAxis.axisRanges.create();
 		range.date = new Date(2020, 2, 22);
-		//range.endDate = new Date(2020, 3, 30);
+		range.endDate = new Date(2020, 4, 3);
 		range.axisFill.fill = am4core.color("#eee");
 		range.axisFill.fillOpacity = 0.05;
 		range.grid.stroke = am4core.color("#eee");
@@ -384,6 +384,21 @@
 		range.label.rotation = 90;
 		range.label.horizontalCenter = "right";
 		range.label.verticalCenter = "bottom";
+
+		var range1 = dateAxis.axisRanges.create();
+		range1.date = new Date(2020, 4, 2);	// 30 Abril
+		range1.axisFill.fill = am4core.color("#eee");
+		range1.axisFill.fillOpacity = 0.05;
+		range1.grid.stroke = am4core.color("#eee");
+		range1.grid.strokeWidth = 1;
+		range1.grid.strokeOpacity = 0.5;
+
+		range1.label.text = "Dados corrigidos pela DGS";
+		range1.label.fontSize = 10; range1.label.fill = am4core.color("#cfd734");
+		range1.label.inside = true;
+		range1.label.rotation = 90;
+		range1.label.horizontalCenter = "right";
+		range1.label.verticalCenter = "bottom";
 
 		// var rangeStats = valueAxisTot.axisRanges.create();
 		// rangeStats.value = 1000;
@@ -584,7 +599,7 @@ am4core.useTheme(am4themes_animated);
 				// axis ranges - Texto que aparece no gráfico
 				var range1 = dateAxisStacked.axisRanges.create();
 				range1.date = new Date(2020, 2, 22);
-				//range1.endDate = new Date(2020, 3, 30);
+				range1.endDate = new Date(2020, 4, 3);
 				range1.axisFill.fill = am4core.color("#eee");
 				range1.axisFill.fillOpacity = 0.05;
 				range1.grid.stroke = am4core.color("#eee");
@@ -600,7 +615,6 @@ am4core.useTheme(am4themes_animated);
 
 				var range2 = dateAxisStacked.axisRanges.create();
 				range2.date = new Date(2020, 3, 21);
-				//range1.endDate = new Date(2020, 3, 30);
 				range2.axisFill.fill = am4core.color("#eee");
 				range2.axisFill.fillOpacity = 0.05;
 				range2.grid.stroke = am4core.color("#eee");
@@ -615,15 +629,15 @@ am4core.useTheme(am4themes_animated);
 				range2.label.verticalCenter = "bottom";
 
 				var range3 = dateAxisStacked.axisRanges.create();
-				range3.date = new Date(2020, 3, 30);	// 30 Abril
+				range3.date = new Date(2020, 4, 2);	// 30 Abril
 				range3.axisFill.fill = am4core.color("#eee");
 				range3.axisFill.fillOpacity = 0.05;
 				range3.grid.stroke = am4core.color("#eee");
 				range3.grid.strokeWidth = 1;
-				range3.grid.strokeOpacity = 0.3;
+				range3.grid.strokeOpacity = 0.5;
 
-				range3.label.text = "Forte acréscimo de actividade nas ruas; atmosfera de relaxamento social";
-				range3.label.fontSize = 12; range3.label.fill = am4core.color("#cfd734");
+				range3.label.text = "Dados corrigidos pela DGS";
+				range3.label.fontSize = 10; range3.label.fill = am4core.color("#cfd734");
 				range3.label.inside = true;
 				range3.label.rotation = 90;
 				range3.label.horizontalCenter = "right";
@@ -690,7 +704,7 @@ am4core.useTheme(am4themes_animated);
 		valueAxisX.renderer.labels.template.fontSize = 10;
 		valueAxisX.logarithmic = true;
 		var eixoXXTooltip = valueAxisX.tooltip;
-		eixoXXTooltip.background.fill = am4core.color("#13a889");
+		eixoXXTooltip.background.fill = am4core.color("#EE7D07"); eixoXXTooltip.background.stroke = am4core.color("#171717");
 		valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL CASOS: [/][bold font-size:11]" + texto + "[/b]";});
 
 		// Create value axis YY
@@ -699,7 +713,7 @@ am4core.useTheme(am4themes_animated);
 		valueAxisY.renderer.labels.template.fontSize = 10;
 		valueAxisY.logarithmic = true;
 		var eixoYYTooltip = valueAxisY.tooltip;
-		eixoYYTooltip.background.fill = am4core.color("#13a889");
+		eixoYYTooltip.background.fill = am4core.color("#EE7D07"); eixoYYTooltip.background.stroke = am4core.color("#171717");
 		eixoYYTooltip.rotation = 270;
 		valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]CASOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
 
@@ -909,7 +923,7 @@ am4core.useTheme(am4themes_animated);
 				valueAxisX.renderer.labels.template.fontSize = 10;
 				valueAxisX.logarithmic = true;
 				var eixoXXTooltip = valueAxisX.tooltip;
-				eixoXXTooltip.background.fill = am4core.color("#13a889");
+				eixoXXTooltip.background.fill = am4core.color("#EE7D07"); eixoXXTooltip.background.stroke = am4core.color("#171717");
 				valueAxisX.adapter.add("getTooltipText", function(texto){return "[font-size:11]TOTAL ÓBITOS: [/][bold font-size:11]" + texto + "[/b]";});
 
 				// Create value axis YY
@@ -918,7 +932,7 @@ am4core.useTheme(am4themes_animated);
 				valueAxisY.renderer.labels.template.fontSize = 10;
 				valueAxisY.logarithmic = true;
 				var eixoYYTooltip = valueAxisY.tooltip;
-				eixoYYTooltip.background.fill = am4core.color("#13a889");
+				eixoYYTooltip.background.fill = am4core.color("#EE7D07"); eixoYYTooltip.background.stroke = am4core.color("#171717");
 				eixoYYTooltip.rotation = 270;
 				valueAxisY.adapter.add("getTooltipText", function(texto){return "[font-size:11]ÓBITOS 7 DIAS: [/][bold font-size:11]" + texto + "[/b]";});
 
@@ -1206,7 +1220,7 @@ am4core.useTheme(am4themes_animated);
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
 		range.calculatePercent = true;
-		range.value = 7.11; // VALOR DA MÉDIA GLOBAL
+		range.value = 7.09; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
