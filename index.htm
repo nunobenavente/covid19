@@ -1095,8 +1095,14 @@ am4core.useTheme(am4themes_animated);
 //////////////////////////////////////////////////////
 		// GRAFICO LETALIDADE
 		// Create chart instance
-	var chart = am4core.create("letalidadediv", am4charts.XYChart);
-		chart.dataSource.url = "stats.json";
+	var chart3 = am4core.create("letalidadediv", am4charts.XYChart);
+		chart3.dataSource.url = "stats.json";
+
+		chart3.events.on("beforedatavalidated", function(ev) {
+  		chart3.data.sort(function(a, b) {
+    		return (b.letalidade - a.letalidade);
+  		});
+		});
 
 
 		// // Add data
@@ -1124,12 +1130,12 @@ am4core.useTheme(am4themes_animated);
 		// 	"obitos": 2955
 		// }];
 
-		var title = chart.titles.create();
+		var title = chart3.titles.create();
 		title.text = "[bold font-size: 18]Letalidade[/]\n(óbitos/casos confirmados)";
 		title.textAlign = "middle";
 
 		// Create axes
-		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		var categoryAxis = chart3.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.dataFields.category = "country";
 		categoryAxis.renderer.grid.template.disabled = true;
 		categoryAxis.renderer.minGridDistance = 30;
@@ -1138,7 +1144,7 @@ am4core.useTheme(am4themes_animated);
 		categoryAxis.renderer.labels.template.fontSize = 10;
 
 
-		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		var valueAxis = chart3.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
 		//valueAxis.title.text = "%";
@@ -1152,15 +1158,15 @@ am4core.useTheme(am4themes_animated);
 		valueAxis.extraTooltipPrecision = 1;
 
 		// Do not crop bullets
-		chart.maskBullets = false;
+		chart3.maskBullets = false;
 
 		// Remove padding
-		//chart.paddingBottom = 0;
+		//chart3.paddingBottom = 0;
 
-		chart.numberFormatter.numberFormat = "#.00";
+		chart3.numberFormatter.numberFormat = "#.00";
 
 		// Create series
-		var series = chart.series.push(new am4charts.ColumnSeries());
+		var series = chart3.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "letalidade";
 		series.calculatePercent = true;
 		series.dataFields.categoryX = "country";
@@ -1235,20 +1241,20 @@ am4core.useTheme(am4themes_animated);
 		range.label.fill = range.grid.stroke;
 		range.label.align = "right";
 		range.label.verticalCenter = "bottom";
-		chart.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
+		chart3.seriesContainer.zIndex = -1; // envia a series para tras da linha da media
 
 
 		// CURSOR XY para ligar axis tooltips
-		chart.cursor = new am4charts.XYCursor();
-		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
-		//chart.cursor.lineX.strokeWidth = 0.5;
+		chart3.cursor = new am4charts.XYCursor();
+		chart3.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart3.cursor.lineX.strokeWidth = 0.5;
 		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
-		chart.cursor.lineY.strokeWidth = 0.5;
-		chart.cursor.xAxis = categoryAxis;
-		chart.cursor.fullWidthLineX = true;
-		chart.cursor.lineX.strokeWidth = 0;
-		chart.cursor.lineX.fill = am4core.color("#8F3985");
-		chart.cursor.lineX.fillOpacity = 0.1;
+		chart3.cursor.lineY.strokeWidth = 0.5;
+		chart3.cursor.xAxis = categoryAxis;
+		chart3.cursor.fullWidthLineX = true;
+		chart3.cursor.lineX.strokeWidth = 0;
+		chart3.cursor.lineX.fill = am4core.color("#8F3985");
+		chart3.cursor.lineX.fillOpacity = 0.1;
 		categoryAxis.cursorTooltipEnabled = false;
 
 		var axisTooltip = valueAxis.tooltip;
@@ -1266,14 +1272,20 @@ am4core.useTheme(am4themes_animated);
 		axisTooltip.filters.push(dropShadow);
 
 
-		chart.exporting.menu = new am4core.ExportMenu();
+		chart3.exporting.menu = new am4core.ExportMenu();
 
 
 		/////////////////////////////////////////////
 		// CASOS POR MILHAO
 		// Create chart instance
-		var chart = am4core.create("casospormilhaodiv", am4charts.XYChart);
-		chart.dataSource.url = "stats.json";
+		var chart1 = am4core.create("casospormilhaodiv", am4charts.XYChart);
+		chart1.dataSource.url = "stats.json";
+
+		chart1.events.on("beforedatavalidated", function(ev) {
+  		chart1.data.sort(function(a, b) {
+    		return (b.casosMilhao - a.casosMilhao);
+  		});
+		});
 
 
 		// // Add data
@@ -1289,12 +1301,12 @@ am4core.useTheme(am4themes_animated);
 		// 	"bullet": "./flags/GB.png"
 		// }];
 
-		var title = chart.titles.create();
+		var title = chart1.titles.create();
 		title.text = "[bold font-size: 18]Casos confirmados/milhão de habitantes[/]\n";
 		title.textAlign = "middle";
 
 		// Create axes
-		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		var categoryAxis = chart1.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.dataFields.category = "country";
 		categoryAxis.renderer.grid.template.disabled = true;
 		categoryAxis.renderer.minGridDistance = 30;
@@ -1302,7 +1314,7 @@ am4core.useTheme(am4themes_animated);
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
 
-		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		var valueAxis = chart1.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
 		//valueAxis.title.text = "%";
@@ -1312,15 +1324,15 @@ am4core.useTheme(am4themes_animated);
 		valueAxis.max = 7000;
 
 		// Do not crop bullets
-		chart.maskBullets = false;
+		chart1.maskBullets = false;
 
 		// Remove padding
 		//chart.paddingBottom = 0;
 
-		chart.numberFormatter.numberFormat = "#.";
+		chart1.numberFormatter.numberFormat = "#.";
 
 		// Create series
-		var series = chart.series.push(new am4charts.ColumnSeries());
+		var series = chart1.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "casosMilhao";
 		series.dataFields.categoryX = "country";
 		series.strokeWidth = 0;
@@ -1361,16 +1373,16 @@ am4core.useTheme(am4themes_animated);
 
 
 		// CURSOR XY para ligar axis tooltips
-		chart.cursor = new am4charts.XYCursor();
-		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
-		//chart.cursor.lineX.strokeWidth = 0.5;
+		chart1.cursor = new am4charts.XYCursor();
+		chart1.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart1.cursor.lineX.strokeWidth = 0.5;
 		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
-		chart.cursor.lineY.strokeWidth = 0.5;
-		chart.cursor.xAxis = categoryAxis;
-		chart.cursor.fullWidthLineX = true;
-		chart.cursor.lineX.strokeWidth = 0;
-		chart.cursor.lineX.fill = am4core.color("#8F3985");
-		chart.cursor.lineX.fillOpacity = 0.1;
+		chart1.cursor.lineY.strokeWidth = 0.5;
+		chart1.cursor.xAxis = categoryAxis;
+		chart1.cursor.fullWidthLineX = true;
+		chart1.cursor.lineX.strokeWidth = 0;
+		chart1.cursor.lineX.fill = am4core.color("#8F3985");
+		chart1.cursor.lineX.fillOpacity = 0.1;
 		categoryAxis.cursorTooltipEnabled = false;
 
 		var axisTooltip = valueAxis.tooltip;
@@ -1389,7 +1401,7 @@ am4core.useTheme(am4themes_animated);
 
 
 		// Enable export
-		chart.exporting.menu = new am4core.ExportMenu();
+		chart1.exporting.menu = new am4core.ExportMenu();
 
 
 
@@ -1397,9 +1409,14 @@ am4core.useTheme(am4themes_animated);
 		/////////////////////////////////////////////
 		// ÓBITOS POR MILHAO
 		// Create chart instance
-		var chart = am4core.create("obitospormilhaodiv", am4charts.XYChart);
-		chart.dataSource.url = "stats.json";
+		var chart4 = am4core.create("obitospormilhaodiv", am4charts.XYChart);
+		chart4.dataSource.url = "stats.json";
 
+		chart4.events.on("beforedatavalidated", function(ev) {
+  		chart4.data.sort(function(a, b) {
+    		return (b.obitosMilhao - a.obitosMilhao);
+  		});
+		});
 
 		// Add data
 		//chart.data = [{
@@ -1430,13 +1447,13 @@ am4core.useTheme(am4themes_animated);
 		//
 		//		}];
 
-		var title = chart.titles.create();
+		var title = chart4.titles.create();
 		title.text = "[bold font-size: 18]Óbitos/milhão de habitantes[/]\n";
 		title.textAlign = "middle";
 
 		//let colorSet = new am4core.ColorSet();
 		// Create axes
-		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		var categoryAxis = chart4.xAxes.push(new am4charts.CategoryAxis());
 		categoryAxis.dataFields.category = "country";
 		categoryAxis.renderer.grid.template.disabled = true;
 		categoryAxis.renderer.minGridDistance = 30;
@@ -1444,7 +1461,7 @@ am4core.useTheme(am4themes_animated);
 		categoryAxis.renderer.labels.template.fill = am4core.color("#fff");
 		categoryAxis.renderer.labels.template.fontSize = 10;
 
-		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		var valueAxis = chart4.yAxes.push(new am4charts.ValueAxis());
 		valueAxis.renderer.grid.template.strokeDasharray = "4,4";
 		valueAxis.renderer.labels.template.disabled = false;
 		//valueAxis.title.text = "%";
@@ -1455,16 +1472,16 @@ am4core.useTheme(am4themes_animated);
 
 
 		// Do not crop bullets
-		chart.maskBullets = false;
+		chart4.maskBullets = false;
 
 		// Remove padding
-		//chart.paddingBottom = 0;
+		//chart4.paddingBottom = 0;
 
-		chart.numberFormatter.numberFormat = "#.";
+		chart4.numberFormatter.numberFormat = "#.";
 
 
 		// Create series
-		var series = chart.series.push(new am4charts.ColumnSeries());
+		var series = chart4.series.push(new am4charts.ColumnSeries());
 		series.dataFields.valueY = "obitosMilhao";
 		series.dataFields.categoryX = "country";
 		//series.columns.template.propertyFields.fill = am4core.color("#000");
@@ -1504,16 +1521,16 @@ am4core.useTheme(am4themes_animated);
 
 
 		// CURSOR XY para ligar axis tooltips
-		chart.cursor = new am4charts.XYCursor();
-		chart.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
-		//chart.cursor.lineX.strokeWidth = 0.5;
+		chart4.cursor = new am4charts.XYCursor();
+		chart4.cursor.behavior = "none"; // zoomX, zoomY, panX, panY, panXY, none, etc
+		//chart4.cursor.lineX.strokeWidth = 0.5;
 		//loglogAmcharts.cursor.lineX.strokeDasharray = "";
-		chart.cursor.lineY.strokeWidth = 0.5;
-		chart.cursor.xAxis = categoryAxis;
-		chart.cursor.fullWidthLineX = true;
-		chart.cursor.lineX.strokeWidth = 0;
-		chart.cursor.lineX.fill = am4core.color("#8F3985");
-		chart.cursor.lineX.fillOpacity = 0.1;
+		chart4.cursor.lineY.strokeWidth = 0.5;
+		chart4.cursor.xAxis = categoryAxis;
+		chart4.cursor.fullWidthLineX = true;
+		chart4.cursor.lineX.strokeWidth = 0;
+		chart4.cursor.lineX.fill = am4core.color("#8F3985");
+		chart4.cursor.lineX.fillOpacity = 0.1;
 		categoryAxis.cursorTooltipEnabled = false;
 
 		var axisTooltip = valueAxis.tooltip;
@@ -1532,7 +1549,7 @@ am4core.useTheme(am4themes_animated);
 
 
 		// Enable export
-		chart.exporting.menu = new am4core.ExportMenu();
+		chart4.exporting.menu = new am4core.ExportMenu();
 
 
 
@@ -1544,10 +1561,10 @@ am4core.useTheme(am4themes_animated);
 		chart.dataSource.url = "stats.json";
 
 		chart.events.on("beforedatavalidated", function(ev) {
-  chart.data.sort(function(a, b) {
-    return (b.testesMilhao - a.testesMilhao);
-  });
-});
+  		chart.data.sort(function(a, b) {
+    		return (b.testesMilhao - a.testesMilhao);
+  		});
+		});
 
 
 		var title = chart.titles.create();
