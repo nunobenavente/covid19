@@ -386,15 +386,16 @@
 		range.label.verticalCenter = "bottom";
 
 		var range1 = dateAxis.axisRanges.create();
-		range1.date = new Date(2020, 4, 2);	// 30 Abril
-		range1.axisFill.fill = am4core.color("#eee");
-		range1.axisFill.fillOpacity = 0.05;
-		range1.grid.stroke = am4core.color("#eee");
+		range1.date = new Date(2020, 4, 3);	// 3 Maio
+		range1.endDate = new Date(2020,5,1); // Data intederminada
+		range1.axisFill.fill = am4core.color("#aea");
+		range1.axisFill.fillOpacity = 0.1;
+		range1.grid.stroke = am4core.color("#aea");
 		range1.grid.strokeWidth = 1;
 		range1.grid.strokeOpacity = 0.5;
 
-		range1.label.text = "Dados corrigidos pela DGS";
-		range1.label.fontSize = 10; range1.label.fill = am4core.color("#cfd734");
+		range1.label.text = "Fim Estado Emergência / Início Estado Calamidade Pública";
+		range1.label.fontSize = 12; range1.label.fill = am4core.color("#cfd734");
 		range1.label.inside = true;
 		range1.label.rotation = 90;
 		range1.label.horizontalCenter = "right";
@@ -629,15 +630,16 @@ am4core.useTheme(am4themes_animated);
 				range2.label.verticalCenter = "bottom";
 
 				var range3 = dateAxisStacked.axisRanges.create();
-				range3.date = new Date(2020, 4, 2);	// 30 Abril
-				range3.axisFill.fill = am4core.color("#eee");
-				range3.axisFill.fillOpacity = 0.05;
-				range3.grid.stroke = am4core.color("#eee");
+				range3.date = new Date(2020, 4, 3);	// 3 Maio
+				range3.endDate = new Date(2020, 5, 3);	// Data indeterminada
+				range3.axisFill.fill = am4core.color("#aea");
+				range3.axisFill.fillOpacity = 0.1;
+				range3.grid.stroke = am4core.color("#aea");
 				range3.grid.strokeWidth = 1;
 				range3.grid.strokeOpacity = 0.5;
 
-				range3.label.text = "Dados corrigidos pela DGS";
-				range3.label.fontSize = 10; range3.label.fill = am4core.color("#cfd734");
+				range3.label.text = "Fim Estado Emergência / Início Estado Calamidade Pública";
+				range3.label.fontSize = 12; range3.label.fill = am4core.color("#cfd734");
 				range3.label.inside = true;
 				range3.label.rotation = 90;
 				range3.label.horizontalCenter = "right";
@@ -1093,9 +1095,9 @@ am4core.useTheme(am4themes_animated);
 //////////////////////////////////////////////////////
 		// GRAFICO LETALIDADE
 		// Create chart instance
-		var chart = am4core.create("letalidadediv", am4charts.XYChart);
+	var chart = am4core.create("letalidadediv", am4charts.XYChart);
 		chart.dataSource.url = "stats.json";
-//
+
 
 		// // Add data
 		// chart.data = [{
@@ -1177,6 +1179,7 @@ am4core.useTheme(am4themes_animated);
 			"dataField": "valueY"
 		});
 
+
 		// Add bullets
 		var bullet = series.bullets.push(new am4charts.Bullet());
 		var image = bullet.createChild(am4core.Image);
@@ -1219,8 +1222,9 @@ am4core.useTheme(am4themes_animated);
 
 		// Create value axis range - LINHA DA MEDIA QUE ATRAVESSA O GRAFICO
 		var range = valueAxis.axisRanges.create();
-		range.calculatePercent = true;
-		range.value = 7.03; // VALOR DA MÉDIA GLOBAL
+		//range.calculatePercent = true;
+
+		range.value = 7.00; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
