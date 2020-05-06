@@ -674,25 +674,25 @@ am4core.useTheme(am4themes_animated);
 	//
 
 		loglogAmcharts.colors.list = [
-			am4core.color("#EEE"), am4core.color("#EEE"),				// PT
-			am4core.color("#ffda19"),am4core.color("#FFDA19"),	// BE
-			am4core.color("#FFE119"),am4core.color("#FFE119"),	// DE
+			am4core.color("#EEE"), am4core.color("#EEE"), am4core.color("#EEE"),				// PT
+			am4core.color("#ffda19"),am4core.color("#FFDA19"),	am4core.color("#FFDA19"),// BE
+			am4core.color("#FFE119"),am4core.color("#FFE119"), am4core.color("#FFE119"),	// DE
 
-			am4core.color("#F57D7D"), am4core.color("#F57D7D"),	// ES
-			am4core.color("#b4c0ff"), am4core.color("#b4c0ff"),	// FR
+			am4core.color("#F57D7D"), am4core.color("#F57D7D"), am4core.color("#F57D7D"),	// ES
+			am4core.color("#b4c0ff"), am4core.color("#b4c0ff"), am4core.color("#b4c0ff"),	// FR
 
-			am4core.color("#4285f7"), am4core.color("#4285f7"),	// GB
-			am4core.color("#BD0101"), am4core.color("#BD0101"),	// IT
+			am4core.color("#4285f7"), am4core.color("#4285f7"), am4core.color("#4285f7"),	// GB
+			am4core.color("#BD0101"), am4core.color("#BD0101"), am4core.color("#BD0101"),	// IT
 
-			am4core.color("#00AA00"), am4core.color("#00AA00"),	// LU
-			am4core.color("#FF8832"), am4core.color("#FF8832"),	// NE
-			am4core.color("#a60e0e"), am4core.color("#a60e0e"),	// CH
-			am4core.color("#0040ff"), am4core.color("#0040FF"),	// SE
+			am4core.color("#00AA00"), am4core.color("#00AA00"), am4core.color("#00AA00"),	// LU
+			am4core.color("#FF8832"), am4core.color("#FF8832"), am4core.color("#FF8832"),	// NE
+			am4core.color("#a60e0e"), am4core.color("#a60e0e"), am4core.color("#a60e0e"),	// CH
+			am4core.color("#0040ff"), am4core.color("#0040FF"), am4core.color("#0040FF"),	// SE
 
-			am4core.color("#00CC00"), am4core.color("#00CC00"), // BR
-			am4core.color("#008888"), am4core.color("#008888"), // KR
-			am4core.color("#642dda"), am4core.color("#642dda"), // US
-			am4core.color("#CCC"), am4core.color("#CCC")				// Global
+			am4core.color("#00CC00"), am4core.color("#00CC00"), am4core.color("#00CC00"), // BR
+			am4core.color("#008888"), am4core.color("#008888"), am4core.color("#008888"), // KR
+			am4core.color("#642dda"), am4core.color("#642dda"), am4core.color("#642dda"), // US
+			am4core.color("#CCC"), am4core.color("#CCC"), am4core.color("#CCC")				// Global
 		];
 
 
@@ -810,12 +810,35 @@ am4core.useTheme(am4themes_animated);
 			labelBullet.label.dx = offset;
 			labelBullet.label.fontSize = 10;
 
+
+			// Serie Estado de emergência
+			var emergencySeries = loglogAmcharts.series.push(new am4charts.LineSeries());
+			emergencySeries.dataFields.valueY = ISO2pais.toLowerCase().concat("emiy");
+			emergencySeries.dataFields.valueX = ISO2pais.toLowerCase().concat("emix");
+			emergencySeries.hiddenInLegend = true;
+			emergencySeries.hidden = visivelInicio;
+
+			var bullet = emergencySeries.bullets.push(new am4charts.CircleBullet());
+			var labelBullet = emergencySeries.bullets.push(new am4charts.LabelBullet());
+			labelBullet.label.text = series.name.concat(" Lock");
+			bullet.circle.radius = 2.5;
+			bullet.tooltipText = "[font-size: 12px bold]".concat(paisExtenso[ISO2pais].toUpperCase()," Lockdown\n[font-size: 12px]Casos 7 dias: [/][bold font-size: 13px]{valueY}[/]\n[font-size: 12px]\nTotal casos: [/][bold font-size: 13px]{valueX}[/]");
+		 	emergencySeries.tooltip.background.stroke = am4core.color("#000");
+
+			var bulletHover = bullet.states.create("hover");
+			bulletHover.properties.scale = 2;
+			//bullet.circle.stroke = "#EEE";
+			labelBullet.label.dx = offset +15;
+			labelBullet.label.fontSize = 10;
+
 			series.events.on("hidden", function() {
-		  	lastPtSeries.hide();
+				lastPtSeries.hide();
+				emergencySeries.hide();
 			});
 
 			series.events.on("shown", function() {
-		  	lastPtSeries.show();
+				lastPtSeries.show();
+				emergencySeries.show();
 			});
 
 		}
