@@ -178,7 +178,7 @@
 		//data = data.slice(1, data.length);
 
 		var Dia = [];
-	  for (var i = 1; i <= data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
+	  for (var i = 1; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
 				data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
 				data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
 				data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
@@ -434,7 +434,7 @@ am4core.useTheme(am4themes_animated);
 				var data1 = ev.target.data;
 				//data = data.slice(1, data.length);
 
-			  for (var i = 1; i < data1.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
+			  for (var i = 1; i <= data1.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
 						data1[i]["Activos"] = data1[i]["Confirmed"] - data1[i]["Deaths"] - data1[i]["Recovered"];
 						data1[i]["letalidade"] = data1[i]["Deaths"]/data1[i]["Confirmed"]*100;
 						data1[i]["casosMilhao"] = data1[i]["Confirmed"]/(POPPT/1000000);
