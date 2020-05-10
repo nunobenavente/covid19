@@ -179,7 +179,7 @@
 
 		var Dia = [];
 	  for (var i = 0; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
-			if (i == 0) {
+			if (i = 0) {
 				data[i]["dia"] = data[i]["Confirmed"];
 	  		}else{
 		  		data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
