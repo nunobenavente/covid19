@@ -178,7 +178,7 @@
 		//data = data.slice(1, data.length);
 
 		var Dia = [];
-	  for (var i = 1; i < data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
+	  for (var i = 1; i <= data.length; i++) { // não considero o último dia porque a estatística de PT está sempre atrasada 1 dia
 				data[i]["dia"] = data[i]["Confirmed"] - data[i-1]["Confirmed"];		// Casos diários (total dia - total dia anterior)
 				data[i]["letalidade"] = data[i]["Deaths"]/data[i]["Confirmed"]*100;
 				data[i]["casosMilhao"] = data[i]["Confirmed"]/(POPPT/1000000);
