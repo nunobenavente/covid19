@@ -1323,7 +1323,7 @@ am4core.useTheme(am4themes_animated);
 		var range = valueAxis.axisRanges.create();
 		//range.calculatePercent = true;
 
-		range.value = 6.47; // VALOR DA MÉDIA GLOBAL
+		range.value = 6.36; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
@@ -1681,23 +1681,23 @@ am4core.useTheme(am4themes_animated);
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 100000;
+		//valueAxis.max = 100000;
 
-		// axis break
-		var axisBreak = valueAxis.axisBreaks.create();
-		axisBreak.startValue = 61000;
-		axisBreak.endValue = 91000;
+		//// axis break
+		//var axisBreak = valueAxis.axisBreaks.create();
+		//axisBreak.startValue = 61000;
+		//axisBreak.endValue = 91000;
 		// fixed axis break
-		var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
-		axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
+		//var d = (axisBreak.endValue - axisBreak.startValue) / (valueAxis.max - valueAxis.min);
+		//axisBreak.breakSize = 0.05 * (1 - d) / d; /// 0.05 means that the break will take 5% of the total value axis height
 
-		//make break expand on hover
-		var hoverState = axisBreak.states.create("hover");
-		hoverState.properties.breakSize = 1;
-		hoverState.properties.opacity = 0.1;
-		hoverState.transitionDuration = 500;
+		////make break expand on hover
+		//var hoverState = axisBreak.states.create("hover");
+		//hoverState.properties.breakSize = 1;
+		//hoverState.properties.opacity = 0.1;
+		//hoverState.transitionDuration = 500;
 
-		axisBreak.defaultState.transitionDuration = 1000;
+		//axisBreak.defaultState.transitionDuration = 1000;
 
 
 		// Do not crop bullets
