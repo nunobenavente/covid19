@@ -243,6 +243,14 @@
 		valueAxisDta.renderer.opposite = true;
 		//valueAxisDta.max = 2000;
 		valueAxisDta.renderer.grid.template.strokeOpacity = 1; valueAxisDta.renderer.grid.template.stroke = am4core.color("CORGRID");
+		
+		//YY Casos Diários2 - eixo da direita
+		var valueAxisDta2 = chartPT.yAxes.push(new am4charts.ValueAxis());
+		valueAxisDta2.title.text = "[font-size:12 #ffc800]CASOS DIÁRIOS [/]/ [font-size:12 #a71616]MORTES[/] / [font-size:12 #166db4]RECUPERADOS[/]";
+		valueAxisDta2.renderer.labels.template.fontSize = 10;
+		valueAxisDta2.renderer.opposite = true;
+		//valueAxisDta.max = 2000;
+		valueAxisDta2.renderer.grid.template.strokeOpacity = 1; valueAxisDta2.renderer.grid.template.stroke = am4core.color("CORGRID");
 
 		// SERIES
 		// Series Casos Totais
@@ -274,7 +282,7 @@
 		seriesDia.name = "CASOS DIÁRIOS";
 		seriesDia.dataFields.valueY = "dia";
 		seriesDia.dataFields.dateX = "Date";
-		seriesDia.yAxis = valueAxisTot;
+		seriesDia.yAxis = valueAxisDta2;
 		seriesDia.calculatePercent = true;
 		seriesDia.columns.template.width = am4core.percent(80);
 		seriesDia.tooltipText = "[font-size: 12px]Casos Dia: [/][bold  font-size: 13px]{dia}[/] {valueY.previousChange.formatNumber('[#F11 font-size:11]#|[#0F0 font-size:11]#')}";
