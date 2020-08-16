@@ -432,8 +432,8 @@
 
 
 		////////////////////////////////////////////
-				// GRAFICO PORTUGAL STACKED
-am4core.useTheme(am4themes_animated);
+		// GRAFICO PORTUGAL STACKED
+		am4core.useTheme(am4themes_animated);
 
 				var chartPTstacked = am4core.create("chartPTstacked", am4charts.XYChart);
 				chartPTstacked.dataSource.url = "https://api.covid19api.com/dayone/country/portugal";
@@ -643,7 +643,7 @@ am4core.useTheme(am4themes_animated);
 
 				var range3 = dateAxisStacked.axisRanges.create();
 				range3.date = new Date(2020, 4, 3);	// 3 Maio
-				range3.endDate = new Date(2020, 5, 3);	// Data indeterminada
+				range3.endDate = new Date(2020, 11, 3);	// Data indeterminada
 				range3.axisFill.fill = am4core.color("#aea");
 				range3.axisFill.fillOpacity = 0.1;
 				range3.grid.stroke = am4core.color("#aea");
@@ -1331,7 +1331,7 @@ am4core.useTheme(am4themes_animated);
 		var range = valueAxis.axisRanges.create();
 		//range.calculatePercent = true;
 
-		range.value = 4.62; // VALOR DA MÉDIA GLOBAL
+		range.value = 3.56; // VALOR DA MÉDIA GLOBAL
 		var media = range.value;
 		range.grid.stroke = am4core.color("#eee");
 		range.grid.strokeWidth = 1;
@@ -1422,7 +1422,7 @@ am4core.useTheme(am4themes_animated);
 		//valueAxis.title.fontSize = 12;
 		valueAxis.renderer.labels.template.fontSize = 10;
 		valueAxis.min = 0;
-		valueAxis.max = 7000;
+		//valueAxis.max = 7000;
 
 		// Do not crop bullets
 		chart1.maskBullets = false;
